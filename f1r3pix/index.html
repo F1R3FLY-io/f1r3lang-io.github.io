@@ -228,13 +228,13 @@ const TOUR_SLIDES = [
   { icon: "fork", title: "ANYONE CAN CLONE\nTHIS CANVAS", body: "No lock-in, no walled gardens. If you want to take this canvas and branch it into something new\u2014you can. Cloning isn\u2019t a threat. It\u2019s how the ecosystem grows." },
 ];
 
-function TourIcon({ type, color = "rgba(255,255,255,0.55)", size = 48 }) {
+function TourIcon({ type, color = "#fff", size = 48 }) {
   const icons = {
-    pixel: <svg width={size} height={size} viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="12" height="12" rx="1" fill={color}/><rect x="20" y="4" width="12" height="12" rx="1" fill={color} opacity=".5"/><rect x="4" y="20" width="12" height="12" rx="1" fill={color} opacity=".5"/><rect x="20" y="20" width="12" height="12" rx="1" fill={color}/><rect x="36" y="4" width="4" height="4" rx="1" fill={color} opacity=".3"/></svg>,
-    globe: <svg width={size} height={size} viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke={color} strokeWidth="1.5"/><ellipse cx="20" cy="20" rx="8" ry="16" stroke={color} strokeWidth="1.5"/><line x1="4" y1="20" x2="36" y2="20" stroke={color} strokeWidth="1.5"/><line x1="20" y1="4" x2="20" y2="36" stroke={color} strokeWidth="1.5"/></svg>,
-    bot: <svg width={size} height={size} viewBox="0 0 40 40" fill="none"><rect x="8" y="12" width="24" height="20" rx="4" stroke={color} strokeWidth="1.5"/><circle cx="16" cy="22" r="2.5" fill={color}/><circle cx="24" cy="22" r="2.5" fill={color}/><path d="M15 28c0 0 2 2.5 5 2.5s5-2.5 5-2.5" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="20" y1="6" x2="20" y2="12" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle cx="20" cy="5" r="2" fill={color}/></svg>,
-    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
-    fork: <svg width={size} height={size} viewBox="0 0 40 40" fill="none"><circle cx="20" cy="8" r="3" stroke={color} strokeWidth="1.5"/><circle cx="10" cy="32" r="3" stroke={color} strokeWidth="1.5"/><circle cx="30" cy="32" r="3" stroke={color} strokeWidth="1.5"/><path d="M20 11v8c0 4-10 4-10 10" stroke={color} strokeWidth="1.5"/><path d="M20 19c0 4 10 4 10 10" stroke={color} strokeWidth="1.5"/></svg>,
+    pixel: <svg className="tour-icon-pixel" width={size} height={size} viewBox="0 0 40 40" fill="none"><rect className="tpx-1" x="4" y="4" width="12" height="12" rx="1" fill={color}/><rect className="tpx-2" x="20" y="4" width="12" height="12" rx="1" fill={color} opacity=".5"/><rect className="tpx-3" x="4" y="20" width="12" height="12" rx="1" fill={color} opacity=".5"/><rect className="tpx-4" x="20" y="20" width="12" height="12" rx="1" fill={color}/><rect className="tpx-5" x="36" y="4" width="4" height="4" rx="1" fill={color} opacity=".3"/></svg>,
+    globe: <svg className="tour-icon-globe" width={size} height={size} viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke={color} strokeWidth="1.5"/><ellipse className="tglobe-spin" cx="20" cy="20" rx="8" ry="16" stroke={color} strokeWidth="1.5"/><line x1="4" y1="20" x2="36" y2="20" stroke={color} strokeWidth="1.5"/><line x1="20" y1="4" x2="20" y2="36" stroke={color} strokeWidth="1.5"/></svg>,
+    bot: <svg className="tour-icon-bot" width={size} height={size} viewBox="0 0 40 40" fill="none"><rect x="8" y="12" width="24" height="20" rx="4" stroke={color} strokeWidth="1.5"/><circle className="tbot-eye-l" cx="16" cy="22" r="2.5" fill={color}/><circle className="tbot-eye-r" cx="24" cy="22" r="2.5" fill={color}/><path d="M15 28c0 0 2 2.5 5 2.5s5-2.5 5-2.5" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="20" y1="6" x2="20" y2="12" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle className="tbot-antenna" cx="20" cy="5" r="2" fill={color}/></svg>,
+    chain: <svg className="tour-icon-chain" width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tchain-l" x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect className="tchain-r" x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line className="tchain-bar1" x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line className="tchain-bar2" x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
+    fork: <svg className="tour-icon-fork" width={size} height={size} viewBox="0 0 40 40" fill="none"><circle cx="20" cy="8" r="3" stroke={color} strokeWidth="1.5"/><circle className="tfork-l" cx="10" cy="32" r="3" stroke={color} strokeWidth="1.5"/><circle className="tfork-r" cx="30" cy="32" r="3" stroke={color} strokeWidth="1.5"/><path d="M20 11v8c0 4-10 4-10 10" stroke={color} strokeWidth="1.5"/><path d="M20 19c0 4 10 4 10 10" stroke={color} strokeWidth="1.5"/></svg>,
   };
   return icons[type] || null;
 }
@@ -245,7 +245,19 @@ function TourOverlay({ onClose }) {
   const isLast = slide === TOUR_SLIDES.length - 1;
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(0,0,0,0.95)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={onClose}>
-      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
+      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes pixPulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tpx-1{animation:pixPulse 2.4s ease-in-out infinite}.tpx-2{animation:pixPulse 2.4s ease-in-out .4s infinite}.tpx-3{animation:pixPulse 2.4s ease-in-out .8s infinite}.tpx-4{animation:pixPulse 2.4s ease-in-out 1.2s infinite}.tpx-5{animation:pixPulse 2.4s ease-in-out 1.6s infinite}
+@keyframes globeSway{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.4)}}
+.tglobe-spin{transform-origin:center;animation:globeSway 4s ease-in-out infinite}
+@keyframes botBlink{0%,42%,50%,100%{opacity:1}45%,48%{opacity:0}}
+@keyframes antennaPulse{0%,100%{opacity:1;r:2}50%{opacity:.5;r:3}}
+.tbot-eye-l,.tbot-eye-r{animation:botBlink 3s ease-in-out infinite}.tbot-antenna{animation:antennaPulse 2s ease-in-out infinite}
+@keyframes chainSlide{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
+@keyframes chainSlideR{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
+.tchain-l{animation:chainSlide 3s ease-in-out infinite}.tchain-r{animation:chainSlideR 3s ease-in-out infinite}
+@keyframes forkPulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tfork-l{animation:forkPulse 2.5s ease-in-out infinite}.tfork-r{animation:forkPulse 2.5s ease-in-out .6s infinite}`}</style>
       <div onClick={e => e.stopPropagation()} style={{ animation: "tourIn .35s ease-out", maxWidth: 460, width: "90%", textAlign: "center", padding: "48px 36px 40px", border: `1px solid #007bc466`, borderRadius: 14, background: "#000" }}>
         <div style={{ marginBottom: 20 }}><TourIcon type={s.icon} size={48} /></div>
         <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: 4, fontFamily: FH, color: BRAND.yellow, lineHeight: 1.7, marginBottom: 16, whiteSpace: "pre-line" }}>{s.title}</div>

@@ -15,6 +15,7 @@
     .game-layout { flex-direction: column !important; }
     .game-sidebar { width: 100% !important; min-width: 0 !important; border-left: none !important; border-right: none !important; }
     .game-sidebar-left { display: none !important; }
+    .game-sidebar-right { display: none !important; }
     .game-header { position: sticky; top: 0; z-index: 50; background: #000 !important; min-height: auto !important; padding: 8px 12px !important; }
   }
 </style>
@@ -91,12 +92,12 @@ function HowBtn({onClick}) {
   return <button onClick={onClick} style={{background:"#000", border:`1px solid ${BRAND.border}`, color:"#fff", borderRadius:20, padding:"12px 24px 8px", fontSize:16, cursor:"pointer", fontFamily:FH, letterSpacing:2, fontWeight:300, display:"inline-flex", alignItems:"center", justifyContent:"center", lineHeight:1, minHeight:38, whiteSpace:"nowrap"}}>HOW THIS WORKS</button>;
 }
 
-function TourIcon({type, color="rgba(255,255,255,0.55)", size=48}) {
+function TourIcon({type, color="#fff", size=48}) {
   const icons = {
-    droplet: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M24 6c0 0-14 16-14 26a14 14 0 0028 0c0-10-14-26-14-26z" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/><circle cx="24" cy="30" r="4" fill={color} opacity=".3"/></svg>,
-    globe: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><ellipse cx="24" cy="24" rx="9" ry="18" stroke={color} strokeWidth="1.5"/><line x1="6" y1="24" x2="42" y2="24" stroke={color} strokeWidth="1.5"/><path d="M8 14h32M8 34h32" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
-    flag: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><line x1="12" y1="6" x2="12" y2="42" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><path d="M12 8h24l-6 8 6 8H12" stroke={color} strokeWidth="1.5" fill={color} fillOpacity=".15"/></svg>,
-    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
+    droplet: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M24 6c0 0-14 16-14 26a14 14 0 0028 0c0-10-14-26-14-26z" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/><circle className="tdrop-inner" cx="24" cy="30" r="4" fill={color} opacity=".3"/></svg>,
+    globe: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><ellipse className="tglobe-spin" cx="24" cy="24" rx="9" ry="18" stroke={color} strokeWidth="1.5"/><line x1="6" y1="24" x2="42" y2="24" stroke={color} strokeWidth="1.5"/><path d="M8 14h32M8 34h32" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
+    flag: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><line x1="12" y1="6" x2="12" y2="42" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><path className="tflag-wave" d="M12 8h24l-6 8 6 8H12" stroke={color} strokeWidth="1.5" fill={color} fillOpacity=".15"/></svg>,
+    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tchain-l" x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect className="tchain-r" x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
   };
   return icons[type] || null;
 }
@@ -113,7 +114,16 @@ function TourOverlay({onClose}) {
   const isLast = si === slides.length - 1;
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(12px)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
-      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
+      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes dropPulse{0%,100%{opacity:.3;r:4}50%{opacity:.7;r:5}}
+.tdrop-inner{animation:dropPulse 2.5s ease-in-out infinite}
+@keyframes globeSway{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.4)}}
+.tglobe-spin{transform-origin:center;animation:globeSway 4s ease-in-out infinite}
+@keyframes flagWave{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
+.tflag-wave{animation:flagWave 2.5s ease-in-out infinite}
+@keyframes chainSlide{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
+@keyframes chainSlideR{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
+.tchain-l{animation:chainSlide 3s ease-in-out infinite}.tchain-r{animation:chainSlideR 3s ease-in-out infinite}`}</style>
       <div onClick={e=>e.stopPropagation()} style={{animation:"tourIn .35s ease-out",maxWidth:460,width:"90%",padding:"48px 36px 40px",border:`1px solid #007bc466`,borderRadius:14,background:"#000",textAlign:"center"}}>
         <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
         <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
@@ -272,24 +282,6 @@ function F1R3Ink() {
             )}
             <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB}}>How does this F1R3INK make you feel?</div>
           </div>
-
-          {/* INKED BY section */}
-          <div style={{display:"flex",flexDirection:"column",gap:12}}>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,textTransform:"uppercase"}}>INKED BY</div>
-            {MY_INKS.length > 0 ? (
-              <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                {MY_INKS.map((s,i) => (
-                  <div key={i} style={{display:"flex",alignItems:"center",gap:8}}>
-                    <div style={{width:12,height:12,borderRadius:"50%",background:s.color,flexShrink:0,border:`1px solid ${BRAND.border}`}}/>
-                    <span style={{fontSize:16,color:"#fff",fontFamily:FB}}>{s.from}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{color:BRAND.textSecondary,fontSize:16,textAlign:"center",lineHeight:1.6,fontFamily:FB}}>no ink yet<br/><span>others will color your flag</span></div>
-            )}
-            <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginTop:4}}>powered by F1R3INK</div>
-          </div>
         </div>
 
         {/* Center — Community */}
@@ -316,6 +308,26 @@ function F1R3Ink() {
                 <div style={{fontSize:16,color:BRAND.textSecondary,marginTop:6,fontFamily:FB}}>{p.inks.length} ink{p.inks.length!==1?"s":""}</div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Right Sidebar — Inked By */}
+        <div className="game-sidebar game-sidebar-right" style={{width:300,minWidth:300,flexShrink:0,borderLeft:`1px solid ${BRAND.border}`,padding:"20px 16px",display:"flex",flexDirection:"column",gap:20,overflowY:"auto",background:"#000"}}>
+          <div style={{display:"flex",flexDirection:"column",gap:12}}>
+            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,textTransform:"uppercase"}}>INKED BY</div>
+            {MY_INKS.length > 0 ? (
+              <div style={{display:"flex",flexDirection:"column",gap:6}}>
+                {MY_INKS.map((s,i) => (
+                  <div key={i} style={{display:"flex",alignItems:"center",gap:8}}>
+                    <div style={{width:12,height:12,borderRadius:"50%",background:s.color,flexShrink:0,border:`1px solid ${BRAND.border}`}}/>
+                    <span style={{fontSize:16,color:"#fff",fontFamily:FB}}>{s.from}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{color:BRAND.textSecondary,fontSize:16,textAlign:"center",lineHeight:1.6,fontFamily:FB}}>no ink yet<br/><span>others will color your flag</span></div>
+            )}
+            <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginTop:4}}>powered by F1R3INK</div>
           </div>
         </div>
       </div>

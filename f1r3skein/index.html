@@ -85,16 +85,16 @@ function HowBtn({onClick}) {
   return <button onClick={onClick} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:300,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>HOW THIS WORKS</button>;
 }
 
-function TourIcon({type, color="rgba(255,255,255,0.55)", size=48}) {
+function TourIcon({type, color="#fff", size=48}) {
   const icons = {
-    dna: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M16 6c0 8 16 10 16 18s-16 10-16 18" stroke={color} strokeWidth="1.5" fill="none"/><path d="M32 6c0 8-16 10-16 18s16 10 16 18" stroke={color} strokeWidth="1.5" fill="none"/><line x1="16" y1="15" x2="32" y2="15" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="24" x2="32" y2="24" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="33" x2="32" y2="33" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
-    ear: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M30 10c6 3 10 9 10 16s-4 14-10 16" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><path d="M26 16c3 1.5 5 5 5 8s-2 7-5 8" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle cx="18" cy="24" r="4" fill={color} opacity=".5"/><line x1="8" y1="24" x2="14" y2="24" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
-    selection: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M8 36L24 8l16 28H8z" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/><circle cx="24" cy="28" r="4" fill={color} opacity=".4"/><line x1="16" y1="32" x2="32" y2="32" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
-    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
-    globe: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><ellipse cx="24" cy="24" rx="9" ry="18" stroke={color} strokeWidth="1.5"/><line x1="6" y1="24" x2="42" y2="24" stroke={color} strokeWidth="1.5"/><path d="M8 14h32M8 34h32" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
-    book: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M8 8h14c2 0 2 2 2 2v28s0-2-2-2H8V8z" stroke={color} strokeWidth="1.5"/><path d="M40 8H26c-2 0-2 2-2 2v28s0-2 2-2h14V8z" stroke={color} strokeWidth="1.5"/><line x1="12" y1="16" x2="20" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="12" y1="20" x2="18" y2="20" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="16" x2="36" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="20" x2="34" y2="20" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
-    spectrum: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="6" y="32" width="8" height="10" rx="1" fill={color} opacity=".3"/><rect x="16" y="24" width="8" height="18" rx="1" fill={color} opacity=".45"/><rect x="26" y="16" width="8" height="26" rx="1" fill={color} opacity=".6"/><rect x="36" y="8" width="8" height="34" rx="1" fill={color} opacity=".8"/></svg>,
-    bot: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="10" y="14" width="28" height="24" rx="5" stroke={color} strokeWidth="1.5"/><circle cx="19" cy="26" r="3" fill={color}/><circle cx="29" cy="26" r="3" fill={color}/><path d="M18 33c0 0 2.5 3 6 3s6-3 6-3" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="24" y1="6" x2="24" y2="14" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle cx="24" cy="5" r="2.5" fill={color}/></svg>,
+    dna: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path className="tdna-l" d="M16 6c0 8 16 10 16 18s-16 10-16 18" stroke={color} strokeWidth="1.5" fill="none"/><path className="tdna-r" d="M32 6c0 8-16 10-16 18s16 10 16 18" stroke={color} strokeWidth="1.5" fill="none"/><line x1="16" y1="15" x2="32" y2="15" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="24" x2="32" y2="24" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="33" x2="32" y2="33" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
+    ear: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path className="tear-outer" d="M30 10c6 3 10 9 10 16s-4 14-10 16" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><path className="tear-inner" d="M26 16c3 1.5 5 5 5 8s-2 7-5 8" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle className="tear-dot" cx="18" cy="24" r="4" fill={color} opacity=".5"/><line x1="8" y1="24" x2="14" y2="24" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
+    selection: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M8 36L24 8l16 28H8z" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/><circle className="tsel-dot" cx="24" cy="28" r="4" fill={color} opacity=".4"/><line x1="16" y1="32" x2="32" y2="32" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
+    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tchain-l" x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect className="tchain-r" x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
+    globe: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><ellipse className="tglobe-spin" cx="24" cy="24" rx="9" ry="18" stroke={color} strokeWidth="1.5"/><line x1="6" y1="24" x2="42" y2="24" stroke={color} strokeWidth="1.5"/><path d="M8 14h32M8 34h32" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
+    book: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path className="tbook-l" d="M8 8h14c2 0 2 2 2 2v28s0-2-2-2H8V8z" stroke={color} strokeWidth="1.5"/><path className="tbook-r" d="M40 8H26c-2 0-2 2-2 2v28s0-2 2-2h14V8z" stroke={color} strokeWidth="1.5"/><line x1="12" y1="16" x2="20" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="12" y1="20" x2="18" y2="20" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="16" x2="36" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="20" x2="34" y2="20" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
+    spectrum: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tspec-1" x="6" y="32" width="8" height="10" rx="1" fill={color} opacity=".3"/><rect className="tspec-2" x="16" y="24" width="8" height="18" rx="1" fill={color} opacity=".45"/><rect className="tspec-3" x="26" y="16" width="8" height="26" rx="1" fill={color} opacity=".6"/><rect className="tspec-4" x="36" y="8" width="8" height="34" rx="1" fill={color} opacity=".8"/></svg>,
+    bot: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="10" y="14" width="28" height="24" rx="5" stroke={color} strokeWidth="1.5"/><circle className="tbot-eye-l" cx="19" cy="26" r="3" fill={color}/><circle className="tbot-eye-r" cx="29" cy="26" r="3" fill={color}/><path d="M18 33c0 0 2.5 3 6 3s6-3 6-3" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="24" y1="6" x2="24" y2="14" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle className="tbot-antenna" cx="24" cy="5" r="2.5" fill={color}/></svg>,
   };
   return icons[type] || null;
 }
@@ -111,7 +111,29 @@ function TourOverlay({onClose}) {
   const isLast = si === slides.length - 1;
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(12px)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
-      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
+      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes dnaShift{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
+@keyframes dnaShiftR{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
+.tdna-l{animation:dnaShift 3s ease-in-out infinite}.tdna-r{animation:dnaShiftR 3s ease-in-out infinite}
+@keyframes earPulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tear-outer{animation:earPulse 2s ease-in-out infinite}.tear-inner{animation:earPulse 2s ease-in-out .5s infinite}
+@keyframes earDot{0%,100%{opacity:.5;r:4}50%{opacity:.9;r:5}}
+.tear-dot{animation:earDot 2s ease-in-out infinite}
+@keyframes selPulse{0%,100%{opacity:.4}50%{opacity:.9}}
+.tsel-dot{animation:selPulse 2.5s ease-in-out infinite}
+@keyframes chainSlide{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
+@keyframes chainSlideR{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
+.tchain-l{animation:chainSlide 3s ease-in-out infinite}.tchain-r{animation:chainSlideR 3s ease-in-out infinite}
+@keyframes globeSway{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.4)}}
+.tglobe-spin{transform-origin:center;animation:globeSway 4s ease-in-out infinite}
+@keyframes bookOpen{0%,100%{transform:rotate(0)}50%{transform:rotate(-2deg)}}
+@keyframes bookOpenR{0%,100%{transform:rotate(0)}50%{transform:rotate(2deg)}}
+.tbook-l{transform-origin:right center;animation:bookOpen 3s ease-in-out infinite}.tbook-r{transform-origin:left center;animation:bookOpenR 3s ease-in-out infinite}
+@keyframes specGrow{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.15)}}
+.tspec-1{transform-origin:bottom;animation:specGrow 2s ease-in-out infinite}.tspec-2{transform-origin:bottom;animation:specGrow 2s ease-in-out .2s infinite}.tspec-3{transform-origin:bottom;animation:specGrow 2s ease-in-out .4s infinite}.tspec-4{transform-origin:bottom;animation:specGrow 2s ease-in-out .6s infinite}
+@keyframes botBlink{0%,42%,50%,100%{opacity:1}45%,48%{opacity:0}}
+@keyframes antennaPulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tbot-eye-l,.tbot-eye-r{animation:botBlink 3s ease-in-out infinite}.tbot-antenna{animation:antennaPulse 2s ease-in-out infinite}`}</style>
       <div onClick={e=>e.stopPropagation()} style={{animation:"tourIn .35s ease-out",maxWidth:460,width:"90%",padding:"48px 36px 40px",border:`1px solid #007bc466`,borderRadius:14,background:"#000",textAlign:"center"}}>
         <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
         <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
