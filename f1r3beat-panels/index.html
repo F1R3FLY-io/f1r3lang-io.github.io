@@ -14,7 +14,7 @@
   .join-solid-box { background: #000 !important; position: relative; z-index: 1; }
   @media (max-width: 1024px) {
     .game-layout { flex-direction: column !important; }
-    .game-sidebar { width: 100% !important; border-left: none !important; border-right: none !important; border-top: 1px solid #3FA9F566 !important; padding: 16px !important; max-height: none !important; overflow-y: visible !important; }
+    .game-sidebar { width: 100% !important; border-left: none !important; border-right: none !important; border-top: 1px solid #007bc466 !important; padding: 16px !important; max-height: none !important; overflow-y: visible !important; }
     .game-sidebar-left { border-top: none !important; }
     .beat-grid-outer { padding: 24px 12px !important; min-height: 420px !important; }
   }
@@ -36,7 +36,7 @@ const { useState, useEffect, useRef } = React;
 
 const BRAND = {
   yellow: "#F3D630", sage: "#8BB999", sky: "#3FA9F5",
-  border: "#3FA9F566",
+  border: "#007bc466",
   stroke: "linear-gradient(90deg, #F3D630, #8BB999)",
   textSecondary: "#A0A0A0"
 };
@@ -116,31 +116,45 @@ function HumanIcon({size=14, color="#fff"}) {
 }
 
 function HowBtn({onClick}) {
-  return <button onClick={onClick} style={{background:"#000", border:`1px solid ${BRAND.border}`, color:"#fff", borderRadius:20, padding:"10px 24px", fontSize:16, cursor:"pointer", fontFamily:FH, letterSpacing:2, fontWeight:400, display:"inline-flex", alignItems:"center", justifyContent:"center", lineHeight:1, minHeight:38}}>HOW THIS WORKS</button>;
+  return <button onClick={onClick} style={{background:"#000", border:`1px solid ${BRAND.border}`, color:"#fff", borderRadius:20, padding:"10px 24px", fontSize:16, cursor:"pointer", fontFamily:FH, letterSpacing:2, fontWeight:300, display:"inline-flex", alignItems:"center", justifyContent:"center", lineHeight:1, minHeight:38}}>HOW THIS WORKS</button>;
+}
+
+function TourIcon({type, color="rgba(255,255,255,0.55)", size=48}) {
+  const icons = {
+    waveform: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><line x1="8" y1="14" x2="8" y2="34" stroke={color} strokeWidth="2" strokeLinecap="round"/><line x1="14" y1="8" x2="14" y2="40" stroke={color} strokeWidth="2" strokeLinecap="round"/><line x1="20" y1="18" x2="20" y2="30" stroke={color} strokeWidth="2" strokeLinecap="round"/><line x1="26" y1="10" x2="26" y2="38" stroke={color} strokeWidth="2" strokeLinecap="round"/><line x1="32" y1="16" x2="32" y2="32" stroke={color} strokeWidth="2" strokeLinecap="round"/><line x1="38" y1="12" x2="38" y2="36" stroke={color} strokeWidth="2" strokeLinecap="round"/></svg>,
+    grid: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="6" y="6" width="10" height="10" rx="2" stroke={color} strokeWidth="1.5"/><rect x="19" y="6" width="10" height="10" rx="2" stroke={color} strokeWidth="1.5"/><rect x="32" y="6" width="10" height="10" rx="2" fill={color} opacity=".4"/><rect x="6" y="19" width="10" height="10" rx="2" stroke={color} strokeWidth="1.5"/><rect x="19" y="19" width="10" height="10" rx="2" fill={color} opacity=".4"/><rect x="32" y="19" width="10" height="10" rx="2" stroke={color} strokeWidth="1.5"/><rect x="6" y="32" width="10" height="10" rx="2" fill={color} opacity=".4"/><rect x="19" y="32" width="10" height="10" rx="2" stroke={color} strokeWidth="1.5"/><rect x="32" y="32" width="10" height="10" rx="2" stroke={color} strokeWidth="1.5"/></svg>,
+    record: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><circle cx="24" cy="24" r="8" fill={color} opacity=".5"/><path d="M24 6v4M24 38v4M6 24h4M38 24h4" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
+    globe: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><ellipse cx="24" cy="24" rx="9" ry="18" stroke={color} strokeWidth="1.5"/><line x1="6" y1="24" x2="42" y2="24" stroke={color} strokeWidth="1.5"/><path d="M8 14h32M8 34h32" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
+    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
+  };
+  return icons[type] || null;
 }
 
 function TourOverlay({onClose}) {
   const slides = [
-    { title:"BEAT IS A CONVERSATION\nMADE OF RHYTHM", body:"Toggle a cell. Hear it. Someone else toggles another. Now you're playing together. Not a solo. A collective groove, built one step at a time." },
-    { title:"EIGHT VOICES\nSIXTEEN STEPS", body:"Rows are instruments — kick, snare, hats, toms, clap, rim. Columns are 16th notes. Play loops. Everyone hears what everyone does, the moment they do it." },
-    { title:"RECORD THE EVOLUTION\nNOT JUST THE SNAPSHOT", body:"The record button captures the whole arc — how the beat grew from silence to groove. Every toggle is a signed transaction on the shard. The session is the artifact." },
-    { title:"BUILT ON\nF1R3FLY", body:"F1R3BEAT runs on F1R3FLY's shared computing layer. Every cell toggle is a real transaction on a real shard. No central server. No single point of failure." }
+    { icon:"waveform", title:"BEAT IS A CONVERSATION\nMADE OF RHYTHM", body:"Toggle a cell. Hear it. Someone else toggles another. Now you're playing together. Not a solo. A collective groove, built one step at a time." },
+    { icon:"grid", title:"EIGHT VOICES\nSIXTEEN STEPS", body:"Rows are instruments — kick, snare, hats, toms, clap, rim. Columns are 16th notes. Play loops. Everyone hears what everyone does, the moment they do it." },
+    { icon:"record", title:"RECORD THE EVOLUTION\nNOT JUST THE SNAPSHOT", body:"The record button captures the whole arc — how the beat grew from silence to groove. Every toggle is a signed transaction on the shard. The session is the artifact." },
+    { icon:"globe", title:"YOUR UNIQUE F1R3SIGN\nTRAVELS WITH YOU", body:"Your F1R3Sign isn't locked to this game. It moves with you across every service built on F1R3FLY. One sign, one reputation, everywhere." },
+    { icon:"chain", title:"BUILT ON\nF1R3FLY", body:"F1R3BEAT runs on F1R3FLY's shared computing layer. Every cell toggle is a real transaction on a real shard. No central server. No single point of failure." },
   ];
   const [si, setSi] = useState(0);
   const s = slides[si];
+  const isLast = si === slides.length - 1;
   return (
-    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.92)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
-      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}`}</style>
-      <div onClick={e=>e.stopPropagation()} style={{maxWidth:480,width:"90%",padding:"48px 40px",border:`1px dashed ${BRAND.sky}66`,borderRadius:14,background:"#000",animation:"tourIn 0.3s ease-out",textAlign:"center"}}>
-        <h2 style={{fontSize:22,fontWeight:700,letterSpacing:4,color:"#fff",lineHeight:1.5,whiteSpace:"pre-line",margin:"0 0 20px"}}>{s.title}</h2>
-        <p style={{fontSize:16,color:"#fff",lineHeight:1.8,fontFamily:FB,margin:0}}>{s.body}</p>
-        <div style={{display:"flex",justifyContent:"center",gap:8,marginTop:32}}>
-          {slides.map((_,i)=><div key={i} onClick={()=>setSi(i)} style={{width:8,height:8,borderRadius:"50%",background:i===si?BEAT_ACCENT:BRAND.textSecondary,cursor:"pointer"}} />)}
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(12px)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
+      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
+      <div onClick={e=>e.stopPropagation()} style={{animation:"tourIn .35s ease-out",maxWidth:460,width:"90%",padding:"48px 36px 40px",border:`1px dashed #007bc466`,borderRadius:14,background:"#000",textAlign:"center"}}>
+        <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
+        <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
+        <div style={{width:80,height:1,background:"linear-gradient(90deg, #F3D630, #8BB999)",margin:"0 auto 20px"}}/>
+        <div style={{fontSize:17,color:"#fff",lineHeight:1.6,fontFamily:FB,marginBottom:36}}>{s.body}</div>
+        <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:28}}>
+          {slides.map((_,i)=><div key={i} onClick={()=>setSi(i)} style={{width:10,height:10,borderRadius:"50%",background:i===si?BRAND.yellow:"rgba(255,255,255,0.2)",cursor:"pointer",transition:"background .2s"}} />)}
         </div>
-        <div style={{marginTop:24}}>
-          {si < slides.length-1
-            ? <button onClick={()=>setSi(si+1)} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 28px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:2,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>NEXT</button>
-            : <button onClick={onClose} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 28px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:2,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>LET'S GO</button>}
+        <div style={{display:"flex",justifyContent:"center",gap:16}}>
+          {si > 0 && <button onClick={()=>setSi(si-1)} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,cursor:"pointer",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>BACK</button>}
+          <button onClick={()=>isLast?onClose():setSi(si+1)} style={{background:"linear-gradient(135deg, #5c0269, #7b0429)",border:"none",color:"#fff",borderRadius:20,padding:"12px 28px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,fontWeight:600,cursor:"pointer",boxShadow:"0 0 16px rgba(123,4,41,0.4)",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>{isLast?"LET\u2019S GO":"NEXT"}</button>
         </div>
       </div>
     </div>
@@ -149,9 +163,8 @@ function TourOverlay({onClose}) {
 
 function BuiltOnBadge() {
   return (
-    <div style={{position:"fixed",bottom:16,left:"50%",transform:"translateX(-50%)",zIndex:100,display:"flex",alignItems:"center",gap:10,background:"#000",border:`1px solid ${BRAND.border}`,borderRadius:8,padding:"8px 16px",fontFamily:FH,fontSize:16,letterSpacing:2,color:"#fff",cursor:"pointer",backdropFilter:"blur(8px)"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
-      <span style={{color:"#fff",fontSize:16,letterSpacing:2}}>BUILT ON</span>
-      <svg width="120" viewBox="0 0 2343 535" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="b-lg" x1="620.975" y1="117.901" x2="793.518" y2="-180.951" gradientTransform="translate(-545.342 290.672) rotate(-4.856)" gradientUnits="userSpaceOnUse"><stop offset="0" stopColor="#009188"/><stop offset="1" stopColor="#007bc4"/></linearGradient><linearGradient id="b-lg1" x1="10868.88" y1="2958.368" x2="11042.919" y2="2656.923" gradientTransform="translate(11539.772 2556.8) rotate(-153.904) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stopColor="#009188"/><stop offset="1" stopColor="#007bc4"/></linearGradient><linearGradient id="b-lg2" x1="1278.548" y1="-693.973" x2="1379.282" y2="-693.973" gradientTransform="translate(-816.84 975.667) rotate(-11.485)" xlinkHref="#b-lg"/><radialGradient id="b-rg" cx="-507.17" cy="1315.506" fx="-507.17" fy="1166.669" r="148.898" gradientTransform="translate(-462.725 1690.402) rotate(-169.698) scale(1.001 1.048) skewX(.542)" gradientUnits="userSpaceOnUse"><stop offset=".159" stopColor="#ebe1a3"/><stop offset=".658" stopColor="#f3d630"/><stop offset=".995" stopColor="#f3d630"/></radialGradient></defs><g><path fill="url(#b-lg)" d="M316.697,105.798c-37.703,124.422-167.35,232.91-298.749,218.058-19.188-3.649-20.283-20.828-15.672-37.06C31.864,162.855,152.312,70.533,276.989,74.429c21.882.057,44.988,2.747,39.708,31.368Z"/><path fill="url(#b-lg1)" d="M349.717,112.154c-8.765,129.993,73.792,279.334,201.506,314.364,19.172,3.736,26.255-11.869,27.685-28.713,16.157-126.526-63.53-257.377-181.112-300.119-20.416-8.086-42.901-14.173-48.079,14.468Z"/><path fill="url(#b-lg2)" d="M400.519,44.343c1.708-41.624-83.95-62.735-103.871-23.736-3.572,6.996-.071,15.53,6.922,17.387,25.852,6.863,56.168,11.194,82.282,18.292,7.128,1.934,14.336-3.926,14.667-11.944Z"/><path fill="url(#b-rg)" d="M378.911,353.267c-46.405,267.616-227.024,226.916-174.919-34.206,44.206-27.89,81.981-64.979,110.028-108.046,11.008,50.816,33.273,99.674,64.892,142.252Z"/></g><g><path fill="#fff" d="M755.273,169.256c0-2.975,2.379-5.652,5.652-5.652h121.068c3.271,0,5.652,2.677,5.652,5.652v24.391c0,2.975-2.381,5.652-5.652,5.652h-88.049v55.924h73.473c2.975,0,5.652,2.677,5.652,5.652v24.392c0,2.974-2.677,5.652-5.652,5.652h-73.473v75.258c0,2.975-2.678,5.652-5.652,5.652h-27.367c-3.272,0-5.652-2.677-5.652-5.652v-196.92Z"/><path fill="#fff" d="M952.779,223.691l-26.177,5.652c-2.677.595-5.652-1.189-5.949-3.867l-1.785-14.576c-.297-2.379.297-4.164,1.488-5.353l42.834-35.993h20.822c2.975,0,5.355,2.677,5.355,5.652v190.971c0,2.975-2.379,5.652-5.355,5.652h-25.581c-3.272,0-5.652-2.677-5.652-5.652v-142.485Z"/><path fill="#fff" d="M1058.965,169.256c0-2.975,2.379-5.652,5.652-5.652h85.075c35.696,0,64.847,28.556,64.847,63.954,0,27.367-18.146,49.676-44.024,60.088l40.752,75.555c2.082,3.868,0,8.627-5.056,8.627h-31.234c-2.677,0-4.164-1.488-4.759-2.677l-39.563-78.828h-33.018v75.853c0,2.975-2.678,5.652-5.652,5.652h-27.367c-3.272,0-5.652-2.677-5.652-5.652v-196.92ZM1146.419,258.494c15.765,0,29.449-13.683,29.449-30.34,0-15.766-13.684-28.855-29.449-28.855h-48.486v59.195h48.486Z"/><path fill="#fff" d="M1255.873,340.892l15.171-14.576c2.677-2.379,5.355-2.379,7.734,0,.892,1.19,18.443,16.064,36.588,16.064,16.063,0,31.532-11.602,31.532-27.962,0-15.468-14.279-29.449-41.05-29.449h-16.658c-3.271,0-5.652-2.379-5.652-5.949v-18.74c0-3.867,2.082-5.949,5.652-5.949h16.658c24.392,0,36.885-12.196,36.885-27.366,0-16.361-13.683-27.366-28.854-27.366-15.468,0-24.987,8.329-30.044,14.278-2.082,2.379-5.353,2.677-8.031.297l-14.575-13.683c-2.381-2.082-2.082-5.652,0-7.734,0,0,22.606-26.177,55.923-26.177,34.506,0,63.359,21.12,63.359,54.436,0,22.905-17.253,40.157-30.639,46.404v.893c13.98,5.949,35.993,22.012,35.993,48.486,0,33.614-27.366,58.006-68.417,58.006-37.182,0-55.328-18.74-61.872-26.474-1.785-2.082-1.488-5.355.297-7.437Z"/><path fill="#fff" d="M1442.072,169.256c0-2.975,2.379-5.652,5.652-5.652h121.068c3.272,0,5.651,2.677,5.651,5.652v24.391c0,2.975-2.378,5.652-5.651,5.652h-88.049v55.924h73.473c2.975,0,5.653,2.677,5.653,5.652v24.392c0,2.974-2.678,5.652-5.653,5.652h-73.473v75.258c0,2.975-2.678,5.652-5.652,5.652h-27.367c-3.272,0-5.652-2.677-5.652-5.652v-196.92Z"/><path fill="#fff" d="M1624.705,169.256c0-2.975,2.381-5.652,5.653-5.652h27.366c2.975,0,5.651,2.677,5.651,5.652v166.876h75.853c3.272,0,5.653,2.678,5.653,5.652v24.392c0,2.975-2.381,5.652-5.653,5.652h-108.87c-3.272,0-5.653-2.677-5.653-5.652v-196.92Z"/><path fill="#fff" d="M1815.074,271.582l-67.822-99.352c-2.381-3.867,0-8.626,4.759-8.626h30.341c2.381,0,3.867,1.486,4.759,2.677l47.595,68.417,47.593-68.417c.892-1.19,2.381-2.677,4.759-2.677h30.641c4.759,0,7.137,4.759,4.759,8.626l-68.714,99.055v94.891c0,2.975-2.678,5.652-5.653,5.652h-27.366c-3.272,0-5.651-2.677-5.651-5.652v-94.594Z"/><path fill="#fff" d="M1961.416,325.721c13.387,0,24.691,11.304,24.691,24.689s-11.304,24.392-24.691,24.392-24.391-11.006-24.391-24.392,11.006-24.689,24.391-24.689Z"/><path fill="#fff" d="M2036.073,169.256c0-2.975,2.678-5.652,5.653-5.652h27.663c2.975,0,5.651,2.677,5.651,5.652v196.92c0,2.975-2.676,5.652-5.651,5.652h-27.663c-2.975,0-5.653-2.677-5.653-5.652v-196.92Z"/><path fill="#fff" d="M2235.958,160.629c59.493,0,107.086,47.891,107.086,107.384s-47.593,106.79-107.086,106.79-106.789-47.297-106.789-106.79,47.298-107.384,106.789-107.384ZM2235.958,336.132c37.481,0,68.417-30.639,68.417-68.119s-30.936-68.714-68.417-68.714-68.119,31.234-68.119,68.714,30.639,68.119,68.119,68.119Z"/></g></svg>
+    <div style={{position:"fixed",bottom:16,left:"50%",transform:"translateX(-50%)",zIndex:100,cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
+      <img src="built-on-f1r3fly.io-box.svg" alt="Built on F1R3FLY.IO" style={{height:48,display:"block"}}/>
     </div>
   );
 }
@@ -265,21 +278,21 @@ function F1R3Beat() {
   // ── JOIN SCREEN ─────────────────────────────────────────
   if (phase === "join") return (
     <div className="join-beat-bg" style={{minHeight:"100vh",background:"#000",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",fontFamily:FH,position:"relative",padding:"40px 20px"}}>
-      <style>{FONTS}{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:${BRAND.sky}66 !important;outline:none}`}</style>
+      <style>{FONTS}{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:#007bc466 !important;outline:none}`}</style>
       <div style={{animation:"fadeIn .6s ease-out",textAlign:"center",marginTop:-105,position:"relative",zIndex:1}}>
         <F1R3GamesLogo width={196}/>
-        <div style={{fontSize:16,color:"#fff",letterSpacing:6,fontFamily:FH,fontWeight:400,marginTop:24}}>PRESENTS</div>
+        <div style={{fontSize:16,color:"#fff",letterSpacing:6,fontFamily:FH,fontWeight:300,marginTop:24}}>PRESENTS</div>
         <div style={{height:40}}/>
-        <div className="join-solid-box" style={{border:`1px dashed ${BRAND.sky}66`,borderRadius:14,padding:"40px 48px",display:"inline-block"}}>
+        <div className="join-solid-box" style={{border:`1px dashed #007bc466`,borderRadius:14,padding:"40px 48px",display:"inline-block"}}>
           <h1 style={{margin:"0 0 20px",display:"flex",alignItems:"center",justifyContent:"center"}}><BeatLogo height={57}/></h1>
           <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:1.6}}>A COLLECTIVE GROOVE,<br/>BUILT STEP BY STEP</div>
         </div>
         <div style={{height:50}}/>
         <div style={{display:"flex",flexDirection:"column",gap:10,alignItems:"center"}}>
           <div style={{fontSize:16,color:BRAND.yellow,letterSpacing:4,fontWeight:700,fontFamily:FH}}>CHOOSE YOUR F1R3SIGN</div>
-          <input value={myName} onChange={e=>setMyName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handleJoin()} placeholder="someone rhythmic" style={{background:"#000",border:`1px dashed ${BRAND.sky}66`,borderRadius:6,color:"#fff",padding:"10px 16px",fontSize:16,fontWeight:300,width:"100%",maxWidth:460,fontFamily:FH,textAlign:"center",outline:"none",marginTop:20}}/>
+          <input value={myName} onChange={e=>setMyName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handleJoin()} placeholder="someone rhythmic" style={{background:"#000",border:`1px dashed #007bc466`,borderRadius:6,color:"#fff",padding:"10px 16px",fontSize:16,fontWeight:300,width:"100%",maxWidth:460,fontFamily:FH,textAlign:"center",outline:"none",marginTop:20}}/>
           <button onClick={handleJoin} style={{background:"linear-gradient(135deg, #5c0269, #7b0429)",color:"#fff",border:"none",borderRadius:20,padding:"12px 32px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:3,boxShadow:"0 0 20px rgba(123,4,41,0.4)",marginTop:20,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>JOIN</button>
-          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:400,fontFamily:FH,lineHeight:2.2,marginTop:20}}>YOUR F1R3SIGN TRAVELS<br/>WITH YOU ACROSS F1R3FLY</div>
+          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:2.2,marginTop:20}}>YOUR UNIQUE F1R3SIGN<br/>TRAVELS WITH YOU</div>
           <div style={{marginTop:12}}><HowBtn onClick={()=>setShowTour(true)}/></div>
         </div>
         <div style={{marginTop:16,color:BRAND.textSecondary,fontSize:16}}>{DEMO_PLAYERS.length} playing</div>
@@ -317,7 +330,7 @@ function F1R3Beat() {
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
           <HowBtn onClick={()=>setShowTour(true)}/>
-          <button onClick={()=>setPhase("join")} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"10px 18px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:1,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>LEAVE</button>
+          <button onClick={()=>setPhase("join")} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"10px 18px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:1,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap",fontWeight:300}}>LEAVE</button>
         </div>
       </div>
 
@@ -332,7 +345,7 @@ function F1R3Beat() {
 
           {/* TRANSPORT section */}
           <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:12}}>
-            <div style={{fontSize:16,textTransform:"uppercase",letterSpacing:2,color:"#fff",fontFamily:FH,fontWeight:400}}>TRANSPORT</div>
+            <div style={{fontSize:16,textTransform:"uppercase",letterSpacing:2,color:"#fff",fontFamily:FH,fontWeight:300}}>TRANSPORT</div>
 
             <button onClick={togglePlay} style={{
               background: playing ? "linear-gradient(135deg, #8b0000, #b91c1c)" : "linear-gradient(135deg, #5c0269, #7b0429)",
@@ -351,25 +364,25 @@ function F1R3Beat() {
                 style={{width:"100%"}}/>
             </div>
 
-            <button onClick={clearGrid} style={{background:"none",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:400,minHeight:38,width:"100%",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,whiteSpace:"nowrap"}}>CLEAR</button>
+            <button onClick={clearGrid} style={{background:"none",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:300,minHeight:38,width:"100%",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,whiteSpace:"nowrap"}}>CLEAR</button>
           </div>
 
           {/* SESSION / RECORD section — ember-accented */}
           <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:12,position:"relative"}}>
-            <div style={{fontSize:16,textTransform:"uppercase",letterSpacing:2,color:"#fff",fontFamily:FH,fontWeight:400}}>SESSION</div>
-            <button onClick={showRecordTip} style={{background:"none",border:`1px solid ${BEAT_ACCENT}66`,color:BEAT_ACCENT,borderRadius:20,padding:"12px 24px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:400,minHeight:38,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8,width:"100%",lineHeight:1,whiteSpace:"nowrap"}}>
+            <div style={{fontSize:16,textTransform:"uppercase",letterSpacing:2,color:"#fff",fontFamily:FH,fontWeight:300}}>SESSION</div>
+            <button onClick={showRecordTip} style={{background:"none",border:`1px solid ${BEAT_ACCENT}66`,color:BEAT_ACCENT,borderRadius:20,padding:"12px 24px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:300,minHeight:38,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8,width:"100%",lineHeight:1,whiteSpace:"nowrap"}}>
               <span style={{width:8,height:8,borderRadius:"50%",background:BEAT_ACCENT,display:"inline-block"}}/>
               RECORD
             </button>
             <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,lineHeight:1.4}}>captures the evolution of the beat — not just the snapshot</div>
             {recordTip && (
-              <div style={{position:"absolute",top:"calc(100% + 8px)",left:0,right:0,background:"#000",border:`1px dashed ${BRAND.sky}66`,borderRadius:8,padding:"8px 14px",fontSize:16,color:"#fff",fontFamily:FB,letterSpacing:1,animation:"tipIn 0.2s ease-out",zIndex:10,textAlign:"center"}}>coming soon</div>
+              <div style={{position:"absolute",top:"calc(100% + 8px)",left:0,right:0,background:"#000",border:`1px dashed #007bc466`,borderRadius:8,padding:"8px 14px",fontSize:16,color:"#fff",fontFamily:FB,letterSpacing:1,animation:"tipIn 0.2s ease-out",zIndex:10,textAlign:"center"}}>coming soon</div>
             )}
           </div>
 
           {/* SHARD status */}
           <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:12}}>
-            <div style={{fontSize:16,textTransform:"uppercase",letterSpacing:2,color:"#fff",fontFamily:FH,fontWeight:400}}>SHARD</div>
+            <div style={{fontSize:16,textTransform:"uppercase",letterSpacing:2,color:"#fff",fontFamily:FH,fontWeight:300}}>SHARD</div>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
               <span style={{width:8,height:8,borderRadius:"50%",background:"#4CD964",display:"inline-block",boxShadow:"0 0 6px rgba(76,217,100,0.6)"}}/>
               <span style={{fontSize:16,color:"#fff",fontFamily:FM}}>live · polling 2s</span>
@@ -409,7 +422,7 @@ function F1R3Beat() {
 
           {/* PLAYERS section */}
           <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:12}}>
-            <div style={{fontSize:16,textTransform:"uppercase",letterSpacing:2,color:"#fff",fontFamily:FH,fontWeight:400}}>PLAYERS</div>
+            <div style={{fontSize:16,textTransform:"uppercase",letterSpacing:2,color:"#fff",fontFamily:FH,fontWeight:300}}>PLAYERS</div>
 
             {/* Me */}
             <div style={{display:"flex",alignItems:"center",gap:10,padding:"8px 10px",borderRadius:6,border:`1px solid ${BEAT_ACCENT}44`,background:"rgba(255,107,43,0.04)"}}>

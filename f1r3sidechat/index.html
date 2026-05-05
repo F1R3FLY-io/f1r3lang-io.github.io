@@ -15,7 +15,7 @@
     .game-header { flex-wrap: wrap !important; padding: 10px 12px !important; }
     .story-layout { flex-direction: column !important; }
     .game-sidebar-left { display: none !important; }
-    .story-sidebar { width: 100% !important; min-width: 100% !important; border-left: none !important; border-top: 1px solid #3FA9F566 !important; max-height: none !important; flex-direction: column !important; gap: 16px !important; padding: 16px !important; }
+    .story-sidebar { width: 100% !important; min-width: 100% !important; border-left: none !important; border-top: 1px solid #007bc466 !important; max-height: none !important; flex-direction: column !important; gap: 16px !important; padding: 16px !important; }
     .story-main { padding: 20px 16px !important; }
   }
   @media (max-width: 480px) {
@@ -32,7 +32,7 @@ const { useState, useEffect, useCallback, useRef, useReducer } = React;
 const BRAND = {
   yellow: "#F3D630", sage: "#8BB999", sky: "#3FA9F5",
   surface: "#000000", card: "#0c0c18",
-  border: "#3FA9F566",
+  border: "#007bc466",
   stroke: "linear-gradient(90deg, #F3D630, #8BB999)",
   text: "#ffffff", textMuted: "#ffffff", textDim: "#ffffff",
   textSecondary: "#A0A0A0"
@@ -89,26 +89,46 @@ const COSTS = { DRIVE:100, AI_COAUTHOR:500, TALK_AUTHOR:250, TIP_MIN:10 };
 function Avatar({src, size=32}) { return <img src={src} alt="" style={{width:size,height:size,borderRadius:"50%",objectFit:"cover",border:`2px solid ${BRAND.border}`,flexShrink:0}} />; }
 function HumanIcon({size=14, color="#fff"}) { return (<svg width={size} height={size} viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke={color} strokeWidth="1.5" fill="none"/><path d="M2.5 15c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" stroke={color} strokeWidth="1.5" fill="none" strokeLinecap="round"/></svg>); }
 
-function HowBtn({onClick}) { return <button onClick={onClick} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:400,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>HOW THIS WORKS</button>; }
+function HowBtn({onClick}) { return <button onClick={onClick} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:300,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>HOW THIS WORKS</button>; }
+
+function TourIcon({type, color="rgba(255,255,255,0.55)", size=48}) {
+  const icons = {
+    dna: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M16 6c0 8 16 10 16 18s-16 10-16 18" stroke={color} strokeWidth="1.5" fill="none"/><path d="M32 6c0 8-16 10-16 18s16 10 16 18" stroke={color} strokeWidth="1.5" fill="none"/><line x1="16" y1="15" x2="32" y2="15" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="24" x2="32" y2="24" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="33" x2="32" y2="33" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
+    ear: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M30 10c6 3 10 9 10 16s-4 14-10 16" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><path d="M26 16c3 1.5 5 5 5 8s-2 7-5 8" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle cx="18" cy="24" r="4" fill={color} opacity=".5"/><line x1="8" y1="24" x2="14" y2="24" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
+    selection: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M8 36L24 8l16 28H8z" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/><circle cx="24" cy="28" r="4" fill={color} opacity=".4"/><line x1="16" y1="32" x2="32" y2="32" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
+    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
+    globe: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><ellipse cx="24" cy="24" rx="9" ry="18" stroke={color} strokeWidth="1.5"/><line x1="6" y1="24" x2="42" y2="24" stroke={color} strokeWidth="1.5"/><path d="M8 14h32M8 34h32" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
+    book: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M8 8h14c2 0 2 2 2 2v28s0-2-2-2H8V8z" stroke={color} strokeWidth="1.5"/><path d="M40 8H26c-2 0-2 2-2 2v28s0-2 2-2h14V8z" stroke={color} strokeWidth="1.5"/><line x1="12" y1="16" x2="20" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="12" y1="20" x2="18" y2="20" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="16" x2="36" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="20" x2="34" y2="20" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
+    spectrum: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="6" y="32" width="8" height="10" rx="1" fill={color} opacity=".3"/><rect x="16" y="24" width="8" height="18" rx="1" fill={color} opacity=".45"/><rect x="26" y="16" width="8" height="26" rx="1" fill={color} opacity=".6"/><rect x="36" y="8" width="8" height="34" rx="1" fill={color} opacity=".8"/></svg>,
+    bot: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="10" y="14" width="28" height="24" rx="5" stroke={color} strokeWidth="1.5"/><circle cx="19" cy="26" r="3" fill={color}/><circle cx="29" cy="26" r="3" fill={color}/><path d="M18 33c0 0 2.5 3 6 3s6-3 6-3" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="24" y1="6" x2="24" y2="14" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle cx="24" cy="5" r="2.5" fill={color}/></svg>,
+  };
+  return icons[type] || null;
+}
 
 function TourOverlay({onClose}) {
   const slides = [
-    { title:"STORIES ARE\nBETTER TOGETHER", body:"A serial narrative unfolds in real time. You arrive as a reader. If the story moves you, you can step into it \u2014 comment, tip, drive a character, or propose where the plot goes next." },
-    { title:"FOUR WAYS IN\nONE SPECTRUM", body:"Reader (free) \u2192 Kibitzer (comment for free) \u2192 Character Driver (pay to take the wheel of a character) \u2192 Meta-Author (pay to propose plot changes). Deeper participation costs more tokens." },
-    { title:"AI IS A\nCHARACTER TOO", body:"The AI co-author isn\u2019t hidden. It\u2019s a named participant in the story, visible and addressable. Human and AI write together, publicly. The process is part of the art." },
-    { title:"BUILT ON\nF1R3FLY", body:"Every chapter, every comment, every character turn is a signed transaction on a F1R3FLY shard. The story\u2019s provenance is permanent, auditable, and community-owned." }
+    { icon:"book", title:"STORIES ARE\nBETTER TOGETHER", body:"A serial narrative unfolds in real time. You arrive as a reader. If the story moves you, you can step into it \u2014 comment, tip, drive a character, or propose where the plot goes next." },
+    { icon:"spectrum", title:"FOUR WAYS IN\nONE SPECTRUM", body:"Reader (free) \u2192 Kibitzer (comment for free) \u2192 Character Driver (pay to take the wheel of a character) \u2192 Meta-Author (pay to propose plot changes). Deeper participation costs more tokens." },
+    { icon:"bot", title:"AI IS A\nCHARACTER TOO", body:"The AI co-author isn\u2019t hidden. It\u2019s a named participant in the story, visible and addressable. Human and AI write together, publicly. The process is part of the art." },
+    { icon:"chain", title:"BUILT ON\nF1R3FLY", body:"Every chapter, every comment, every character turn is a signed transaction on a F1R3FLY shard. The story\u2019s provenance is permanent, auditable, and community-owned." },
   ];
-  const [si, setSi] = useState(0); const s = slides[si];
+  const [si, setSi] = useState(0);
+  const s = slides[si];
+  const isLast = si === slides.length - 1;
   return (
-    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.92)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
-      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}`}</style>
-      <div onClick={e=>e.stopPropagation()} style={{maxWidth:480,width:"90%",padding:"48px 40px",border:`1px dashed ${BRAND.sky}66`,borderRadius:14,background:"#000",animation:"tourIn 0.3s ease-out",textAlign:"center"}}>
-        <h2 style={{fontSize:22,fontWeight:700,letterSpacing:4,color:"#fff",lineHeight:1.5,whiteSpace:"pre-line",margin:"0 0 20px"}}>{s.title}</h2>
-        <p style={{fontSize:16,color:"#fff",lineHeight:1.8,fontFamily:FB,margin:0}}>{s.body}</p>
-        <div style={{display:"flex",justifyContent:"center",gap:8,marginTop:32}}>{slides.map((_,i)=><div key={i} onClick={()=>setSi(i)} style={{width:8,height:8,borderRadius:"50%",background:i===si?CHAT_ACCENT:BRAND.textSecondary,cursor:"pointer"}} />)}</div>
-        <div style={{marginTop:24}}>
-          {si<slides.length-1 ? <button onClick={()=>setSi(si+1)} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:2,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>NEXT</button>
-          : <button onClick={onClose} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:2,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>START READING</button>}
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(12px)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
+      <style>{{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}`}}</style>
+      <div onClick={e=>e.stopPropagation()} style={{animation:"tourIn .35s ease-out",maxWidth:460,width:"90%",padding:"48px 36px 40px",border:`1px dashed #007bc466`,borderRadius:14,background:"#000",textAlign:"center"}}>
+        <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
+        <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
+        <div style={{width:80,height:1,background:"linear-gradient(90deg, #F3D630, #8BB999)",margin:"0 auto 20px"}}/>
+        <div style={{fontSize:17,color:"#fff",lineHeight:1.6,fontFamily:FB,marginBottom:36}}>{s.body}</div>
+        <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:28}}>
+          {slides.map((_,i)=><div key={i} onClick={()=>setSi(i)} style={{width:10,height:10,borderRadius:"50%",background:i===si?BRAND.yellow:"rgba(255,255,255,0.2)",cursor:"pointer",transition:"background .2s"}} />)}
+        </div>
+        <div style={{display:"flex",justifyContent:"center",gap:16}}>
+          {si > 0 && <button onClick={()=>setSi(si-1)} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,cursor:"pointer",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>BACK</button>}
+          <button onClick={()=>isLast?onClose():setSi(si+1)} style={{background:"linear-gradient(135deg, #5c0269, #7b0429)",border:"none",color:"#fff",borderRadius:20,padding:"12px 28px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,fontWeight:600,cursor:"pointer",boxShadow:"0 0 16px rgba(123,4,41,0.4)",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>{isLast?"LET\u2019S GO":"NEXT"}</button>
         </div>
       </div>
     </div>
@@ -116,194 +136,9 @@ function TourOverlay({onClose}) {
 }
 
 function BuiltOnBadge() {
-  return (<div style={{position:"fixed",bottom:16,left:"50%",transform:"translateX(-50%)",zIndex:100,display:"flex",alignItems:"center",gap:10,background:"#000",border:`1px solid ${BRAND.border}`,borderRadius:8,padding:"8px 16px",fontFamily:FH,fontSize:16,letterSpacing:2,color:"#fff",cursor:"pointer",backdropFilter:"blur(8px)"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
-    <span style={{color:"#fff",fontSize:16,letterSpacing:2}}>BUILT ON</span>
-    <svg width="120" viewBox="0 0 2343 535" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="b-lg" x1="620.975" y1="117.901" x2="793.518" y2="-180.951" gradientTransform="translate(-545.342 290.672) rotate(-4.856)" gradientUnits="userSpaceOnUse"><stop offset="0" stopColor="#009188"/><stop offset="1" stopColor="#007bc4"/></linearGradient><linearGradient id="b-lg1" x1="10868.88" y1="2958.368" x2="11042.919" y2="2656.923" gradientTransform="translate(11539.772 2556.8) rotate(-153.904) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stopColor="#009188"/><stop offset="1" stopColor="#007bc4"/></linearGradient><linearGradient id="b-lg2" x1="1278.548" y1="-693.973" x2="1379.282" y2="-693.973" gradientTransform="translate(-816.84 975.667) rotate(-11.485)" xlinkHref="#b-lg"/><radialGradient id="b-rg" cx="-507.17" cy="1315.506" fx="-507.17" fy="1166.669" r="148.898" gradientTransform="translate(-462.725 1690.402) rotate(-169.698) scale(1.001 1.048) skewX(.542)" gradientUnits="userSpaceOnUse"><stop offset=".159" stopColor="#ebe1a3"/><stop offset=".658" stopColor="#f3d630"/><stop offset=".995" stopColor="#f3d630"/></radialGradient></defs><g><path fill="url(#b-lg)" d="M316.697,105.798c-37.703,124.422-167.35,232.91-298.749,218.058-19.188-3.649-20.283-20.828-15.672-37.06C31.864,162.855,152.312,70.533,276.989,74.429c21.882.057,44.988,2.747,39.708,31.368Z"/><path fill="url(#b-lg1)" d="M349.717,112.154c-8.765,129.993,73.792,279.334,201.506,314.364,19.172,3.736,26.255-11.869,27.685-28.713,16.157-126.526-63.53-257.377-181.112-300.119-20.416-8.086-42.901-14.173-48.079,14.468Z"/><path fill="url(#b-lg2)" d="M400.519,44.343c1.708-41.624-83.95-62.735-103.871-23.736-3.572,6.996-.071,15.53,6.922,17.387,25.852,6.863,56.168,11.194,82.282,18.292,7.128,1.934,14.336-3.926,14.667-11.944Z"/><path fill="url(#b-rg)" d="M378.911,353.267c-46.405,267.616-227.024,226.916-174.919-34.206,44.206-27.89,81.981-64.979,110.028-108.046,11.008,50.816,33.273,99.674,64.892,142.252Z"/></g><g><path fill="#fff" d="M755.273,169.256c0-2.975,2.379-5.652,5.652-5.652h121.068c3.271,0,5.652,2.677,5.652,5.652v24.391c0,2.975-2.381,5.652-5.652,5.652h-88.049v55.924h73.473c2.975,0,5.652,2.677,5.652,5.652v24.392c0,2.974-2.677,5.652-5.652,5.652h-73.473v75.258c0,2.975-2.678,5.652-5.652,5.652h-27.367c-3.272,0-5.652-2.677-5.652-5.652v-196.92Z"/><path fill="#fff" d="M952.779,223.691l-26.177,5.652c-2.677.595-5.652-1.189-5.949-3.867l-1.785-14.576c-.297-2.379.297-4.164,1.488-5.353l42.834-35.993h20.822c2.975,0,5.355,2.677,5.355,5.652v190.971c0,2.975-2.379,5.652-5.355,5.652h-25.581c-3.272,0-5.652-2.677-5.652-5.652v-142.485Z"/><path fill="#fff" d="M1058.965,169.256c0-2.975,2.379-5.652,5.652-5.652h85.075c35.696,0,64.847,28.556,64.847,63.954,0,27.367-18.146,49.676-44.024,60.088l40.752,75.555c2.082,3.868,0,8.627-5.056,8.627h-31.234c-2.677,0-4.164-1.488-4.759-2.677l-39.563-78.828h-33.018v75.853c0,2.975-2.678,5.652-5.652,5.652h-27.367c-3.272,0-5.652-2.677-5.652-5.652v-196.92ZM1146.419,258.494c15.765,0,29.449-13.683,29.449-30.34,0-15.766-13.684-28.855-29.449-28.855h-48.486v59.195h48.486Z"/><path fill="#fff" d="M1255.873,340.892l15.171-14.576c2.677-2.379,5.355-2.379,7.734,0,.892,1.19,18.443,16.064,36.588,16.064,16.063,0,31.532-11.602,31.532-27.962,0-15.468-14.279-29.449-41.05-29.449h-16.658c-3.271,0-5.652-2.379-5.652-5.949v-18.74c0-3.867,2.082-5.949,5.652-5.949h16.658c24.392,0,36.885-12.196,36.885-27.366,0-16.361-13.683-27.366-28.854-27.366-15.468,0-24.987,8.329-30.044,14.278-2.082,2.379-5.353,2.677-8.031.297l-14.575-13.683c-2.381-2.082-2.082-5.652,0-7.734,0,0,22.606-26.177,55.923-26.177,34.506,0,63.359,21.12,63.359,54.436,0,22.905-17.253,40.157-30.639,46.404v.893c13.98,5.949,35.993,22.012,35.993,48.486,0,33.614-27.366,58.006-68.417,58.006-37.182,0-55.328-18.74-61.872-26.474-1.785-2.082-1.488-5.355.297-7.437Z"/><path fill="#fff" d="M1442.072,169.256c0-2.975,2.379-5.652,5.652-5.652h121.068c3.272,0,5.651,2.677,5.651,5.652v24.391c0,2.975-2.378,5.652-5.651,5.652h-88.049v55.924h73.473c2.975,0,5.653,2.677,5.653,5.652v24.392c0,2.974-2.678,5.652-5.653,5.652h-73.473v75.258c0,2.975-2.678,5.652-5.652,5.652h-27.367c-3.272,0-5.652-2.677-5.652-5.652v-196.92Z"/><path fill="#fff" d="M1624.705,169.256c0-2.975,2.381-5.652,5.653-5.652h27.366c2.975,0,5.651,2.677,5.651,5.652v166.876h75.853c3.272,0,5.653,2.678,5.653,5.652v24.392c0,2.975-2.381,5.652-5.653,5.652h-108.87c-3.272,0-5.653-2.677-5.653-5.652v-196.92Z"/><path fill="#fff" d="M1815.074,271.582l-67.822-99.352c-2.381-3.867,0-8.626,4.759-8.626h30.341c2.381,0,3.867,1.486,4.759,2.677l47.595,68.417,47.593-68.417c.892-1.19,2.381-2.677,4.759-2.677h30.641c4.759,0,7.137,4.759,4.759,8.626l-68.714,99.055v94.891c0,2.975-2.678,5.652-5.653,5.652h-27.366c-3.272,0-5.651-2.677-5.651-5.652v-94.594Z"/><path fill="#fff" d="M1961.416,325.721c13.387,0,24.691,11.304,24.691,24.689s-11.304,24.392-24.691,24.392-24.391-11.006-24.391-24.392,11.006-24.689,24.391-24.689Z"/><path fill="#fff" d="M2036.073,169.256c0-2.678,2.678-5.652,5.653-5.652h27.663c2.975,0,5.651,2.677,5.651,5.652v196.92c0,2.975-2.676,5.652-5.651,5.652h-27.663c-2.975,0-5.653-2.677-5.653-5.652v-196.92Z"/><path fill="#fff" d="M2235.958,160.629c59.493,0,107.086,47.891,107.086,107.384s-47.593,106.79-107.086,106.79-106.789-47.297-106.789-106.79,47.298-107.384,106.789-107.384ZM2235.958,336.132c37.481,0,68.417-30.639,68.417-68.119s-30.936-68.714-68.417-68.714-68.119,31.234-68.119,68.714,30.639,68.119,68.119,68.119Z"/></g></svg>
-  </div>);
-}
-
-function F1R3GamesLogo({width=300}) {
-  return <svg width={width} viewBox="0 0 2041.904 1169.445" xmlns="http://www.w3.org/2000/svg" style={{display:"block",margin:"0 auto"}}>
-    <defs>
-      <linearGradient id="fg-g-flame" x1="771.497" y1="405.595" x2="1465.057" y2="405.595" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#f3d630"/>
-        <stop offset="1" stopColor="#a62832"/>
-      </linearGradient>
-      <linearGradient id="fg-g-knot" x1="929.98" y1="747.859" x2="929.98" y2="0" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#9ec597"/>
-        <stop offset=".519" stopColor="#5db7e7"/>
-        <stop offset="1" stopColor="#186d8c"/>
-      </linearGradient>
-      <clipPath id="fg-clip">
-        <path fill="none" d="M853.788,747.438c-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,169.433,169.896,99.235,172.964Z"/>
-      </clipPath>
-    </defs>
-    <path fill="#fff" d="M0,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737H46.094v66.658h87.579c3.545,0,6.736,3.191,6.736,6.737v29.074c0,3.546-3.191,6.737-6.736,6.737H46.094v89.706c0,3.545-3.19,6.736-6.736,6.736H6.737c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM235.429,989.323l-31.202,6.737c-3.191.709-6.736-1.419-7.091-4.609l-2.128-17.374c-.354-2.837.354-4.964,1.773-6.383l51.058-42.902h24.819c3.546,0,6.383,3.191,6.383,6.736v227.634c0,3.545-2.837,6.736-6.383,6.736h-30.492c-3.9,0-6.737-3.191-6.737-6.736v-169.839ZM362.005,924.438c0-3.546,2.837-6.737,6.737-6.737h101.406c42.548,0,77.296,34.039,77.296,76.232,0,32.62-21.629,59.213-52.477,71.623l48.576,90.061c2.482,4.609,0,10.282-6.027,10.282h-37.229c-3.191,0-4.965-1.772-5.674-3.191l-47.157-93.96h-39.357v90.415c0,3.545-3.19,6.736-6.736,6.736h-32.62c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM466.248,1030.808c18.792,0,35.103-16.31,35.103-36.166,0-18.792-16.311-34.393-35.103-34.393h-57.795v70.559h57.795ZM596.72,1129.024l18.083-17.374c3.191-2.837,6.382-2.837,9.219,0,1.063,1.418,21.983,19.146,43.612,19.146,19.146,0,37.584-13.828,37.584-33.329,0-18.438-17.02-35.103-48.931-35.103h-19.855c-3.9,0-6.737-2.836-6.737-7.091v-22.338c0-4.609,2.482-7.092,6.737-7.092h19.855c29.074,0,43.967-14.537,43.967-32.62,0-19.501-16.311-32.62-34.394-32.62-18.438,0-29.783,9.928-35.812,17.02-2.481,2.836-6.382,3.19-9.573.354l-17.374-16.311c-2.836-2.482-2.481-6.736,0-9.219,0,0,26.947-31.202,66.659-31.202,41.13,0,75.523,25.175,75.523,64.886,0,27.302-20.565,47.867-36.521,55.313v1.063c16.664,7.091,42.902,26.238,42.902,57.795,0,40.065-32.62,69.141-81.551,69.141-44.321,0-65.949-22.338-73.75-31.557-2.128-2.482-1.773-6.383.354-8.864ZM928.233,914.156c31.911,0,62.404,12.409,86.515,32.975,2.837,2.836,3.191,7.091.354,9.928l-21.982,23.047c-2.837,2.837-6.028,2.837-9.219,0-15.247-13.474-34.039-20.564-53.54-20.564-44.321,0-79.424,37.938-79.424,82.26,0,43.966,35.103,81.196,79.778,81.196,19.855,0,35.103-6.028,42.193-8.864v-30.139h-28.365c-3.9,0-6.737-2.837-6.737-6.382v-28.012c0-3.899,2.837-6.736,6.737-6.736h68.077c3.546,0,6.382,3.191,6.382,6.736v90.77c0,2.837-1.418,4.609-2.836,5.674,0,0-36.521,23.047-87.934,23.047-70.559,0-127.29-56.022-127.29-126.936s56.731-127.999,127.29-127.999ZM1056.58,1156.68l110.271-238.625c1.064-2.127,2.837-3.899,6.028-3.899h3.545c3.546,0,4.965,1.772,6.028,3.899l109.207,238.625c2.127,4.609-.709,9.219-6.028,9.219h-30.847c-5.319,0-7.801-2.127-10.283-7.092l-17.373-38.293h-106.017l-17.374,38.293c-1.418,3.546-4.609,7.092-10.282,7.092h-30.848c-5.318,0-8.154-4.609-6.027-9.219ZM1209.754,1081.156l-35.457-78.005h-1.063l-34.748,78.005h71.269ZM1367.53,919.474c.354-2.837,2.481-5.318,6.382-5.318h5.673c2.837,0,4.965,1.418,6.028,3.545l78.005,167.356h1.063l78.005-167.356c1.064-2.127,2.837-3.545,6.028-3.545h5.673c3.9,0,6.027,2.481,6.382,5.318l41.84,238.27c1.063,4.964-1.773,8.155-6.383,8.155h-32.266c-3.191,0-6.027-2.837-6.736-5.318l-20.92-134.382h-1.063l-62.05,139.346c-.709,2.127-2.837,3.9-6.027,3.9h-6.383c-3.19,0-4.964-1.773-6.027-3.9l-62.759-139.346h-1.063l-20.565,134.382c-.354,2.481-3.19,5.318-6.382,5.318h-31.911c-4.609,0-7.446-3.191-6.736-8.155l42.193-238.27ZM1668.902,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737h-104.952v58.149h87.579c3.545,0,6.736,3.19,6.736,6.736v29.429c0,3.9-3.191,6.737-6.736,6.737h-87.579v62.05h104.952c3.9,0,6.737,3.19,6.737,6.736v29.075c0,3.545-2.837,6.736-6.737,6.736h-144.309c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM1880.576,1131.151l12.765-21.982c2.836-4.965,8.864-4.965,12.055-2.482,1.773,1.063,30.493,21.983,53.54,21.983,18.438,0,32.266-12.056,32.266-27.302,0-18.083-15.246-30.493-45.03-42.549-33.329-13.474-66.658-34.747-66.658-76.586,0-31.557,23.401-68.077,79.777-68.077,36.166,0,63.822,18.438,70.914,23.756,3.546,2.127,4.609,8.155,2.127,11.7l-13.474,20.211c-2.836,4.255-8.154,7.091-12.409,4.255-2.837-1.773-29.784-19.502-49.285-19.502-20.211,0-31.202,13.474-31.202,24.82,0,16.665,13.119,28.011,41.839,39.712,34.394,13.828,74.104,34.393,74.104,80.132,0,36.521-31.557,70.205-81.551,70.205-44.675,0-70.913-20.92-78.005-27.656-3.19-3.191-4.964-4.964-1.772-10.638Z"/>
-    <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
-    <path fill="url(#fg-g-knot)" d="M1141.963,0c46.349,37.918,87.228,88.12,111.168,144.498,43.213,100.509,37.954,217.952-4.471,317.93-38.879,93.004-108.665,173.115-196.595,223.912-60.038,35.129-128.081,58.03-198.278,61.098-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,47.079,20,71.506,21.017,162.417,4.662,311.49-124.764,356.969-278.806,10.093-33.178,15.288-67.976,15.967-102.614,2.477-74.218-23.888-147.489-57.031-214.071Z"/>
-    <g clipPath="url(#fg-clip)">
-      <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
-    </g>
-  </svg>;
-}
-
-function F1R3SideChat() {
-  const [phase, setPhase] = useState("join");
-  const [myName, setMyName] = useState("");
-  const [showTour, setShowTour] = useState(false);
-  const [currentCh, setCurrentCh] = useState("ch1");
-  const [comments, setComments] = useState(COMMENTS);
-  const [newComment, setNewComment] = useState("");
-  const [myRole, setMyRole] = useState("reader");
-  const [drivingChar, setDrivingChar] = useState(null);
-
-  const chapter = STORY.chapters.find(c => c.id === currentCh) || STORY.chapters[0];
-  const chapterComments = comments.filter(c => c.chapterId === currentCh);
-  const handleJoin = () => { if (myName.trim()) setPhase("read"); };
-  const addComment = () => { if (!newComment.trim()) return; setComments(c => [...c, { id:Date.now(), userId:"me", name:myName.trim()||"You", chapterId:currentCh, text:newComment.trim(), applause:0 }]); setNewComment(""); };
-  const takeWheel = (charId) => { setMyRole("creator"); setDrivingChar(charId); };
-
-  if (phase === "join") return (
-    <div style={{minHeight:"100vh",background:"#000",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",fontFamily:FH,position:"relative",padding:"40px 20px"}}>
-      <style>{FONTS}{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:${BRAND.sky}66 !important;outline:none}`}</style>
-      <div style={{animation:"fadeIn .6s ease-out",textAlign:"center",marginTop:-105,position:"relative",zIndex:1}}>
-        <F1R3GamesLogo width={196}/>
-        <div style={{fontSize:16,color:"#fff",letterSpacing:6,fontFamily:FH,fontWeight:400,marginTop:24}}>PRESENTS</div>
-        <div style={{height:40}}/>
-        <div style={{border:`1px dashed ${BRAND.sky}66`,borderRadius:14,padding:"40px 48px",display:"inline-block",background:"#000"}}>
-          <h1 style={{margin:"0 0 20px",display:"flex",alignItems:"center",justifyContent:"center"}}><SideChatLogo height={180}/></h1>
-          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:1.6}}>COLLABORATIVE FICTION,<br/>WRITTEN LIVE</div>
-        </div>
-        <div style={{height:50}}/>
-        <div style={{display:"flex",flexDirection:"column",gap:10,alignItems:"center"}}>
-          <div style={{fontSize:16,color:BRAND.yellow,letterSpacing:4,fontWeight:700,fontFamily:FH}}>CHOOSE YOUR F1R3SIGN</div>
-          <input value={myName} onChange={e=>setMyName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handleJoin()} placeholder="someone with a story" style={{background:"#000",border:`1px dashed ${BRAND.sky}66`,borderRadius:6,color:"#fff",padding:"10px 16px",fontSize:16,fontWeight:300,width:"100%",maxWidth:460,fontFamily:FH,textAlign:"center",outline:"none",marginTop:20}}/>
-          <button onClick={handleJoin} style={{background:`linear-gradient(135deg, #5c0269, #7b0429)`,color:"#fff",border:"none",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:3,boxShadow:"0 0 20px rgba(123,4,41,0.4)",marginTop:20,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>JOIN</button>
-          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:400,fontFamily:FH,lineHeight:2.2,marginTop:20}}>YOUR F1R3SIGN TRAVELS<br/>WITH YOU ACROSS F1R3FLY</div>
-          <div style={{marginTop:12}}><HowBtn onClick={()=>setShowTour(true)}/></div>
-        </div>
-        <div style={{marginTop:16,color:BRAND.textSecondary,fontSize:16}}>{STORY.readers} readers</div>
-      </div>
-      <BuiltOnBadge/>
-      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
-    </div>
-  );
-
-  const displayName = myName.trim() || "You";
-  const canWrite = myRole === "creator" && chapter.status === "open";
-
   return (
-    <div style={{minHeight:"100vh",background:"#000",color:"#fff",fontFamily:FH,display:"flex",flexDirection:"column",position:"relative",paddingBottom:80}}>
-      <style>{FONTS}{`::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}*{box-sizing:border-box}input::placeholder,textarea::placeholder{color:${BRAND.textSecondary};opacity:1}`}</style>
-
-      <div className="game-header" style={{padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#000",minHeight:70,gap:12}}>
-        <div style={{display:"flex",alignItems:"baseline",gap:12,flexWrap:"wrap"}}>
-          <span style={{display:"flex",alignItems:"center"}}><SideChatLogo height={27}/></span>
-          <span style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FB}}>{STORY.readers} readers | {STORY.chapters.length} chapters | shard live</span>
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:12}}>
-          <HowBtn onClick={()=>setShowTour(true)}/>
-          <button onClick={()=>setPhase("join")} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"10px 18px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:1,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>LEAVE</button>
-        </div>
-      </div>
-      <div style={{width:"100%",height:"0.5px",background:BRAND.stroke,opacity:0.8}}/>
-
-      <div className="story-layout" style={{flex:1,display:"flex",overflow:"hidden"}}>
-
-        {/* LEFT SIDEBAR — Identity + Kibitz */}
-        <div className="game-sidebar-left" style={{width:300,minWidth:300,background:"#000",borderRight:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:20,padding:"20px 16px",overflowY:"auto"}}>
-          <div style={{display:"flex",alignItems:"center",gap:10,padding:12,border:`1px solid ${BRAND.border}`,borderRadius:8,background:"#000"}}>
-            <Avatar src={PORTRAITS.hannah} size={40}/>
-            <div>
-              <div style={{fontSize:16,color:CHAT_ACCENT,fontWeight:700,fontFamily:FH,letterSpacing:1}}>{displayName}</div>
-              <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,textTransform:"uppercase",letterSpacing:1}}>{myRole}{drivingChar && ` \u00b7 ${CHARACTERS.find(c=>c.id===drivingChar)?.name}`}</div>
-            </div>
-          </div>
-          <div style={{border:`1px solid ${BRAND.border}`,borderRadius:8,padding:14,flex:1,display:"flex",flexDirection:"column"}}>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>KIBITZ \u00b7 CH {chapter.num} ({chapterComments.length})</div>
-            <div style={{flex:1,overflowY:"auto",display:"flex",flexDirection:"column",gap:12}}>
-              {chapterComments.length === 0 && <div style={{color:BRAND.textSecondary,fontSize:16,fontFamily:FB,textAlign:"center",padding:"16px 0"}}>No comments yet.</div>}
-              {chapterComments.map(c => (
-                <div key={c.id} style={{padding:"8px 0",borderBottom:`1px solid ${BRAND.border}`,animation:"fadeUp 0.3s"}}>
-                  <div style={{fontSize:16,fontWeight:600,color:"#fff",fontFamily:FH,marginBottom:4}}>{c.name}</div>
-                  <div style={{fontSize:16,color:"#fff",lineHeight:1.6,fontFamily:FB}}>{c.text}</div>
-                  <button onClick={()=>setComments(cs=>cs.map(x=>x.id===c.id?{...x,applause:x.applause+1}:x))} style={{marginTop:6,padding:"8px 14px 6px",borderRadius:20,fontSize:16,background:"transparent",border:`1px solid ${BRAND.border}`,color:BRAND.textSecondary,cursor:"pointer",fontFamily:FB,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,whiteSpace:"nowrap"}}>&#128079; {c.applause}</button>
-                </div>
-              ))}
-            </div>
-            <div style={{display:"flex",gap:6,marginTop:10,paddingTop:10,borderTop:`1px solid ${BRAND.border}`}}>
-              <input value={newComment} onChange={e=>setNewComment(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addComment()} placeholder="Comment..." style={{flex:1,background:"#000",border:`1px dashed ${BRAND.sky}66`,borderRadius:6,padding:"8px 10px",color:"#fff",fontSize:16,outline:"none",fontFamily:FB}}/>
-              <button onClick={addComment} disabled={!newComment.trim()} aria-label="Send" style={{background:newComment.trim()?`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`:"transparent",border:newComment.trim()?"none":`1px solid ${BRAND.border}`,borderRadius:6,padding:"8px 14px",color:newComment.trim()?"#fff":BRAND.textSecondary,fontWeight:700,fontSize:16,cursor:newComment.trim()?"pointer":"default",fontFamily:FH,letterSpacing:1}}>&uarr;</button>
-            </div>
-          </div>
-          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>{STORY.genre.toUpperCase()}</div>
-            <div style={{fontSize:16,fontWeight:600,color:"#fff",fontFamily:FH,lineHeight:1.3,marginBottom:6}}>{STORY.title}</div>
-            <div style={{fontSize:16,color:"#fff",fontFamily:FB,lineHeight:1.6,marginBottom:8}}>{STORY.synopsis}</div>
-            <div style={{display:"flex",alignItems:"center",gap:6}}>
-              <span style={{fontSize:16,color:STORY.author.color,fontFamily:FH,fontWeight:600}}>by {STORY.author.name}</span>
-              <span style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginLeft:"auto"}}>{STORY.readers} readers</span>
-            </div>
-          </div>
-        </div>
-
-        {/* CENTER — Story */}
-        <div className="story-main" style={{flex:1,overflow:"auto",padding:"32px 40px 60px"}}>
-          <div style={{maxWidth:680,margin:"0 auto"}}>
-            <div style={{fontSize:16,color:BRAND.textSecondary,letterSpacing:2,fontFamily:FH,marginBottom:8,textTransform:"uppercase"}}>CHAPTER {chapter.num}{chapter.authorId && <span style={{color:BRAND.sky,marginLeft:8}}>by {DEMO_PLAYERS.find(p=>p.id===chapter.authorId)?.name || "unknown"}</span>}</div>
-            <h3 style={{fontSize:26,fontWeight:300,color:"#fff",fontFamily:FH,margin:"0 0 8px",letterSpacing:1}}>{chapter.title}</h3>
-            {chapter.wordCount > 0 && <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginBottom:24}}>{chapter.wordCount} words \u00b7 {chapter.applause} applause</div>}
-            {chapter.text ? (
-              <div>{chapter.text.split("\n").map((para, i) => para.trim() ? <p key={i} style={{fontSize:18,lineHeight:2,color:"#fff",fontFamily:FB,marginBottom:20,textIndent:i>0?24:0,letterSpacing:0.2}}>{para}</p> : <div key={i} style={{height:12}}/>)}</div>
-            ) : (
-              <div style={{textAlign:"center",padding:"60px 0"}}>
-                <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginBottom:16}}>This chapter is open for writing.</div>
-                {canWrite ? <div style={{fontSize:16,color:CHAT_ACCENT,fontFamily:FH,letterSpacing:2}}>You're driving {CHARACTERS.find(c=>c.id===drivingChar)?.name}. Write below.</div>
-                : <div style={{fontSize:16,color:"#fff",fontFamily:FB}}>Take the wheel on a character to start writing. <span style={{color:BRAND.yellow}}>({COSTS.DRIVE} tokens)</span></div>}
-                {canWrite && <div style={{maxWidth:580,margin:"24px auto 0"}}><textarea placeholder="Continue the story..." style={{width:"100%",minHeight:180,background:"#000",border:`1px dashed ${BRAND.sky}66`,borderRadius:8,padding:16,color:"#fff",fontSize:17,lineHeight:1.9,resize:"vertical",outline:"none",fontFamily:FB}}/><div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}><button style={{background:`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`,color:"#fff",border:"none",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:2,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>PUBLISH</button></div></div>}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* RIGHT SIDEBAR — Story info, Chapters, Characters, Engagement */}
-        <div className="story-sidebar" style={{width:300,minWidth:300,background:"#000",borderLeft:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:20,padding:"20px 16px",overflowY:"auto"}}>
-          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>CHAPTERS</div>
-            <div style={{display:"flex",flexDirection:"column",gap:4}}>
-              {STORY.chapters.map(ch => { const sel = ch.id===currentCh; return (
-                <button key={ch.id} onClick={()=>setCurrentCh(ch.id)} style={{display:"flex",alignItems:"baseline",gap:8,padding:"8px 10px",borderRadius:6,textAlign:"left",cursor:"pointer",background:sel?"rgba(63,169,245,0.08)":"transparent",border:sel?`1px solid ${BRAND.border}`:"1px solid transparent",fontFamily:FH}}>
-                  <span style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FH,minWidth:22}}>{ch.num}.</span>
-                  <div><div style={{fontSize:16,color:sel?"#fff":BRAND.textSecondary,fontWeight:sel?600:400}}>{ch.title}</div>{ch.status==="open" && <div style={{fontSize:16,color:BRAND.yellow,marginTop:2,fontFamily:FH,letterSpacing:1}}>OPEN FOR WRITING</div>}</div>
-                </button>); })}
-            </div>
-          </div>
-          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>CHARACTERS</div>
-            {CHARACTERS.map(ch => { const dn = ch.driver?DEMO_PLAYERS.find(p=>p.id===ch.driver)?.name:null; const av = !ch.driver; const isMe = drivingChar===ch.id; return (
-              <div key={ch.id} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 0",borderBottom:`1px solid ${BRAND.border}`}}>
-                <div style={{width:8,height:8,borderRadius:"50%",background:ch.color,flexShrink:0}}/>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:16,fontWeight:600,color:isMe?CHAT_ACCENT:ch.color,fontFamily:FH}}>{ch.name}</div>
-                  <div style={{fontSize:16,color:"#fff",fontFamily:FB,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ch.role}</div>
-                  {dn && <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB}}>Driven by {dn}</div>}
-                </div>
-                {av && !drivingChar && <button onClick={()=>takeWheel(ch.id)} style={{padding:"8px 14px 6px",borderRadius:20,fontSize:16,fontFamily:FH,letterSpacing:1,cursor:"pointer",background:"transparent",border:`1px solid ${BRAND.yellow}66`,color:BRAND.yellow,fontWeight:600,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>DRIVE</button>}
-              </div>); })}
-          </div>
-          <div>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>ENGAGEMENT</div>
-            {[{label:"Comment",cost:"Free",color:BRAND.sage},{label:"Drive Character",cost:`${COSTS.DRIVE} tokens`,color:BRAND.yellow},{label:"Talk to Author",cost:`${COSTS.TALK_AUTHOR} tokens`,color:"#FF6B2B"},{label:"AI Co-Author",cost:`${COSTS.AI_COAUTHOR} tokens`,color:BRAND.sky}].map(e => (
-              <div key={e.label} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontSize:16}}>
-                <span style={{color:"#fff",fontFamily:FB}}>{e.label}</span>
-                <span style={{color:e.color,fontFamily:FH,fontSize:16,fontWeight:600}}>{e.cost}</span>
-              </div>))}
-          </div>
-        </div>
-      </div>
-
-      <BuiltOnBadge/>
-      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
+    <div style={{position:"fixed",bottom:16,left:"50%",transform:"translateX(-50%)",zIndex:100,cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
+      <img src="built-on-f1r3fly.io-box.svg" alt="Built on F1R3FLY.IO" style={{height:48,display:"block"}}/>
     </div>
   );
 }
