@@ -143,6 +143,167 @@ function BuiltOnBadge() {
   );
 }
 
+function F1R3SideChat() {
+  const [phase, setPhase] = useState("join");
+  const [myName, setMyName] = useState("");
+  const [showTour, setShowTour] = useState(false);
+  const [currentCh, setCurrentCh] = useState("ch1");
+  const [comments, setComments] = useState(COMMENTS);
+  const [newComment, setNewComment] = useState("");
+  const [myRole, setMyRole] = useState("reader");
+  const [drivingChar, setDrivingChar] = useState(null);
+
+  const chapter = STORY.chapters.find(c => c.id === currentCh) || STORY.chapters[0];
+  const chapterComments = comments.filter(c => c.chapterId === currentCh);
+  const handleJoin = () => { if (myName.trim()) setPhase("read"); };
+  const addComment = () => { if (!newComment.trim()) return; setComments(c => [...c, { id:Date.now(), userId:"me", name:myName.trim()||"You", chapterId:currentCh, text:newComment.trim(), applause:0 }]); setNewComment(""); };
+  const takeWheel = (charId) => { setMyRole("creator"); setDrivingChar(charId); };
+
+  if (phase === "join") return (
+    <div style={{minHeight:"100vh",background:"#000",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",fontFamily:FH,position:"relative",padding:"40px 20px"}}>
+      <style>{FONTS}{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:#007bc466 !important;outline:none}`}</style>
+      <div style={{animation:"fadeIn .6s ease-out",textAlign:"center",marginTop:-105,position:"relative",zIndex:1}}>
+        <F1R3GamesLogo width={196}/>
+        <div style={{fontSize:16,color:"#fff",letterSpacing:6,fontFamily:FH,fontWeight:300,marginTop:24}}>PRESENTS</div>
+        <div style={{height:40}}/>
+        <div style={{border:`1px solid #007bc466`,borderRadius:14,padding:"40px 48px",display:"inline-block",background:"#000"}}>
+          <h1 style={{margin:"0 0 20px",display:"flex",alignItems:"center",justifyContent:"center"}}><SideChatLogo height={180}/></h1>
+          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:1.6}}>COLLABORATIVE FICTION,<br/>WRITTEN LIVE</div>
+        </div>
+        <div style={{height:50}}/>
+        <div style={{display:"flex",flexDirection:"column",gap:10,alignItems:"center"}}>
+          <div style={{fontSize:16,color:BRAND.yellow,letterSpacing:4,fontWeight:700,fontFamily:FH}}>CHOOSE YOUR F1R3SIGN</div>
+          <input value={myName} onChange={e=>setMyName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handleJoin()} placeholder="someone with a story" style={{background:"#000",border:`1px solid #007bc466`,borderRadius:6,color:"#fff",padding:"10px 16px",fontSize:16,fontWeight:300,width:"100%",maxWidth:460,fontFamily:FH,textAlign:"center",outline:"none",marginTop:20}}/>
+          <button onClick={handleJoin} style={{background:`linear-gradient(135deg, #5c0269, #7b0429)`,color:"#fff",border:"none",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:3,boxShadow:"0 0 20px rgba(123,4,41,0.4)",marginTop:20,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>JOIN</button>
+          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:2.2,marginTop:20}}>YOUR UNIQUE F1R3SIGN<br/>TRAVELS WITH YOU</div>
+          <div style={{marginTop:12}}><HowBtn onClick={()=>setShowTour(true)}/></div>
+        </div>
+        <div style={{marginTop:16,color:BRAND.textSecondary,fontSize:16}}>{STORY.readers} readers</div>
+      </div>
+      <BuiltOnBadge/>
+      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
+    </div>
+  );
+
+  const displayName = myName.trim() || "You";
+  const canWrite = myRole === "creator" && chapter.status === "open";
+
+  return (
+    <div style={{minHeight:"100vh",background:"#000",color:"#fff",fontFamily:FH,display:"flex",flexDirection:"column",position:"relative",paddingBottom:80}}>
+      <style>{FONTS}{`::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}*{box-sizing:border-box}input::placeholder,textarea::placeholder{color:${BRAND.textSecondary};opacity:1}`}</style>
+
+      <div className="game-header" style={{padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#000",minHeight:70,gap:12}}>
+        <div style={{display:"flex",alignItems:"baseline",gap:12,flexWrap:"wrap"}}>
+          <span style={{display:"flex",alignItems:"center"}}><SideChatLogo height={27}/></span>
+          <span style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FB}}>{STORY.readers} readers | {STORY.chapters.length} chapters | shard live</span>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:12}}>
+          <HowBtn onClick={()=>setShowTour(true)}/>
+          <button onClick={()=>setPhase("join")} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"10px 18px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:1,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>LEAVE</button>
+        </div>
+      </div>
+      <div style={{width:"100%",height:"0.5px",background:BRAND.stroke,opacity:0.8}}/>
+
+      <div className="story-layout" style={{flex:1,display:"flex",overflow:"hidden"}}>
+
+        {/* LEFT SIDEBAR — Identity + Kibitz */}
+        <div className="game-sidebar-left" style={{width:300,minWidth:300,background:"#000",borderRight:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:20,padding:"20px 16px",overflowY:"auto"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,padding:12,border:`1px solid ${BRAND.border}`,borderRadius:8,background:"#000"}}>
+            <Avatar src={PORTRAITS.hannah} size={40}/>
+            <div>
+              <div style={{fontSize:16,color:CHAT_ACCENT,fontWeight:700,fontFamily:FH,letterSpacing:1}}>{displayName}</div>
+              <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,textTransform:"uppercase",letterSpacing:1}}>{myRole}{drivingChar && ` \u00b7 ${CHARACTERS.find(c=>c.id===drivingChar)?.name}`}</div>
+            </div>
+          </div>
+          <div style={{border:`1px solid ${BRAND.border}`,borderRadius:8,padding:14,flex:1,display:"flex",flexDirection:"column"}}>
+            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>KIBITZ \u00b7 CH {chapter.num} ({chapterComments.length})</div>
+            <div style={{flex:1,overflowY:"auto",display:"flex",flexDirection:"column",gap:12}}>
+              {chapterComments.length === 0 && <div style={{color:BRAND.textSecondary,fontSize:16,fontFamily:FB,textAlign:"center",padding:"16px 0"}}>No comments yet.</div>}
+              {chapterComments.map(c => (
+                <div key={c.id} style={{padding:"8px 0",borderBottom:`1px solid ${BRAND.border}`,animation:"fadeUp 0.3s"}}>
+                  <div style={{fontSize:16,fontWeight:600,color:"#fff",fontFamily:FH,marginBottom:4}}>{c.name}</div>
+                  <div style={{fontSize:16,color:"#fff",lineHeight:1.6,fontFamily:FB}}>{c.text}</div>
+                  <button onClick={()=>setComments(cs=>cs.map(x=>x.id===c.id?{...x,applause:x.applause+1}:x))} style={{marginTop:6,padding:"8px 14px 6px",borderRadius:20,fontSize:16,background:"transparent",border:`1px solid ${BRAND.border}`,color:BRAND.textSecondary,cursor:"pointer",fontFamily:FB,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,whiteSpace:"nowrap"}}>&#128079; {c.applause}</button>
+                </div>
+              ))}
+            </div>
+            <div style={{display:"flex",gap:6,marginTop:10,paddingTop:10,borderTop:`1px solid ${BRAND.border}`}}>
+              <input value={newComment} onChange={e=>setNewComment(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addComment()} placeholder="Comment..." style={{flex:1,background:"#000",border:`1px solid #007bc466`,borderRadius:6,padding:"8px 10px",color:"#fff",fontSize:16,outline:"none",fontFamily:FB}}/>
+              <button onClick={addComment} disabled={!newComment.trim()} aria-label="Send" style={{background:newComment.trim()?`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`:"transparent",border:newComment.trim()?"none":`1px solid ${BRAND.border}`,borderRadius:6,padding:"8px 14px",color:newComment.trim()?"#fff":BRAND.textSecondary,fontWeight:700,fontSize:16,cursor:newComment.trim()?"pointer":"default",fontFamily:FH,letterSpacing:1}}>&uarr;</button>
+            </div>
+          </div>
+          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
+            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>{STORY.genre.toUpperCase()}</div>
+            <div style={{fontSize:16,fontWeight:600,color:"#fff",fontFamily:FH,lineHeight:1.3,marginBottom:6}}>{STORY.title}</div>
+            <div style={{fontSize:16,color:"#fff",fontFamily:FB,lineHeight:1.6,marginBottom:8}}>{STORY.synopsis}</div>
+            <div style={{display:"flex",alignItems:"center",gap:6}}>
+              <span style={{fontSize:16,color:STORY.author.color,fontFamily:FH,fontWeight:600}}>by {STORY.author.name}</span>
+              <span style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginLeft:"auto"}}>{STORY.readers} readers</span>
+            </div>
+          </div>
+        </div>
+
+        {/* CENTER — Story */}
+        <div className="story-main" style={{flex:1,overflow:"auto",padding:"32px 40px 60px"}}>
+          <div style={{maxWidth:680,margin:"0 auto"}}>
+            <div style={{fontSize:16,color:BRAND.textSecondary,letterSpacing:2,fontFamily:FH,marginBottom:8,textTransform:"uppercase"}}>CHAPTER {chapter.num}{chapter.authorId && <span style={{color:BRAND.sky,marginLeft:8}}>by {DEMO_PLAYERS.find(p=>p.id===chapter.authorId)?.name || "unknown"}</span>}</div>
+            <h3 style={{fontSize:26,fontWeight:300,color:"#fff",fontFamily:FH,margin:"0 0 8px",letterSpacing:1}}>{chapter.title}</h3>
+            {chapter.wordCount > 0 && <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginBottom:24}}>{chapter.wordCount} words \u00b7 {chapter.applause} applause</div>}
+            {chapter.text ? (
+              <div>{chapter.text.split("\n").map((para, i) => para.trim() ? <p key={i} style={{fontSize:18,lineHeight:2,color:"#fff",fontFamily:FB,marginBottom:20,textIndent:i>0?24:0,letterSpacing:0.2}}>{para}</p> : <div key={i} style={{height:12}}/>)}</div>
+            ) : (
+              <div style={{textAlign:"center",padding:"60px 0"}}>
+                <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginBottom:16}}>This chapter is open for writing.</div>
+                {canWrite ? <div style={{fontSize:16,color:CHAT_ACCENT,fontFamily:FH,letterSpacing:2}}>You're driving {CHARACTERS.find(c=>c.id===drivingChar)?.name}. Write below.</div>
+                : <div style={{fontSize:16,color:"#fff",fontFamily:FB}}>Take the wheel on a character to start writing. <span style={{color:BRAND.yellow}}>({COSTS.DRIVE} tokens)</span></div>}
+                {canWrite && <div style={{maxWidth:580,margin:"24px auto 0"}}><textarea placeholder="Continue the story..." style={{width:"100%",minHeight:180,background:"#000",border:`1px solid #007bc466`,borderRadius:8,padding:16,color:"#fff",fontSize:17,lineHeight:1.9,resize:"vertical",outline:"none",fontFamily:FB}}/><div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}><button style={{background:`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`,color:"#fff",border:"none",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:2,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>PUBLISH</button></div></div>}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT SIDEBAR — Story info, Chapters, Characters, Engagement */}
+        <div className="story-sidebar" style={{width:300,minWidth:300,background:"#000",borderLeft:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:20,padding:"20px 16px",overflowY:"auto"}}>
+          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
+            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>CHAPTERS</div>
+            <div style={{display:"flex",flexDirection:"column",gap:4}}>
+              {STORY.chapters.map(ch => { const sel = ch.id===currentCh; return (
+                <button key={ch.id} onClick={()=>setCurrentCh(ch.id)} style={{display:"flex",alignItems:"baseline",gap:8,padding:"8px 10px",borderRadius:6,textAlign:"left",cursor:"pointer",background:sel?"rgba(63,169,245,0.08)":"transparent",border:sel?`1px solid ${BRAND.border}`:"1px solid transparent",fontFamily:FH}}>
+                  <span style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FH,minWidth:22}}>{ch.num}.</span>
+                  <div><div style={{fontSize:16,color:sel?"#fff":BRAND.textSecondary,fontWeight:sel?600:400}}>{ch.title}</div>{ch.status==="open" && <div style={{fontSize:16,color:BRAND.yellow,marginTop:2,fontFamily:FH,letterSpacing:1}}>OPEN FOR WRITING</div>}</div>
+                </button>); })}
+            </div>
+          </div>
+          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
+            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>CHARACTERS</div>
+            {CHARACTERS.map(ch => { const dn = ch.driver?DEMO_PLAYERS.find(p=>p.id===ch.driver)?.name:null; const av = !ch.driver; const isMe = drivingChar===ch.id; return (
+              <div key={ch.id} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 0",borderBottom:`1px solid ${BRAND.border}`}}>
+                <div style={{width:8,height:8,borderRadius:"50%",background:ch.color,flexShrink:0}}/>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:16,fontWeight:600,color:isMe?CHAT_ACCENT:ch.color,fontFamily:FH}}>{ch.name}</div>
+                  <div style={{fontSize:16,color:"#fff",fontFamily:FB,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ch.role}</div>
+                  {dn && <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB}}>Driven by {dn}</div>}
+                </div>
+                {av && !drivingChar && <button onClick={()=>takeWheel(ch.id)} style={{padding:"8px 14px 6px",borderRadius:20,fontSize:16,fontFamily:FH,letterSpacing:1,cursor:"pointer",background:"transparent",border:`1px solid ${BRAND.yellow}66`,color:BRAND.yellow,fontWeight:600,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>DRIVE</button>}
+              </div>); })}
+          </div>
+          <div>
+            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>ENGAGEMENT</div>
+            {[{label:"Comment",cost:"Free",color:BRAND.sage},{label:"Drive Character",cost:`${COSTS.DRIVE} tokens`,color:BRAND.yellow},{label:"Talk to Author",cost:`${COSTS.TALK_AUTHOR} tokens`,color:"#FF6B2B"},{label:"AI Co-Author",cost:`${COSTS.AI_COAUTHOR} tokens`,color:BRAND.sky}].map(e => (
+              <div key={e.label} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontSize:16}}>
+                <span style={{color:"#fff",fontFamily:FB}}>{e.label}</span>
+                <span style={{color:e.color,fontFamily:FH,fontSize:16,fontWeight:600}}>{e.cost}</span>
+              </div>))}
+          </div>
+        </div>
+      </div>
+
+      <BuiltOnBadge/>
+      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
+    </div>
+  );
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(<F1R3SideChat/>);
 </script>
 </body>
