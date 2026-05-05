@@ -117,7 +117,7 @@ function TourOverlay({onClose}) {
   const isLast = si === slides.length - 1;
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(12px)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
-      <style>{{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}`}}</style>
+      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
       <div onClick={e=>e.stopPropagation()} style={{animation:"tourIn .35s ease-out",maxWidth:460,width:"90%",padding:"48px 36px 40px",border:`1px solid #007bc466`,borderRadius:14,background:"#000",textAlign:"center"}}>
         <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
         <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
