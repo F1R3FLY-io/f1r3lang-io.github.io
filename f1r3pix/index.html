@@ -246,7 +246,7 @@ function TourOverlay({ onClose }) {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(0,0,0,0.95)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={onClose}>
       <style>{`@keyframes tourIn{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
-      <div onClick={e => e.stopPropagation()} style={{ animation: "tourIn .35s ease-out", maxWidth: 460, width: "90%", textAlign: "center", padding: "48px 36px 40px", border: `1px dashed #007bc466`, borderRadius: 14, background: "#000" }}>
+      <div onClick={e => e.stopPropagation()} style={{ animation: "tourIn .35s ease-out", maxWidth: 460, width: "90%", textAlign: "center", padding: "48px 36px 40px", border: `1px solid #007bc466`, borderRadius: 14, background: "#000" }}>
         <div style={{ marginBottom: 20 }}><TourIcon type={s.icon} size={48} /></div>
         <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: 4, fontFamily: FH, color: BRAND.yellow, lineHeight: 1.7, marginBottom: 16, whiteSpace: "pre-line" }}>{s.title}</div>
         <div style={{ width: 80, height: 1, background: "linear-gradient(90deg, #F3D630, #8BB999)", margin: "0 auto 20px" }} />
@@ -354,7 +354,7 @@ function JoinScreen({ onJoin, players }) {
         <F1R3GamesLogo width={196} />
         <div style={{ fontSize: 16, color: "#fff", letterSpacing: 6, fontFamily: FH, fontWeight: 300, marginTop: 24 }}>PRESENTS</div>
         <div style={{ height: 40 }} />
-        <div className="join-solid-box" style={{ border: `1px dashed #007bc466`, borderRadius: 14, padding: "40px 48px", display: "inline-block", position: "relative", overflow: "hidden" }}>
+        <div className="join-solid-box" style={{ border: `1px solid #007bc466`, borderRadius: 14, padding: "40px 48px", display: "inline-block", position: "relative", overflow: "hidden" }}>
           <h1 className="join-title" style={{ margin: "0 0 20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <PixWordmark height={56} />
           </h1>
@@ -364,7 +364,7 @@ function JoinScreen({ onJoin, players }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
           <div style={{ fontSize: 16, color: BRAND.yellow, letterSpacing: 4, fontWeight: 700, fontFamily: FH }}>CHOOSE YOUR F1R3SIGN</div>
           <input value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === "Enter" && go()} placeholder="someone wonderful"
-            style={{ background: "#000", border: `1px dashed #007bc466`, borderRadius: 6, color: "#fff", padding: "10px 16px", fontSize: 16, fontWeight: 300, width: "100%", maxWidth: 460, fontFamily: FH, textAlign: "center", outline: "none", marginTop: 20 }} />
+            style={{ background: "#000", border: `1px solid #007bc466`, borderRadius: 6, color: "#fff", padding: "10px 16px", fontSize: 16, fontWeight: 300, width: "100%", maxWidth: 460, fontFamily: FH, textAlign: "center", outline: "none", marginTop: 20 }} />
           <button onClick={go} style={{ background: "linear-gradient(135deg, #5c0269, #7b0429)", color: "#fff", border: "none", borderRadius: 20, padding: "12px 32px 8px", fontSize: 16, fontFamily: FH, fontWeight: 600, cursor: "pointer", letterSpacing: 3, boxShadow: "0 0 20px rgba(123,4,41,0.4)", marginTop: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, minHeight: 38 }}>JOIN</button>
           <div style={{ fontSize: 16, color: "#fff", letterSpacing: 4, fontWeight: 300, fontFamily: FH, lineHeight: 2.2, marginTop: 20 }}>YOUR UNIQUE F1R3SIGN<br />TRAVELS WITH YOU</div>
         </div>
