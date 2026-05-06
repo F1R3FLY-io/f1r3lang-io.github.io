@@ -17,10 +17,22 @@
     .game-sidebar-left { display: none !important; }
     .story-sidebar { width: 100% !important; min-width: 100% !important; border-left: none !important; border-top: 1px solid #007bc466 !important; max-height: none !important; flex-direction: column !important; gap: 16px !important; padding: 16px !important; }
     .story-main { padding: 20px 16px !important; }
+    /* JOIN SCREEN MOBILE */
+    .join-hex-bg { height: auto !important; min-height: 100vh !important; max-height: none !important; overflow-y: auto !important; padding: 60px 16px 24px !important; }
+    .join-hex-bg > div:first-child { margin-top: 0 !important; }
+    .join-solid-box { padding: 24px 20px !important; }
+    .join-solid-box h1 svg { height: 36px !important; }
+    .join-solid-box > div:last-child { font-size: 14px !important; letter-spacing: 2px !important; }
+
   }
   @media (max-width: 480px) {
     .game-header { padding: 8px 10px !important; }
     .game-header span[style*="fontSize:16"] { font-size: 13px !important; letter-spacing: 1px !important; }
+    /* JOIN SCREEN SMALL PHONE */
+    .join-hex-bg { padding: 40px 12px 20px !important; }
+    .join-solid-box { padding: 20px 16px !important; }
+    .join-solid-box h1 svg { height: 28px !important; }
+
   }
 </style>
 </head>

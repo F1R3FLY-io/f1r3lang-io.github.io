@@ -42,7 +42,14 @@
   .join-solid-box { background: #000 !important; position: relative; z-index: 1; }
   @media (max-width: 768px) { html, body { overflow-y: auto; overflow-x: hidden; height: auto; } html { scroll-behavior: auto; } }
   @media (max-width: 768px) {
-    .game-layout { flex-direction: column !important; }
+    .game-layout { flex-direction: column !important; 
+    /* JOIN SCREEN MOBILE */
+    .join-hex-bg { height: auto !important; min-height: 100vh !important; max-height: none !important; overflow-y: auto !important; padding: 60px 16px 24px !important; }
+    .join-hex-bg > div:first-child { margin-top: 0 !important; }
+    .join-solid-box { padding: 24px 20px !important; }
+    .join-solid-box h1 svg { height: 36px !important; }
+    .join-solid-box > div:last-child { font-size: 14px !important; letter-spacing: 2px !important; }
+}
     .game-sidebar {
       width: 100% !important; border-left: none !important;
       border-top: none;
@@ -69,7 +76,12 @@
     .join-logo { width: 200px !important; }
     .tour-btn { font-size: 10px !important; padding: 4px 8px !important; }
     .leave-btn { font-size: 12px !important; padding: 4px 8px !important; }
-  }
+  
+    /* JOIN SCREEN SMALL PHONE */
+    .join-hex-bg { padding: 40px 12px 20px !important; }
+    .join-solid-box { padding: 20px 16px !important; }
+    .join-solid-box h1 svg { height: 28px !important; }
+}
 </style>
 </head>
 <body>
