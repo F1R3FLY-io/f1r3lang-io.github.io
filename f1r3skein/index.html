@@ -6,7 +6,6 @@
 <title>F1R3SKEIN — Draft Review v1 (Hannah Adams, April 2026)</title>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 100%; min-height: 100vh; background: #000; color: #fff; overflow-x: hidden; }
@@ -26,15 +25,21 @@
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel">
-const { useState } = React;
-
+<script>
+const {
+  useState
+} = React;
 const BRAND = {
-  yellow: "#F3D630", sage: "#8BB999", sky: "#3FA9F5",
-  surface: "#000000", card: "#0c0c18",
+  yellow: "#F3D630",
+  sage: "#8BB999",
+  sky: "#3FA9F5",
+  surface: "#000000",
+  card: "#0c0c18",
   border: "#007bc466",
   stroke: "linear-gradient(90deg, #F3D630, #8BB999)",
-  text: "#ffffff", textMuted: "#ffffff", textDim: "#ffffff",
+  text: "#ffffff",
+  textMuted: "#ffffff",
+  textDim: "#ffffff",
   textSecondary: "#A0A0A0"
 };
 const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Source+Sans+3:wght@200;300;400;600;700&display=swap');`;
@@ -42,80 +47,465 @@ const FH = "'Josefin Sans', sans-serif";
 const FB = "'Source Sans 3', sans-serif";
 const SKEIN_ACCENT = "#3FA9F5"; // brand sky blue
 
-function SkeinLogo({height=74}) {
-  return <img src="images/f13rskein-logo.svg" alt="F1R3SKEIN" style={{height,width:"auto",display:"block"}} />;
+function SkeinLogo({
+  height = 74
+}) {
+  return /*#__PURE__*/React.createElement("img", {
+    src: "images/f13rskein-logo.svg",
+    alt: "F1R3SKEIN",
+    style: {
+      height,
+      width: "auto",
+      display: "block"
+    }
+  });
 }
-function SkeinLogoH({height=23}) {
-  return <img src="images/f13rskein-logo-horizontal.svg" alt="F1R3SKEIN" style={{height,width:"auto",display:"block"}} />;
+function SkeinLogoH({
+  height = 23
+}) {
+  return /*#__PURE__*/React.createElement("img", {
+    src: "images/f13rskein-logo-horizontal.svg",
+    alt: "F1R3SKEIN",
+    style: {
+      height,
+      width: "auto",
+      display: "block"
+    }
+  });
 }
-
-const SCALE_NOTES = ["C3","D3","E3","G3","A3","C4","D4","E4","G4","A4","C5","D5","E5","G5","A5","C6","D6","E6","G6","A6","C7","D7"];
+const SCALE_NOTES = ["C3", "D3", "E3", "G3", "A3", "C4", "D4", "E4", "G4", "A4", "C5", "D5", "E5", "G5", "A5", "C6", "D6", "E6", "G6", "A6", "C7", "D7"];
 
 // Generate demo snippets with colorful bar visualizations
 function makeSnippet(id, noteCount, gen, label, engagement, likes, plays, parents) {
   const notes = [];
   for (let i = 0; i < noteCount; i++) {
-    notes.push({ pitch: Math.floor(Math.random() * 22), duration: Math.floor(Math.random() * 5) });
+    notes.push({
+      pitch: Math.floor(Math.random() * 22),
+      duration: Math.floor(Math.random() * 5)
+    });
   }
-  return { id, notes, gen, label, engagement, likes, plays, parents };
+  return {
+    id,
+    notes,
+    gen,
+    label,
+    engagement,
+    likes,
+    plays,
+    parents
+  };
 }
-
-const SNIPPETS = [
-  makeSnippet("483273_1", 9,  0, "Gen-0", 47, 12, 35, null),
-  makeSnippet("483273_2", 4,  0, "Gen-0", 31,  8, 23, null),
-  makeSnippet("483273_3", 11, 0, "Gen-0", 28,  6, 22, null),
-  makeSnippet("483273_4", 7,  0, "Gen-0", 22,  5, 17, null),
-  makeSnippet("483273_5", 10, 1, "M♪+F♩", 18,  4, 14, ["483273_1","483273_3"]),
-  makeSnippet("483273_6", 4,  0, "Gen-0", 12,  3, 9,  null),
-  makeSnippet("483273_7", 7,  1, "F♪+M♩", 9,   2, 7,  ["483273_2","483273_4"]),
-  makeSnippet("483273_8", 10, 0, "Gen-0", 5,   1, 4,  null),
-];
-
-const BAR_COLORS = ["#F3D630","#8BB999","#3FA9F5","#BF5AF2","#FF6B2B","#009188","#007bc4","#F3D630","#5E5CE6","#8BB999","#3FA9F5"];
-function NoteViz({notes, height=48}) {
-  return (
-    <div style={{display:"flex",gap:2,alignItems:"flex-end",minHeight:height,padding:"4px 0"}}>
-      {notes.map((note, i) => {
-        const h = 8 + (note.pitch / 21) * 40;
-        const w = 4 + note.duration * 6;
-        const color = BAR_COLORS[note.pitch % BAR_COLORS.length];
-        return <div key={i} style={{width:w,height:h,backgroundColor:color,opacity:0.85,borderRadius:2,transition:"all 0.1s"}} title={SCALE_NOTES[note.pitch]}/>;
-      })}
-    </div>
-  );
+const SNIPPETS = [makeSnippet("483273_1", 9, 0, "Gen-0", 47, 12, 35, null), makeSnippet("483273_2", 4, 0, "Gen-0", 31, 8, 23, null), makeSnippet("483273_3", 11, 0, "Gen-0", 28, 6, 22, null), makeSnippet("483273_4", 7, 0, "Gen-0", 22, 5, 17, null), makeSnippet("483273_5", 10, 1, "M♪+F♩", 18, 4, 14, ["483273_1", "483273_3"]), makeSnippet("483273_6", 4, 0, "Gen-0", 12, 3, 9, null), makeSnippet("483273_7", 7, 1, "F♪+M♩", 9, 2, 7, ["483273_2", "483273_4"]), makeSnippet("483273_8", 10, 0, "Gen-0", 5, 1, 4, null)];
+const BAR_COLORS = ["#F3D630", "#8BB999", "#3FA9F5", "#BF5AF2", "#FF6B2B", "#009188", "#007bc4", "#F3D630", "#5E5CE6", "#8BB999", "#3FA9F5"];
+function NoteViz({
+  notes,
+  height = 48
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 2,
+      alignItems: "flex-end",
+      minHeight: height,
+      padding: "4px 0"
+    }
+  }, notes.map((note, i) => {
+    const h = 8 + note.pitch / 21 * 40;
+    const w = 4 + note.duration * 6;
+    const color = BAR_COLORS[note.pitch % BAR_COLORS.length];
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        width: w,
+        height: h,
+        backgroundColor: color,
+        opacity: 0.85,
+        borderRadius: 2,
+        transition: "all 0.1s"
+      },
+      title: SCALE_NOTES[note.pitch]
+    });
+  }));
 }
-
-function HowBtn({onClick}) {
-  return <button onClick={onClick} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:300,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>HOW THIS WORKS</button>;
+function HowBtn({
+  onClick
+}) {
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: onClick,
+    style: {
+      background: "#000",
+      border: `1px solid ${BRAND.border}`,
+      color: "#fff",
+      borderRadius: 20,
+      padding: "12px 24px 8px",
+      fontSize: 16,
+      cursor: "pointer",
+      fontFamily: FH,
+      letterSpacing: 2,
+      fontWeight: 300,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38,
+      whiteSpace: "nowrap"
+    }
+  }, "HOW THIS WORKS");
 }
-
-function TourIcon({type, color="#fff", size=48}) {
+function TourIcon({
+  type,
+  color = "#fff",
+  size = 48
+}) {
   const icons = {
-    dna: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path className="tdna-l" d="M16 6c0 8 16 10 16 18s-16 10-16 18" stroke={color} strokeWidth="1.5" fill="none"/><path className="tdna-r" d="M32 6c0 8-16 10-16 18s16 10 16 18" stroke={color} strokeWidth="1.5" fill="none"/><line x1="16" y1="15" x2="32" y2="15" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="24" x2="32" y2="24" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="33" x2="32" y2="33" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
-    ear: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path className="tear-outer" d="M30 10c6 3 10 9 10 16s-4 14-10 16" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><path className="tear-inner" d="M26 16c3 1.5 5 5 5 8s-2 7-5 8" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle className="tear-dot" cx="18" cy="24" r="4" fill={color} opacity=".5"/><line x1="8" y1="24" x2="14" y2="24" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
-    selection: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M8 36L24 8l16 28H8z" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/><circle className="tsel-dot" cx="24" cy="28" r="4" fill={color} opacity=".4"/><line x1="16" y1="32" x2="32" y2="32" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
-    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tchain-l" x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect className="tchain-r" x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
-    globe: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><ellipse className="tglobe-spin" cx="24" cy="24" rx="9" ry="18" stroke={color} strokeWidth="1.5"/><line x1="6" y1="24" x2="42" y2="24" stroke={color} strokeWidth="1.5"/><path d="M8 14h32M8 34h32" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
-    book: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path className="tbook-l" d="M8 8h14c2 0 2 2 2 2v28s0-2-2-2H8V8z" stroke={color} strokeWidth="1.5"/><path className="tbook-r" d="M40 8H26c-2 0-2 2-2 2v28s0-2 2-2h14V8z" stroke={color} strokeWidth="1.5"/><line x1="12" y1="16" x2="20" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="12" y1="20" x2="18" y2="20" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="16" x2="36" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="20" x2="34" y2="20" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
-    spectrum: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tspec-1" x="6" y="32" width="8" height="10" rx="1" fill={color} opacity=".3"/><rect className="tspec-2" x="16" y="24" width="8" height="18" rx="1" fill={color} opacity=".45"/><rect className="tspec-3" x="26" y="16" width="8" height="26" rx="1" fill={color} opacity=".6"/><rect className="tspec-4" x="36" y="8" width="8" height="34" rx="1" fill={color} opacity=".8"/></svg>,
-    bot: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="10" y="14" width="28" height="24" rx="5" stroke={color} strokeWidth="1.5"/><circle className="tbot-eye-l" cx="19" cy="26" r="3" fill={color}/><circle className="tbot-eye-r" cx="29" cy="26" r="3" fill={color}/><path d="M18 33c0 0 2.5 3 6 3s6-3 6-3" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="24" y1="6" x2="24" y2="14" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle className="tbot-antenna" cx="24" cy="5" r="2.5" fill={color}/></svg>,
+    dna: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("path", {
+      className: "tdna-l",
+      d: "M16 6c0 8 16 10 16 18s-16 10-16 18",
+      stroke: color,
+      strokeWidth: "1.5",
+      fill: "none"
+    }), /*#__PURE__*/React.createElement("path", {
+      className: "tdna-r",
+      d: "M32 6c0 8-16 10-16 18s16 10 16 18",
+      stroke: color,
+      strokeWidth: "1.5",
+      fill: "none"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "16",
+      y1: "15",
+      x2: "32",
+      y2: "15",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".4"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "16",
+      y1: "24",
+      x2: "32",
+      y2: "24",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".4"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "16",
+      y1: "33",
+      x2: "32",
+      y2: "33",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".4"
+    })),
+    ear: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("path", {
+      className: "tear-outer",
+      d: "M30 10c6 3 10 9 10 16s-4 14-10 16",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("path", {
+      className: "tear-inner",
+      d: "M26 16c3 1.5 5 5 5 8s-2 7-5 8",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tear-dot",
+      cx: "18",
+      cy: "24",
+      r: "4",
+      fill: color,
+      opacity: ".5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "8",
+      y1: "24",
+      x2: "14",
+      y2: "24",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    })),
+    selection: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M8 36L24 8l16 28H8z",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinejoin: "round"
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tsel-dot",
+      cx: "24",
+      cy: "28",
+      r: "4",
+      fill: color,
+      opacity: ".4"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "16",
+      y1: "32",
+      x2: "32",
+      y2: "32",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".4"
+    })),
+    chain: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("rect", {
+      className: "tchain-l",
+      x: "8",
+      y: "14",
+      width: "14",
+      height: "20",
+      rx: "4",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("rect", {
+      className: "tchain-r",
+      x: "26",
+      y: "14",
+      width: "14",
+      height: "20",
+      rx: "4",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "22",
+      y1: "21",
+      x2: "26",
+      y2: "21",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "22",
+      y1: "27",
+      x2: "26",
+      y2: "27",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    })),
+    globe: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("circle", {
+      cx: "24",
+      cy: "24",
+      r: "18",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("ellipse", {
+      className: "tglobe-spin",
+      cx: "24",
+      cy: "24",
+      rx: "9",
+      ry: "18",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "6",
+      y1: "24",
+      x2: "42",
+      y2: "24",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M8 14h32M8 34h32",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    })),
+    book: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("path", {
+      className: "tbook-l",
+      d: "M8 8h14c2 0 2 2 2 2v28s0-2-2-2H8V8z",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("path", {
+      className: "tbook-r",
+      d: "M40 8H26c-2 0-2 2-2 2v28s0-2 2-2h14V8z",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "12",
+      y1: "16",
+      x2: "20",
+      y2: "16",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "12",
+      y1: "20",
+      x2: "18",
+      y2: "20",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "28",
+      y1: "16",
+      x2: "36",
+      y2: "16",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "28",
+      y1: "20",
+      x2: "34",
+      y2: "20",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    })),
+    spectrum: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("rect", {
+      className: "tspec-1",
+      x: "6",
+      y: "32",
+      width: "8",
+      height: "10",
+      rx: "1",
+      fill: color,
+      opacity: ".3"
+    }), /*#__PURE__*/React.createElement("rect", {
+      className: "tspec-2",
+      x: "16",
+      y: "24",
+      width: "8",
+      height: "18",
+      rx: "1",
+      fill: color,
+      opacity: ".45"
+    }), /*#__PURE__*/React.createElement("rect", {
+      className: "tspec-3",
+      x: "26",
+      y: "16",
+      width: "8",
+      height: "26",
+      rx: "1",
+      fill: color,
+      opacity: ".6"
+    }), /*#__PURE__*/React.createElement("rect", {
+      className: "tspec-4",
+      x: "36",
+      y: "8",
+      width: "8",
+      height: "34",
+      rx: "1",
+      fill: color,
+      opacity: ".8"
+    })),
+    bot: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("rect", {
+      x: "10",
+      y: "14",
+      width: "28",
+      height: "24",
+      rx: "5",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tbot-eye-l",
+      cx: "19",
+      cy: "26",
+      r: "3",
+      fill: color
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tbot-eye-r",
+      cx: "29",
+      cy: "26",
+      r: "3",
+      fill: color
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M18 33c0 0 2.5 3 6 3s6-3 6-3",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "24",
+      y1: "6",
+      x2: "24",
+      y2: "14",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tbot-antenna",
+      cx: "24",
+      cy: "5",
+      r: "2.5",
+      fill: color
+    }))
   };
   return icons[type] || null;
 }
-
-function TourOverlay({onClose}) {
-  const slides = [
-    { icon:"dna", title:"MELODIES THAT\nEVOLVE", body:"Snippets are short musical phrases \u2014 pitches and durations derived from mathematical constants. They live on-chain, and the community decides which survive." },
-    { icon:"ear", title:"LISTEN\nBOOST\nBREED", body:"Play a snippet to hear it. Like it to boost its engagement score. Select two snippets and breed them \u2014 their pitches and durations recombine to produce offspring." },
-    { icon:"selection", title:"NATURAL SELECTION\nON A SHARD", body:"Low-engagement snippets get culled. High-engagement ones breed. Over generations, the population evolves toward what the community finds beautiful." },
-    { icon:"chain", title:"BUILT ON\nF1R3FLY", body:"Every snippet, every breed, every vote is a signed transaction on a F1R3FLY shard. The evolutionary history is permanent and auditable." },
-  ];
+function TourOverlay({
+  onClose
+}) {
+  const slides = [{
+    icon: "dna",
+    title: "MELODIES THAT\nEVOLVE",
+    body: "Snippets are short musical phrases \u2014 pitches and durations derived from mathematical constants. They live on-chain, and the community decides which survive."
+  }, {
+    icon: "ear",
+    title: "LISTEN\nBOOST\nBREED",
+    body: "Play a snippet to hear it. Like it to boost its engagement score. Select two snippets and breed them \u2014 their pitches and durations recombine to produce offspring."
+  }, {
+    icon: "selection",
+    title: "NATURAL SELECTION\nON A SHARD",
+    body: "Low-engagement snippets get culled. High-engagement ones breed. Over generations, the population evolves toward what the community finds beautiful."
+  }, {
+    icon: "chain",
+    title: "BUILT ON\nF1R3FLY",
+    body: "Every snippet, every breed, every vote is a signed transaction on a F1R3FLY shard. The evolutionary history is permanent and auditable."
+  }];
   const [si, setSi] = useState(0);
   const s = slides[si];
   const isLast = si === slides.length - 1;
-  return (
-    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(12px)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
-      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.95)",
+      backdropFilter: "blur(12px)",
+      zIndex: 200,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontFamily: FH
+    },
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("style", null, `@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes dnaShift{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
 @keyframes dnaShiftR{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
 .tdna-l{animation:dnaShift 3s ease-in-out infinite}.tdna-r{animation:dnaShiftR 3s ease-in-out infinite}
@@ -137,209 +527,836 @@ function TourOverlay({onClose}) {
 .tspec-1{transform-origin:bottom;animation:specGrow 2s ease-in-out infinite}.tspec-2{transform-origin:bottom;animation:specGrow 2s ease-in-out .2s infinite}.tspec-3{transform-origin:bottom;animation:specGrow 2s ease-in-out .4s infinite}.tspec-4{transform-origin:bottom;animation:specGrow 2s ease-in-out .6s infinite}
 @keyframes botBlink{0%,42%,50%,100%{opacity:1}45%,48%{opacity:0}}
 @keyframes antennaPulse{0%,100%{opacity:1}50%{opacity:.4}}
-.tbot-eye-l,.tbot-eye-r{animation:botBlink 3s ease-in-out infinite}.tbot-antenna{animation:antennaPulse 2s ease-in-out infinite}`}</style>
-      <div onClick={e=>e.stopPropagation()} style={{animation:"tourIn .35s ease-out",maxWidth:460,width:"90%",padding:"48px 36px 40px",border:`1px solid #007bc466`,borderRadius:14,background:"#000",textAlign:"center"}}>
-        <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
-        <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
-        <div style={{width:80,height:1,background:"linear-gradient(90deg, #F3D630, #8BB999)",margin:"0 auto 20px"}}/>
-        <div style={{fontSize:17,fontWeight:200,color:"#fff",lineHeight:1.6,fontFamily:FB,letterSpacing:0.2,marginBottom:36}}>{s.body}</div>
-        <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:28}}>
-          {slides.map((_,i)=><div key={i} onClick={()=>setSi(i)} style={{width:10,height:10,borderRadius:"50%",background:i===si?BRAND.yellow:"rgba(255,255,255,0.2)",cursor:"pointer",transition:"background .2s"}} />)}
-        </div>
-        <div style={{display:"flex",justifyContent:"center",gap:16}}>
-          {si > 0 && <button onClick={()=>setSi(si-1)} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,cursor:"pointer",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>BACK</button>}
-          <button onClick={()=>isLast?onClose():setSi(si+1)} style={{background:"linear-gradient(135deg, #5c0269, #7b0429)",border:"none",color:"#fff",borderRadius:20,padding:"12px 28px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,fontWeight:600,cursor:"pointer",boxShadow:"0 0 16px rgba(123,4,41,0.4)",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>{isLast?"LET\u2019S EVOLVE":"NEXT"}</button>
-        </div>
-      </div>
-    </div>
-  );
+.tbot-eye-l,.tbot-eye-r{animation:botBlink 3s ease-in-out infinite}.tbot-antenna{animation:antennaPulse 2s ease-in-out infinite}`), /*#__PURE__*/React.createElement("div", {
+    onClick: e => e.stopPropagation(),
+    style: {
+      animation: "tourIn .35s ease-out",
+      maxWidth: 460,
+      width: "90%",
+      padding: "48px 36px 40px",
+      border: `1px solid #007bc466`,
+      borderRadius: 14,
+      background: "#000",
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement(TourIcon, {
+    type: s.icon,
+    size: 48
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 20,
+      fontWeight: 700,
+      letterSpacing: 4,
+      color: BRAND.yellow,
+      lineHeight: 1.7,
+      whiteSpace: "pre-line",
+      margin: "0 0 16px",
+      fontFamily: FH
+    }
+  }, s.title), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 80,
+      height: 1,
+      background: "linear-gradient(90deg, #F3D630, #8BB999)",
+      margin: "0 auto 20px"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 17,
+      fontWeight: 200,
+      color: "#fff",
+      lineHeight: 1.6,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      marginBottom: 36
+    }
+  }, s.body), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      gap: 8,
+      marginBottom: 28
+    }
+  }, slides.map((_, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    onClick: () => setSi(i),
+    style: {
+      width: 10,
+      height: 10,
+      borderRadius: "50%",
+      background: i === si ? BRAND.yellow : "rgba(255,255,255,0.2)",
+      cursor: "pointer",
+      transition: "background .2s"
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      gap: 16
+    }
+  }, si > 0 && /*#__PURE__*/React.createElement("button", {
+    onClick: () => setSi(si - 1),
+    style: {
+      background: "#000",
+      border: `1px solid ${BRAND.border}`,
+      color: "#fff",
+      borderRadius: 20,
+      padding: "12px 24px 8px",
+      fontSize: 16,
+      fontFamily: FH,
+      letterSpacing: 2,
+      cursor: "pointer",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38
+    }
+  }, "BACK"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => isLast ? onClose() : setSi(si + 1),
+    style: {
+      background: "linear-gradient(135deg, #5c0269, #7b0429)",
+      border: "none",
+      color: "#fff",
+      borderRadius: 20,
+      padding: "12px 28px 8px",
+      fontSize: 16,
+      fontFamily: FH,
+      letterSpacing: 2,
+      fontWeight: 600,
+      cursor: "pointer",
+      boxShadow: "0 0 16px rgba(123,4,41,0.4)",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38
+    }
+  }, isLast ? "LET\u2019S EVOLVE" : "NEXT"))));
 }
-
-function F1R3GamesLogo({width=300}) {
-  return <svg width={width} viewBox="0 0 2041.904 1169.445" xmlns="http://www.w3.org/2000/svg" style={{display:"block",margin:"0 auto"}}>
-    <defs>
-      <linearGradient id="fg-g-flame" x1="771.497" y1="405.595" x2="1465.057" y2="405.595" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#f3d630"/>
-        <stop offset="1" stopColor="#a62832"/>
-      </linearGradient>
-      <linearGradient id="fg-g-knot" x1="929.98" y1="747.859" x2="929.98" y2="0" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#9ec597"/>
-        <stop offset=".519" stopColor="#5db7e7"/>
-        <stop offset="1" stopColor="#186d8c"/>
-      </linearGradient>
-      <clipPath id="fg-clip">
-        <path fill="none" d="M853.788,747.438c-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,169.433,169.896,99.235,172.964Z"/>
-      </clipPath>
-    </defs>
-    <path fill="#fff" d="M0,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737H46.094v66.658h87.579c3.545,0,6.736,3.191,6.736,6.737v29.074c0,3.546-3.191,6.737-6.736,6.737H46.094v89.706c0,3.545-3.19,6.736-6.736,6.736H6.737c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM235.429,989.323l-31.202,6.737c-3.191.709-6.736-1.419-7.091-4.609l-2.128-17.374c-.354-2.837.354-4.964,1.773-6.383l51.058-42.902h24.819c3.546,0,6.383,3.191,6.383,6.736v227.634c0,3.545-2.837,6.736-6.383,6.736h-30.492c-3.9,0-6.737-3.191-6.737-6.736v-169.839ZM362.005,924.438c0-3.546,2.837-6.737,6.737-6.737h101.406c42.548,0,77.296,34.039,77.296,76.232,0,32.62-21.629,59.213-52.477,71.623l48.576,90.061c2.482,4.609,0,10.282-6.027,10.282h-37.229c-3.191,0-4.965-1.772-5.674-3.191l-47.157-93.96h-39.357v90.415c0,3.545-3.19,6.736-6.736,6.736h-32.62c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM466.248,1030.808c18.792,0,35.103-16.31,35.103-36.166,0-18.792-16.311-34.393-35.103-34.393h-57.795v70.559h57.795ZM596.72,1129.024l18.083-17.374c3.191-2.837,6.382-2.837,9.219,0,1.063,1.418,21.983,19.146,43.612,19.146,19.146,0,37.584-13.828,37.584-33.329,0-18.438-17.02-35.103-48.931-35.103h-19.855c-3.9,0-6.737-2.836-6.737-7.091v-22.338c0-4.609,2.482-7.092,6.737-7.092h19.855c29.074,0,43.967-14.537,43.967-32.62,0-19.501-16.311-32.62-34.394-32.62-18.438,0-29.783,9.928-35.812,17.02-2.481,2.836-6.382,3.19-9.573.354l-17.374-16.311c-2.836-2.482-2.481-6.736,0-9.219,0,0,26.947-31.202,66.659-31.202,41.13,0,75.523,25.175,75.523,64.886,0,27.302-20.565,47.867-36.521,55.313v1.063c16.664,7.091,42.902,26.238,42.902,57.795,0,40.065-32.62,69.141-81.551,69.141-44.321,0-65.949-22.338-73.75-31.557-2.128-2.482-1.773-6.383.354-8.864ZM928.233,914.156c31.911,0,62.404,12.409,86.515,32.975,2.837,2.836,3.191,7.091.354,9.928l-21.982,23.047c-2.837,2.837-6.028,2.837-9.219,0-15.247-13.474-34.039-20.564-53.54-20.564-44.321,0-79.424,37.938-79.424,82.26,0,43.966,35.103,81.196,79.778,81.196,19.855,0,35.103-6.028,42.193-8.864v-30.139h-28.365c-3.9,0-6.737-2.837-6.737-6.382v-28.012c0-3.899,2.837-6.736,6.737-6.736h68.077c3.546,0,6.382,3.191,6.382,6.736v90.77c0,2.837-1.418,4.609-2.836,5.674,0,0-36.521,23.047-87.934,23.047-70.559,0-127.29-56.022-127.29-126.936s56.731-127.999,127.29-127.999ZM1056.58,1156.68l110.271-238.625c1.064-2.127,2.837-3.899,6.028-3.899h3.545c3.546,0,4.965,1.772,6.028,3.899l109.207,238.625c2.127,4.609-.709,9.219-6.028,9.219h-30.847c-5.319,0-7.801-2.127-10.283-7.092l-17.373-38.293h-106.017l-17.374,38.293c-1.418,3.546-4.609,7.092-10.282,7.092h-30.848c-5.318,0-8.154-4.609-6.027-9.219ZM1209.754,1081.156l-35.457-78.005h-1.063l-34.748,78.005h71.269ZM1367.53,919.474c.354-2.837,2.481-5.318,6.382-5.318h5.673c2.837,0,4.965,1.418,6.028,3.545l78.005,167.356h1.063l78.005-167.356c1.064-2.127,2.837-3.545,6.028-3.545h5.673c3.9,0,6.027,2.481,6.382,5.318l41.84,238.27c1.063,4.964-1.773,8.155-6.383,8.155h-32.266c-3.191,0-6.027-2.837-6.736-5.318l-20.92-134.382h-1.063l-62.05,139.346c-.709,2.127-2.837,3.9-6.027,3.9h-6.383c-3.19,0-4.964-1.773-6.027-3.9l-62.759-139.346h-1.063l-20.565,134.382c-.354,2.481-3.19,5.318-6.382,5.318h-31.911c-4.609,0-7.446-3.191-6.736-8.155l42.193-238.27ZM1668.902,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737h-104.952v58.149h87.579c3.545,0,6.736,3.19,6.736,6.736v29.429c0,3.9-3.191,6.737-6.736,6.737h-87.579v62.05h104.952c3.9,0,6.737,3.19,6.737,6.736v29.075c0,3.545-2.837,6.736-6.737,6.736h-144.309c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM1880.576,1131.151l12.765-21.982c2.836-4.965,8.864-4.965,12.055-2.482,1.773,1.063,30.493,21.983,53.54,21.983,18.438,0,32.266-12.056,32.266-27.302,0-18.083-15.246-30.493-45.03-42.549-33.329-13.474-66.658-34.747-66.658-76.586,0-31.557,23.401-68.077,79.777-68.077,36.166,0,63.822,18.438,70.914,23.756,3.546,2.127,4.609,8.155,2.127,11.7l-13.474,20.211c-2.836,4.255-8.154,7.091-12.409,4.255-2.837-1.773-29.784-19.502-49.285-19.502-20.211,0-31.202,13.474-31.202,24.82,0,16.665,13.119,28.011,41.839,39.712,34.394,13.828,74.104,34.393,74.104,80.132,0,36.521-31.557,70.205-81.551,70.205-44.675,0-70.913-20.92-78.005-27.656-3.19-3.191-4.964-4.964-1.772-10.638Z"/>
-    <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
-    <path fill="url(#fg-g-knot)" d="M1141.963,0c46.349,37.918,87.228,88.12,111.168,144.498,43.213,100.509,37.954,217.952-4.471,317.93-38.879,93.004-108.665,173.115-196.595,223.912-60.038,35.129-128.081,58.03-198.278,61.098-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,47.079,20,71.506,21.017,162.417,4.662,311.49-124.764,356.969-278.806,10.093-33.178,15.288-67.976,15.967-102.614,2.477-74.218-23.888-147.489-57.031-214.071Z"/>
-    <g clipPath="url(#fg-clip)">
-      <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
-    </g>
-  </svg>;
+function F1R3GamesLogo({
+  width = 300
+}) {
+  return /*#__PURE__*/React.createElement("svg", {
+    width: width,
+    viewBox: "0 0 2041.904 1169.445",
+    xmlns: "http://www.w3.org/2000/svg",
+    style: {
+      display: "block",
+      margin: "0 auto"
+    }
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: "fg-g-flame",
+    x1: "771.497",
+    y1: "405.595",
+    x2: "1465.057",
+    y2: "405.595",
+    gradientUnits: "userSpaceOnUse"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0",
+    stopColor: "#f3d630"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "1",
+    stopColor: "#a62832"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "fg-g-knot",
+    x1: "929.98",
+    y1: "747.859",
+    x2: "929.98",
+    y2: "0",
+    gradientUnits: "userSpaceOnUse"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0",
+    stopColor: "#9ec597"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: ".519",
+    stopColor: "#5db7e7"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "1",
+    stopColor: "#186d8c"
+  })), /*#__PURE__*/React.createElement("clipPath", {
+    id: "fg-clip"
+  }, /*#__PURE__*/React.createElement("path", {
+    fill: "none",
+    d: "M853.788,747.438c-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,169.433,169.896,99.235,172.964Z"
+  }))), /*#__PURE__*/React.createElement("path", {
+    fill: "#fff",
+    d: "M0,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737H46.094v66.658h87.579c3.545,0,6.736,3.191,6.736,6.737v29.074c0,3.546-3.191,6.737-6.736,6.737H46.094v89.706c0,3.545-3.19,6.736-6.736,6.736H6.737c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM235.429,989.323l-31.202,6.737c-3.191.709-6.736-1.419-7.091-4.609l-2.128-17.374c-.354-2.837.354-4.964,1.773-6.383l51.058-42.902h24.819c3.546,0,6.383,3.191,6.383,6.736v227.634c0,3.545-2.837,6.736-6.383,6.736h-30.492c-3.9,0-6.737-3.191-6.737-6.736v-169.839ZM362.005,924.438c0-3.546,2.837-6.737,6.737-6.737h101.406c42.548,0,77.296,34.039,77.296,76.232,0,32.62-21.629,59.213-52.477,71.623l48.576,90.061c2.482,4.609,0,10.282-6.027,10.282h-37.229c-3.191,0-4.965-1.772-5.674-3.191l-47.157-93.96h-39.357v90.415c0,3.545-3.19,6.736-6.736,6.736h-32.62c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM466.248,1030.808c18.792,0,35.103-16.31,35.103-36.166,0-18.792-16.311-34.393-35.103-34.393h-57.795v70.559h57.795ZM596.72,1129.024l18.083-17.374c3.191-2.837,6.382-2.837,9.219,0,1.063,1.418,21.983,19.146,43.612,19.146,19.146,0,37.584-13.828,37.584-33.329,0-18.438-17.02-35.103-48.931-35.103h-19.855c-3.9,0-6.737-2.836-6.737-7.091v-22.338c0-4.609,2.482-7.092,6.737-7.092h19.855c29.074,0,43.967-14.537,43.967-32.62,0-19.501-16.311-32.62-34.394-32.62-18.438,0-29.783,9.928-35.812,17.02-2.481,2.836-6.382,3.19-9.573.354l-17.374-16.311c-2.836-2.482-2.481-6.736,0-9.219,0,0,26.947-31.202,66.659-31.202,41.13,0,75.523,25.175,75.523,64.886,0,27.302-20.565,47.867-36.521,55.313v1.063c16.664,7.091,42.902,26.238,42.902,57.795,0,40.065-32.62,69.141-81.551,69.141-44.321,0-65.949-22.338-73.75-31.557-2.128-2.482-1.773-6.383.354-8.864ZM928.233,914.156c31.911,0,62.404,12.409,86.515,32.975,2.837,2.836,3.191,7.091.354,9.928l-21.982,23.047c-2.837,2.837-6.028,2.837-9.219,0-15.247-13.474-34.039-20.564-53.54-20.564-44.321,0-79.424,37.938-79.424,82.26,0,43.966,35.103,81.196,79.778,81.196,19.855,0,35.103-6.028,42.193-8.864v-30.139h-28.365c-3.9,0-6.737-2.837-6.737-6.382v-28.012c0-3.899,2.837-6.736,6.737-6.736h68.077c3.546,0,6.382,3.191,6.382,6.736v90.77c0,2.837-1.418,4.609-2.836,5.674,0,0-36.521,23.047-87.934,23.047-70.559,0-127.29-56.022-127.29-126.936s56.731-127.999,127.29-127.999ZM1056.58,1156.68l110.271-238.625c1.064-2.127,2.837-3.899,6.028-3.899h3.545c3.546,0,4.965,1.772,6.028,3.899l109.207,238.625c2.127,4.609-.709,9.219-6.028,9.219h-30.847c-5.319,0-7.801-2.127-10.283-7.092l-17.373-38.293h-106.017l-17.374,38.293c-1.418,3.546-4.609,7.092-10.282,7.092h-30.848c-5.318,0-8.154-4.609-6.027-9.219ZM1209.754,1081.156l-35.457-78.005h-1.063l-34.748,78.005h71.269ZM1367.53,919.474c.354-2.837,2.481-5.318,6.382-5.318h5.673c2.837,0,4.965,1.418,6.028,3.545l78.005,167.356h1.063l78.005-167.356c1.064-2.127,2.837-3.545,6.028-3.545h5.673c3.9,0,6.027,2.481,6.382,5.318l41.84,238.27c1.063,4.964-1.773,8.155-6.383,8.155h-32.266c-3.191,0-6.027-2.837-6.736-5.318l-20.92-134.382h-1.063l-62.05,139.346c-.709,2.127-2.837,3.9-6.027,3.9h-6.383c-3.19,0-4.964-1.773-6.027-3.9l-62.759-139.346h-1.063l-20.565,134.382c-.354,2.481-3.19,5.318-6.382,5.318h-31.911c-4.609,0-7.446-3.191-6.736-8.155l42.193-238.27ZM1668.902,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737h-104.952v58.149h87.579c3.545,0,6.736,3.19,6.736,6.736v29.429c0,3.9-3.191,6.737-6.736,6.737h-87.579v62.05h104.952c3.9,0,6.737,3.19,6.737,6.736v29.075c0,3.545-2.837,6.736-6.737,6.736h-144.309c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM1880.576,1131.151l12.765-21.982c2.836-4.965,8.864-4.965,12.055-2.482,1.773,1.063,30.493,21.983,53.54,21.983,18.438,0,32.266-12.056,32.266-27.302,0-18.083-15.246-30.493-45.03-42.549-33.329-13.474-66.658-34.747-66.658-76.586,0-31.557,23.401-68.077,79.777-68.077,36.166,0,63.822,18.438,70.914,23.756,3.546,2.127,4.609,8.155,2.127,11.7l-13.474,20.211c-2.836,4.255-8.154,7.091-12.409,4.255-2.837-1.773-29.784-19.502-49.285-19.502-20.211,0-31.202,13.474-31.202,24.82,0,16.665,13.119,28.011,41.839,39.712,34.394,13.828,74.104,34.393,74.104,80.132,0,36.521-31.557,70.205-81.551,70.205-44.675,0-70.913-20.92-78.005-27.656-3.19-3.191-4.964-4.964-1.772-10.638Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    fill: "url(#fg-g-flame)",
+    d: "M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    fill: "url(#fg-g-knot)",
+    d: "M1141.963,0c46.349,37.918,87.228,88.12,111.168,144.498,43.213,100.509,37.954,217.952-4.471,317.93-38.879,93.004-108.665,173.115-196.595,223.912-60.038,35.129-128.081,58.03-198.278,61.098-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,47.079,20,71.506,21.017,162.417,4.662,311.49-124.764,356.969-278.806,10.093-33.178,15.288-67.976,15.967-102.614,2.477-74.218-23.888-147.489-57.031-214.071Z"
+  }), /*#__PURE__*/React.createElement("g", {
+    clipPath: "url(#fg-clip)"
+  }, /*#__PURE__*/React.createElement("path", {
+    fill: "url(#fg-g-flame)",
+    d: "M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"
+  })));
 }
-
 function BuiltOnBadge() {
-  return (
-    <div style={{padding:"12px 0",display:"flex",justifyContent:"center",zIndex:100,background:"#000",cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
-      <img src="built-on-f1r3fly.io-box.svg" alt="Built on F1R3FLY.IO" style={{height:48,display:"block"}}/>
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 0",
+      display: "flex",
+      justifyContent: "center",
+      zIndex: 100,
+      background: "#000",
+      cursor: "pointer"
+    },
+    onClick: () => window.open && window.open("https://f1r3fly.io", "_blank")
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "built-on-f1r3fly.io-box.svg",
+    alt: "Built on F1R3FLY.IO",
+    style: {
+      height: 48,
+      display: "block"
+    }
+  }));
 }
-
 function F1R3Skein() {
   const [phase, setPhase] = useState("join");
   const [myName, setMyName] = useState("");
   const [showTour, setShowTour] = useState(false);
   const [view, setView] = useState("browse");
-
-  const handleJoin = () => { if (myName.trim()) setPhase("play"); };
-
-  if (phase === "join") return (
-    <div style={{minHeight:"100vh",background:"#000",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",fontFamily:FH,position:"relative",padding:"40px 20px"}}>
-      <style>{FONTS}{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:#007bc466 !important;outline:none}`}</style>
-      <div style={{animation:"fadeIn .6s ease-out",textAlign:"center",marginTop:-105,position:"relative",zIndex:1}}>
-        <F1R3GamesLogo width={196}/>
-        <div style={{fontSize:16,color:"#fff",letterSpacing:6,fontFamily:FH,fontWeight:300,marginTop:24}}>PRESENTS</div>
-        <div style={{height:40}}/>
-        <div style={{border:`1px solid #007bc466`,borderRadius:14,padding:"40px 48px",display:"inline-block",background:"#000"}}>
-          <h1 style={{margin:"0 0 20px",display:"flex",alignItems:"center",justifyContent:"center"}}><SkeinLogo height={104}/></h1>
-          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:1.6}}>MELODIES THAT EVOLVE<br/>THROUGH PLAY</div>
-        </div>
-        <div style={{height:50}}/>
-        <div style={{display:"flex",flexDirection:"column",gap:10,alignItems:"center"}}>
-          <div style={{fontSize:16,color:BRAND.yellow,letterSpacing:4,fontWeight:700,fontFamily:FH}}>CHOOSE YOUR F1R3SIGN</div>
-          <input value={myName} onChange={e=>setMyName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handleJoin()} placeholder="someone musical" style={{background:"#000",border:`1px solid #007bc466`,borderRadius:6,color:"#fff",padding:"10px 16px",fontSize:16,fontWeight:300,width:"100%",maxWidth:460,fontFamily:FH,textAlign:"center",outline:"none",marginTop:20}}/>
-          <button onClick={handleJoin} style={{background:`linear-gradient(135deg, #5c0269, #7b0429)`,color:"#fff",border:"none",borderRadius:20,padding:"12px 32px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:3,boxShadow:`0 0 20px rgba(123,4,41,0.4)`,marginTop:20,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>JOIN</button>
-          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:2.2,marginTop:20}}>YOUR UNIQUE F1R3SIGN<br/>TRAVELS WITH YOU</div>
-          <div style={{marginTop:12}}><HowBtn onClick={()=>setShowTour(true)}/></div>
-        </div>
-        <div style={{marginTop:16,color:BRAND.textSecondary,fontSize:16}}>8 snippets evolving</div>
-      </div>
-      <BuiltOnBadge/>
-      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
-    </div>
-  );
-
-  return (
-    <div style={{minHeight:"100vh",background:"#000",color:"#fff",fontFamily:FH,display:"flex",flexDirection:"column",position:"relative",paddingBottom:80}}>
-      <style>{FONTS}{`::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:${BRAND.border};border-radius:2px}*{box-sizing:border-box}`}</style>
-
-      {/* Header */}
-      <div className="game-header" style={{padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#000",minHeight:70,gap:12}}>
-        <div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
-          <SkeinLogoH height={23}/>
-          <span style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,letterSpacing:2,fontFamily:FB,marginTop:4}}>Gen 1 · Pop 8 · Block #8 · shard live</span>
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:8}}>
-          {["browse","breed","chain"].map(v => (
-            <button key={v} onClick={()=>setView(v)} style={{
-              background:view===v?`${SKEIN_ACCENT}22`:"transparent",
-              border:view===v?`1px solid ${SKEIN_ACCENT}66`:`1px solid ${BRAND.border}`,
-              color:view===v?"#fff":BRAND.textSecondary,borderRadius:20,padding:"10px 18px 8px",fontSize:16,
-              cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:view===v?600:400,
-              textTransform:"uppercase",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"
-            }}>{v}</button>
-          ))}
-          <HowBtn onClick={()=>setShowTour(true)}/>
-          <button onClick={()=>setPhase("join")} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"10px 18px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:1,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>LEAVE</button>
-        </div>
-      </div>
-      <div style={{width:"100%",height:"0.5px",background:BRAND.stroke,opacity:0.8}}/>
-
-      {/* Content */}
-      <div style={{flex:1,padding:"20px 28px",overflow:"auto"}}>
-        {view === "browse" && (
-          <div>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
-              <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2}}>Population ranked by engagement · Click ▶ to listen · ♥ to boost</div>
-              <button style={{background:`${BRAND.sage}18`,border:`1px solid ${BRAND.sage}66`,color:BRAND.sage,borderRadius:20,padding:"10px 18px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:600,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>+ DEPLOY RANDOM</button>
-            </div>
-            <div className="snippet-grid" style={{display:"flex",flexDirection:"column",gap:0}}>
-              {SNIPPETS.map((snip, idx) => (
-                <div key={snip.id} style={{
-                  background:"rgba(255,255,255,0.02)",border:`1px solid ${BRAND.border}`,borderRadius:8,
-                  padding:"14px 20px",display:"grid",gridTemplateColumns:"40px 1fr auto",gap:16,alignItems:"center",
-                  marginTop: idx === 0 ? 0 : -1
-                }} className="snippet-row">
-                  <div style={{fontSize:24,fontWeight:700,color:idx<3?SKEIN_ACCENT:BRAND.textSecondary,textAlign:"center",fontFamily:FH}}>{idx+1}</div>
-                  <div>
-                    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6,flexWrap:"wrap"}}>
-                      <span style={{fontSize:16,color:"#fff",fontFamily:FH}}>{snip.id}</span>
-                      <span style={{fontSize:16,padding:"2px 8px",borderRadius:4,background:`${BRAND.sky}18`,color:BRAND.sky,fontFamily:FH}}>Gen {snip.gen}</span>
-                      <span style={{fontSize:16,padding:"2px 8px",borderRadius:4,background:`${BRAND.yellow}18`,color:BRAND.yellow,fontFamily:FH}}>{snip.label}</span>
-                      <span style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2}}>{snip.notes.length} notes</span>
-                      {snip.parents && <span style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2}}>← {snip.parents.join(" × ")}</span>}
-                    </div>
-                    <NoteViz notes={snip.notes}/>
-                  </div>
-                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                    <div style={{textAlign:"right",marginRight:8}}>
-                      <div style={{fontSize:32,fontWeight:700,color:SKEIN_ACCENT,fontFamily:FH,lineHeight:1}}>{snip.engagement}</div>
-                      <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginTop:4}}>{snip.plays}▶ {snip.likes}♥</div>
-                    </div>
-                    <button style={{width:40,height:40,borderRadius:"50%",background:`${SKEIN_ACCENT}22`,border:`1px solid ${SKEIN_ACCENT}66`,color:SKEIN_ACCENT,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>▶</button>
-                    <button style={{width:40,height:40,borderRadius:"50%",background:"rgba(236,72,153,0.1)",border:"1px solid rgba(236,72,153,0.5)",color:"#f472b6",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>♥</button>
-                    <button style={{width:40,height:40,borderRadius:"50%",background:`${BRAND.sage}18`,border:`1px solid ${BRAND.sage}66`,color:BRAND.sage,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}}>⚿</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {view === "breed" && (
-          <div style={{textAlign:"center",padding:"60px 20px"}}>
-            <div style={{display:"grid",gridTemplateColumns:"1fr auto 1fr",gap:24,maxWidth:800,margin:"0 auto",alignItems:"start"}}>
-              <div style={{border:`1px solid ${BRAND.border}`,borderRadius:10,padding:20,background:"rgba(255,100,130,0.04)"}}>
-                <div style={{fontSize:16,color:"#f472b6",letterSpacing:3,fontFamily:FH,fontWeight:600,marginBottom:12}}>♀ MOTHER</div>
-                <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,padding:"24px 0"}}>Select a snippet from Browse view</div>
-              </div>
-              <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:8,paddingTop:30}}>
-                <button style={{width:56,height:56,borderRadius:"50%",background:"rgba(30,30,50,0.5)",border:`1px solid ${BRAND.border}`,color:BRAND.textSecondary,cursor:"not-allowed",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center"}}>⚿</button>
-                <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FH,letterSpacing:2}}>BREED</div>
-              </div>
-              <div style={{border:`1px solid ${BRAND.border}`,borderRadius:10,padding:20,background:"rgba(100,150,255,0.04)"}}>
-                <div style={{fontSize:16,color:"#60a5fa",letterSpacing:3,fontFamily:FH,fontWeight:600,marginBottom:12}}>♂ FATHER</div>
-                <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,padding:"24px 0"}}>Select a snippet from Browse view</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {view === "chain" && (
-          <div>
-            <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginBottom:20}}>F1R3FLY Shard Tuplespace · Rholang State Channels</div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(4, 1fr)",gap:12,marginBottom:24}}>
-              {[{label:"Block Height",value:"8"},{label:"Channels",value:"8"},{label:"Deploys",value:"8"},{label:"Culled",value:"0"}].map(s => (
-                <div key={s.label} style={{border:`1px solid ${BRAND.border}`,borderRadius:8,padding:16,textAlign:"center",background:"rgba(63,169,245,0.02)"}}>
-                  <div style={{fontSize:32,fontWeight:700,color:SKEIN_ACCENT,fontFamily:FH,lineHeight:1}}>{s.value}</div>
-                  <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginTop:8}}>{s.label}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{border:`1px solid ${BRAND.border}`,borderRadius:8,padding:16,background:"rgba(63,169,245,0.02)",maxHeight:360,overflowY:"auto"}}>
-              <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,textTransform:"uppercase",marginBottom:12}}>RECENT OPERATIONS</div>
-              {[...Array(8)].map((_,i) => (
-                <div key={i} style={{display:"flex",gap:16,padding:"6px 0",fontSize:16,fontWeight:200,fontFamily:FB,letterSpacing:0.2}}>
-                  <span style={{color:"#fff",minWidth:40}}>#{i+1}</span>
-                  <span style={{color:BRAND.sage,minWidth:60}}>deploy</span>
-                  <span style={{color:BRAND.textSecondary,flex:1}}>rho:snippet:483273_{i+1}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <BuiltOnBadge/>
-      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
-    </div>
-  );
+  const handleJoin = () => {
+    if (myName.trim()) setPhase("play");
+  };
+  if (phase === "join") return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: "100vh",
+      background: "#000",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "column",
+      fontFamily: FH,
+      position: "relative",
+      padding: "40px 20px"
+    }
+  }, /*#__PURE__*/React.createElement("style", null, FONTS, `@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:#007bc466 !important;outline:none}`), /*#__PURE__*/React.createElement("div", {
+    style: {
+      animation: "fadeIn .6s ease-out",
+      textAlign: "center",
+      marginTop: -105,
+      position: "relative",
+      zIndex: 1
+    }
+  }, /*#__PURE__*/React.createElement(F1R3GamesLogo, {
+    width: 196
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 6,
+      fontFamily: FH,
+      fontWeight: 300,
+      marginTop: 24
+    }
+  }, "PRESENTS"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 40
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: `1px solid #007bc466`,
+      borderRadius: 14,
+      padding: "40px 48px",
+      display: "inline-block",
+      background: "#000"
+    }
+  }, /*#__PURE__*/React.createElement("h1", {
+    style: {
+      margin: "0 0 20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement(SkeinLogo, {
+    height: 104
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 4,
+      fontWeight: 300,
+      fontFamily: FH,
+      lineHeight: 1.6
+    }
+  }, "MELODIES THAT EVOLVE", /*#__PURE__*/React.createElement("br", null), "THROUGH PLAY")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 50
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 10,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: BRAND.yellow,
+      letterSpacing: 4,
+      fontWeight: 700,
+      fontFamily: FH
+    }
+  }, "CHOOSE YOUR F1R3SIGN"), /*#__PURE__*/React.createElement("input", {
+    value: myName,
+    onChange: e => setMyName(e.target.value),
+    onKeyDown: e => e.key === "Enter" && handleJoin(),
+    placeholder: "someone musical",
+    style: {
+      background: "#000",
+      border: `1px solid #007bc466`,
+      borderRadius: 6,
+      color: "#fff",
+      padding: "10px 16px",
+      fontSize: 16,
+      fontWeight: 300,
+      width: "100%",
+      maxWidth: 460,
+      fontFamily: FH,
+      textAlign: "center",
+      outline: "none",
+      marginTop: 20
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: handleJoin,
+    style: {
+      background: `linear-gradient(135deg, #5c0269, #7b0429)`,
+      color: "#fff",
+      border: "none",
+      borderRadius: 20,
+      padding: "12px 32px 8px",
+      fontSize: 16,
+      fontFamily: FH,
+      fontWeight: 600,
+      cursor: "pointer",
+      letterSpacing: 3,
+      boxShadow: `0 0 20px rgba(123,4,41,0.4)`,
+      marginTop: 20,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38,
+      whiteSpace: "nowrap"
+    }
+  }, "JOIN"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 4,
+      fontWeight: 300,
+      fontFamily: FH,
+      lineHeight: 2.2,
+      marginTop: 20
+    }
+  }, "YOUR UNIQUE F1R3SIGN", /*#__PURE__*/React.createElement("br", null), "TRAVELS WITH YOU"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement(HowBtn, {
+    onClick: () => setShowTour(true)
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 16,
+      color: BRAND.textSecondary,
+      fontSize: 16
+    }
+  }, "8 snippets evolving")), /*#__PURE__*/React.createElement(BuiltOnBadge, null), showTour && /*#__PURE__*/React.createElement(TourOverlay, {
+    onClose: () => setShowTour(false)
+  }));
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: "100vh",
+      background: "#000",
+      color: "#fff",
+      fontFamily: FH,
+      display: "flex",
+      flexDirection: "column",
+      position: "relative",
+      paddingBottom: 80
+    }
+  }, /*#__PURE__*/React.createElement("style", null, FONTS, `::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:${BRAND.border};border-radius:2px}*{box-sizing:border-box}`), /*#__PURE__*/React.createElement("div", {
+    className: "game-header",
+    style: {
+      padding: "14px 20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      background: "#000",
+      minHeight: 70,
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement(SkeinLogoH, {
+    height: 23
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      letterSpacing: 2,
+      fontFamily: FB,
+      marginTop: 4
+    }
+  }, "Gen 1 \xB7 Pop 8 \xB7 Block #8 \xB7 shard live")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8
+    }
+  }, ["browse", "breed", "chain"].map(v => /*#__PURE__*/React.createElement("button", {
+    key: v,
+    onClick: () => setView(v),
+    style: {
+      background: view === v ? `${SKEIN_ACCENT}22` : "transparent",
+      border: view === v ? `1px solid ${SKEIN_ACCENT}66` : `1px solid ${BRAND.border}`,
+      color: view === v ? "#fff" : BRAND.textSecondary,
+      borderRadius: 20,
+      padding: "10px 18px 8px",
+      fontSize: 16,
+      cursor: "pointer",
+      fontFamily: FH,
+      letterSpacing: 2,
+      fontWeight: view === v ? 600 : 400,
+      textTransform: "uppercase",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38,
+      whiteSpace: "nowrap"
+    }
+  }, v)), /*#__PURE__*/React.createElement(HowBtn, {
+    onClick: () => setShowTour(true)
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setPhase("join"),
+    style: {
+      background: "#000",
+      border: `1px solid ${BRAND.border}`,
+      color: "#fff",
+      borderRadius: 20,
+      padding: "10px 18px 8px",
+      fontSize: 16,
+      cursor: "pointer",
+      fontFamily: FH,
+      letterSpacing: 1,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38,
+      whiteSpace: "nowrap"
+    }
+  }, "LEAVE"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "100%",
+      height: "0.5px",
+      background: BRAND.stroke,
+      opacity: 0.8
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      padding: "20px 28px",
+      overflow: "auto"
+    }
+  }, view === "browse" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2
+    }
+  }, "Population ranked by engagement \xB7 Click \u25B6 to listen \xB7 \u2665 to boost"), /*#__PURE__*/React.createElement("button", {
+    style: {
+      background: `${BRAND.sage}18`,
+      border: `1px solid ${BRAND.sage}66`,
+      color: BRAND.sage,
+      borderRadius: 20,
+      padding: "10px 18px 8px",
+      fontSize: 16,
+      cursor: "pointer",
+      fontFamily: FH,
+      letterSpacing: 2,
+      fontWeight: 600,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38,
+      whiteSpace: "nowrap"
+    }
+  }, "+ DEPLOY RANDOM")), /*#__PURE__*/React.createElement("div", {
+    className: "snippet-grid",
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 0
+    }
+  }, SNIPPETS.map((snip, idx) => /*#__PURE__*/React.createElement("div", {
+    key: snip.id,
+    style: {
+      background: "rgba(255,255,255,0.02)",
+      border: `1px solid ${BRAND.border}`,
+      borderRadius: 8,
+      padding: "14px 20px",
+      display: "grid",
+      gridTemplateColumns: "40px 1fr auto",
+      gap: 16,
+      alignItems: "center",
+      marginTop: idx === 0 ? 0 : -1
+    },
+    className: "snippet-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 24,
+      fontWeight: 700,
+      color: idx < 3 ? SKEIN_ACCENT : BRAND.textSecondary,
+      textAlign: "center",
+      fontFamily: FH
+    }
+  }, idx + 1), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 6,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      fontFamily: FH
+    }
+  }, snip.id), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      padding: "2px 8px",
+      borderRadius: 4,
+      background: `${BRAND.sky}18`,
+      color: BRAND.sky,
+      fontFamily: FH
+    }
+  }, "Gen ", snip.gen), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      padding: "2px 8px",
+      borderRadius: 4,
+      background: `${BRAND.yellow}18`,
+      color: BRAND.yellow,
+      fontFamily: FH
+    }
+  }, snip.label), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2
+    }
+  }, snip.notes.length, " notes"), snip.parents && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2
+    }
+  }, "\u2190 ", snip.parents.join(" × "))), /*#__PURE__*/React.createElement(NoteViz, {
+    notes: snip.notes
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "right",
+      marginRight: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 32,
+      fontWeight: 700,
+      color: SKEIN_ACCENT,
+      fontFamily: FH,
+      lineHeight: 1
+    }
+  }, snip.engagement), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      marginTop: 4
+    }
+  }, snip.plays, "\u25B6 ", snip.likes, "\u2665")), /*#__PURE__*/React.createElement("button", {
+    style: {
+      width: 40,
+      height: 40,
+      borderRadius: "50%",
+      background: `${SKEIN_ACCENT}22`,
+      border: `1px solid ${SKEIN_ACCENT}66`,
+      color: SKEIN_ACCENT,
+      cursor: "pointer",
+      fontSize: 16,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, "\u25B6"), /*#__PURE__*/React.createElement("button", {
+    style: {
+      width: 40,
+      height: 40,
+      borderRadius: "50%",
+      background: "rgba(236,72,153,0.1)",
+      border: "1px solid rgba(236,72,153,0.5)",
+      color: "#f472b6",
+      cursor: "pointer",
+      fontSize: 16,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, "\u2665"), /*#__PURE__*/React.createElement("button", {
+    style: {
+      width: 40,
+      height: 40,
+      borderRadius: "50%",
+      background: `${BRAND.sage}18`,
+      border: `1px solid ${BRAND.sage}66`,
+      color: BRAND.sage,
+      cursor: "pointer",
+      fontSize: 16,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontFamily: FH
+    }
+  }, "\u26BF")))))), view === "breed" && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "60px 20px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr auto 1fr",
+      gap: 24,
+      maxWidth: 800,
+      margin: "0 auto",
+      alignItems: "start"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: `1px solid ${BRAND.border}`,
+      borderRadius: 10,
+      padding: 20,
+      background: "rgba(255,100,130,0.04)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#f472b6",
+      letterSpacing: 3,
+      fontFamily: FH,
+      fontWeight: 600,
+      marginBottom: 12
+    }
+  }, "\u2640 MOTHER"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      padding: "24px 0"
+    }
+  }, "Select a snippet from Browse view")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: 8,
+      paddingTop: 30
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    style: {
+      width: 56,
+      height: 56,
+      borderRadius: "50%",
+      background: "rgba(30,30,50,0.5)",
+      border: `1px solid ${BRAND.border}`,
+      color: BRAND.textSecondary,
+      cursor: "not-allowed",
+      fontSize: 20,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, "\u26BF"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: BRAND.textSecondary,
+      fontFamily: FH,
+      letterSpacing: 2
+    }
+  }, "BREED")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: `1px solid ${BRAND.border}`,
+      borderRadius: 10,
+      padding: 20,
+      background: "rgba(100,150,255,0.04)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#60a5fa",
+      letterSpacing: 3,
+      fontFamily: FH,
+      fontWeight: 600,
+      marginBottom: 12
+    }
+  }, "\u2642 FATHER"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      padding: "24px 0"
+    }
+  }, "Select a snippet from Browse view")))), view === "chain" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      marginBottom: 20
+    }
+  }, "F1R3FLY Shard Tuplespace \xB7 Rholang State Channels"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(4, 1fr)",
+      gap: 12,
+      marginBottom: 24
+    }
+  }, [{
+    label: "Block Height",
+    value: "8"
+  }, {
+    label: "Channels",
+    value: "8"
+  }, {
+    label: "Deploys",
+    value: "8"
+  }, {
+    label: "Culled",
+    value: "0"
+  }].map(s => /*#__PURE__*/React.createElement("div", {
+    key: s.label,
+    style: {
+      border: `1px solid ${BRAND.border}`,
+      borderRadius: 8,
+      padding: 16,
+      textAlign: "center",
+      background: "rgba(63,169,245,0.02)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 32,
+      fontWeight: 700,
+      color: SKEIN_ACCENT,
+      fontFamily: FH,
+      lineHeight: 1
+    }
+  }, s.value), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      marginTop: 8
+    }
+  }, s.label)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: `1px solid ${BRAND.border}`,
+      borderRadius: 8,
+      padding: 16,
+      background: "rgba(63,169,245,0.02)",
+      maxHeight: 360,
+      overflowY: "auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 2,
+      fontFamily: FH,
+      fontWeight: 600,
+      textTransform: "uppercase",
+      marginBottom: 12
+    }
+  }, "RECENT OPERATIONS"), [...Array(8)].map((_, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: "flex",
+      gap: 16,
+      padding: "6px 0",
+      fontSize: 16,
+      fontWeight: 200,
+      fontFamily: FB,
+      letterSpacing: 0.2
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "#fff",
+      minWidth: 40
+    }
+  }, "#", i + 1), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: BRAND.sage,
+      minWidth: 60
+    }
+  }, "deploy"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: BRAND.textSecondary,
+      flex: 1
+    }
+  }, "rho:snippet:483273_", i + 1)))))), /*#__PURE__*/React.createElement(BuiltOnBadge, null), showTour && /*#__PURE__*/React.createElement(TourOverlay, {
+    onClose: () => setShowTour(false)
+  }));
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(<F1R3Skein/>);
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(F1R3Skein, null));
 </script>
 </body>
 </html>

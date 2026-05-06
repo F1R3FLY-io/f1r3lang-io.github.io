@@ -6,7 +6,6 @@
 <title>F1R3SIDECHAT — Draft Review v1 (Hannah Adams, April 2026)</title>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 100%; min-height: 100vh; background: #000; color: #fff; overflow-x: hidden; }
@@ -27,15 +26,25 @@
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel">
-const { useState, useEffect, useCallback, useRef, useReducer } = React;
-
+<script>
+const {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useReducer
+} = React;
 const BRAND = {
-  yellow: "#F3D630", sage: "#8BB999", sky: "#3FA9F5",
-  surface: "#000000", card: "#0c0c18",
+  yellow: "#F3D630",
+  sage: "#8BB999",
+  sky: "#3FA9F5",
+  surface: "#000000",
+  card: "#0c0c18",
   border: "#007bc466",
   stroke: "linear-gradient(90deg, #F3D630, #8BB999)",
-  text: "#ffffff", textMuted: "#ffffff", textDim: "#ffffff",
+  text: "#ffffff",
+  textMuted: "#ffffff",
+  textDim: "#ffffff",
   textSecondary: "#A0A0A0"
 };
 const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Source+Sans+3:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400&display=swap');`;
@@ -43,85 +52,584 @@ const FH = "'Josefin Sans', sans-serif";
 const FB = "'Source Sans 3', sans-serif";
 const CHAT_ACCENT = "#8BB999"; // brand sage
 
-function SideChatLogo({height=240}) {
-  return <img src="images/f1r3sidechat-logo.svg" alt="F1R3SIDECHAT" style={{height,width:"auto",display:"block"}} />;
+function SideChatLogo({
+  height = 240
+}) {
+  return /*#__PURE__*/React.createElement("img", {
+    src: "images/f1r3sidechat-logo.svg",
+    alt: "F1R3SIDECHAT",
+    style: {
+      height,
+      width: "auto",
+      display: "block"
+    }
+  });
 }
-function SideChatLogoH({height=27}) {
-  return <img src="images/f1r3sidechat-logo-horizontal.svg" alt="F1R3SIDECHAT" style={{height,width:"auto",display:"block"}} />;
+function SideChatLogoH({
+  height = 27
+}) {
+  return /*#__PURE__*/React.createElement("img", {
+    src: "images/f1r3sidechat-logo-horizontal.svg",
+    alt: "F1R3SIDECHAT",
+    style: {
+      height,
+      width: "auto",
+      display: "block"
+    }
+  });
 }
-
 const STORY = {
   title: "The Cartographer of Lost Rivers",
   genre: "Mystery / Fantasy",
-  author: { id: "p2", name: "Aria", color: BRAND.sky },
+  author: {
+    id: "p2",
+    name: "Aria",
+    color: BRAND.sky
+  },
   synopsis: "A blind cartographer hears rivers flowing beneath the streets. When buildings start collapsing into hidden waterways, she must map the invisible before the city drowns.",
   readers: 234,
-  chapters: [
-    { id: "ch1", num: 1, title: "The Sound Beneath Concrete", authorId: "p2", status: "published",
-      text: "The first time Maren heard the river, she thought it was rain.\n\nShe was standing at the corner of Ash Street and Viaduct, her white cane tapping the familiar rhythm against the curb. The city hummed its usual frequencies \u2014 diesel idling, a busker\u2019s violin two blocks east, the staccato of heels on the pedestrian bridge above. But underneath all of it, threading through the concrete like a whispered secret, was the sound of moving water.\n\nNot storm drains. Not burst pipes. This was older. Deeper. A current that remembered being a river.\n\n\u201CYou hear that?\u201D she asked the dog. Sable\u2019s ears perked, but the guide dog gave no indication of alarm. Water was water. But Maren\u2019s hands were trembling on the harness.\n\nShe had been blind since she was nine \u2014 long enough to have rebuilt her entire map of the world in sound and texture. She knew this intersection by its acoustic signature the way sighted people knew it by its traffic light. And this sound did not belong here.\n\nShe knelt, pressing her palm flat against the sidewalk. The vibration was unmistakable. Something was flowing, six feet below her fingers, in a direction that no municipal map acknowledged.",
-      wordCount: 198, applause: 47 },
-    { id: "ch2", num: 2, title: "The Archive of Buried Channels", authorId: "p2", status: "published",
-      text: "The Historical Society occupied the top floor of a building that should have been condemned. Maren climbed the stairs by counting \u2014 forty-two steps, a landing that smelled of mildewed carpet, then twenty more steps to a door that stuck in its frame.\n\n\u201CI need your oldest maps,\u201D she told the archivist, a man whose voice suggested tweed and resignation. \u201CThe ones from before the city paved the rivers.\u201D\n\nA silence. Then the scrape of a chair.\n\n\u201CNo one has asked for those in years,\u201D he said. \u201CThey\u2019re in the basement. Which is ironic, given what\u2019s down there.\u201D\n\nHe meant it as a joke. But when they descended and Maren pressed her hand to the basement wall, she felt it \u2014 the thrum of a current so close it seemed to push against the foundation stones. The archivist didn\u2019t notice. People who could see rarely listened to buildings.",
-      wordCount: 156, applause: 32 },
-    { id: "ch3", num: 3, title: "Cracks in the Foundation", authorId: null, status: "open", text: "", wordCount: 0, applause: 0 }
-  ]
+  chapters: [{
+    id: "ch1",
+    num: 1,
+    title: "The Sound Beneath Concrete",
+    authorId: "p2",
+    status: "published",
+    text: "The first time Maren heard the river, she thought it was rain.\n\nShe was standing at the corner of Ash Street and Viaduct, her white cane tapping the familiar rhythm against the curb. The city hummed its usual frequencies \u2014 diesel idling, a busker\u2019s violin two blocks east, the staccato of heels on the pedestrian bridge above. But underneath all of it, threading through the concrete like a whispered secret, was the sound of moving water.\n\nNot storm drains. Not burst pipes. This was older. Deeper. A current that remembered being a river.\n\n\u201CYou hear that?\u201D she asked the dog. Sable\u2019s ears perked, but the guide dog gave no indication of alarm. Water was water. But Maren\u2019s hands were trembling on the harness.\n\nShe had been blind since she was nine \u2014 long enough to have rebuilt her entire map of the world in sound and texture. She knew this intersection by its acoustic signature the way sighted people knew it by its traffic light. And this sound did not belong here.\n\nShe knelt, pressing her palm flat against the sidewalk. The vibration was unmistakable. Something was flowing, six feet below her fingers, in a direction that no municipal map acknowledged.",
+    wordCount: 198,
+    applause: 47
+  }, {
+    id: "ch2",
+    num: 2,
+    title: "The Archive of Buried Channels",
+    authorId: "p2",
+    status: "published",
+    text: "The Historical Society occupied the top floor of a building that should have been condemned. Maren climbed the stairs by counting \u2014 forty-two steps, a landing that smelled of mildewed carpet, then twenty more steps to a door that stuck in its frame.\n\n\u201CI need your oldest maps,\u201D she told the archivist, a man whose voice suggested tweed and resignation. \u201CThe ones from before the city paved the rivers.\u201D\n\nA silence. Then the scrape of a chair.\n\n\u201CNo one has asked for those in years,\u201D he said. \u201CThey\u2019re in the basement. Which is ironic, given what\u2019s down there.\u201D\n\nHe meant it as a joke. But when they descended and Maren pressed her hand to the basement wall, she felt it \u2014 the thrum of a current so close it seemed to push against the foundation stones. The archivist didn\u2019t notice. People who could see rarely listened to buildings.",
+    wordCount: 156,
+    applause: 32
+  }, {
+    id: "ch3",
+    num: 3,
+    title: "Cracks in the Foundation",
+    authorId: null,
+    status: "open",
+    text: "",
+    wordCount: 0,
+    applause: 0
+  }]
 };
-
-const CHARACTERS = [
-  { id: "maren", name: "Maren", role: "Blind cartographer", driver: "p2", color: BRAND.yellow },
-  { id: "sable", name: "Sable", role: "Guide dog", driver: null, color: "#8B7355" },
-  { id: "archivist", name: "The Archivist", role: "Keeper of forgotten maps", driver: "p5", color: BRAND.sage },
-  { id: "river", name: "The River", role: "The buried consciousness", driver: null, color: BRAND.sky },
-  { id: "mayor", name: "Mayor Calloway", role: "Wants rivers hidden", driver: null, color: "#CC4444" }
-];
-
-const PORTRAITS = { hannah:"images/hannah-adams.jpg", greg:"images/greg-meredith.jpg", mike:"images/mike-stay.jpg", lilia:"images/lilia-rusu.jpg", jeff:"images/jeff-turner.jpg", stephen:"images/stephen-alexander.jpg" };
-const DEMO_PLAYERS = [
-  { id:"p2", name:"Aria", portrait:PORTRAITS.greg, role:"creator" },
-  { id:"p3", name:"Kael", portrait:PORTRAITS.mike, role:"reader" },
-  { id:"p4", name:"Nova", portrait:PORTRAITS.lilia, role:"reader" },
-  { id:"p5", name:"Zeph", portrait:PORTRAITS.jeff, role:"creator" },
-  { id:"p6", name:"Onyx", portrait:PORTRAITS.stephen, role:"reader" }
-];
-const COMMENTS = [
-  { id:1, userId:"p3", name:"Kael", chapterId:"ch1", text:"The acoustic mapping premise is brilliant. Her blindness isn\u2019t a limitation \u2014 it\u2019s her superpower.", applause:12 },
-  { id:2, userId:"p6", name:"Onyx", chapterId:"ch1", text:"Knowing an intersection by its acoustic signature... world-building that makes you stop and re-read.", applause:8 },
-  { id:3, userId:"p4", name:"Nova", chapterId:"ch2", text:"People who could see rarely listened to buildings. This line is the whole thesis of the story.", applause:23 }
-];
-const COSTS = { DRIVE:100, AI_COAUTHOR:500, TALK_AUTHOR:250, TIP_MIN:10 };
-
-function Avatar({src, size=32}) { return <img src={src} alt="" style={{width:size,height:size,borderRadius:"50%",objectFit:"cover",border:`2px solid ${BRAND.border}`,flexShrink:0}} />; }
-function HumanIcon({size=14, color="#fff"}) { return (<svg width={size} height={size} viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke={color} strokeWidth="1.5" fill="none"/><path d="M2.5 15c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" stroke={color} strokeWidth="1.5" fill="none" strokeLinecap="round"/></svg>); }
-
-function HowBtn({onClick}) { return <button onClick={onClick} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:2,fontWeight:300,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>HOW THIS WORKS</button>; }
-
-function TourIcon({type, color="#fff", size=48}) {
+const CHARACTERS = [{
+  id: "maren",
+  name: "Maren",
+  role: "Blind cartographer",
+  driver: "p2",
+  color: BRAND.yellow
+}, {
+  id: "sable",
+  name: "Sable",
+  role: "Guide dog",
+  driver: null,
+  color: "#8B7355"
+}, {
+  id: "archivist",
+  name: "The Archivist",
+  role: "Keeper of forgotten maps",
+  driver: "p5",
+  color: BRAND.sage
+}, {
+  id: "river",
+  name: "The River",
+  role: "The buried consciousness",
+  driver: null,
+  color: BRAND.sky
+}, {
+  id: "mayor",
+  name: "Mayor Calloway",
+  role: "Wants rivers hidden",
+  driver: null,
+  color: "#CC4444"
+}];
+const PORTRAITS = {
+  hannah: "images/hannah-adams.jpg",
+  greg: "images/greg-meredith.jpg",
+  mike: "images/mike-stay.jpg",
+  lilia: "images/lilia-rusu.jpg",
+  jeff: "images/jeff-turner.jpg",
+  stephen: "images/stephen-alexander.jpg"
+};
+const DEMO_PLAYERS = [{
+  id: "p2",
+  name: "Aria",
+  portrait: PORTRAITS.greg,
+  role: "creator"
+}, {
+  id: "p3",
+  name: "Kael",
+  portrait: PORTRAITS.mike,
+  role: "reader"
+}, {
+  id: "p4",
+  name: "Nova",
+  portrait: PORTRAITS.lilia,
+  role: "reader"
+}, {
+  id: "p5",
+  name: "Zeph",
+  portrait: PORTRAITS.jeff,
+  role: "creator"
+}, {
+  id: "p6",
+  name: "Onyx",
+  portrait: PORTRAITS.stephen,
+  role: "reader"
+}];
+const COMMENTS = [{
+  id: 1,
+  userId: "p3",
+  name: "Kael",
+  chapterId: "ch1",
+  text: "The acoustic mapping premise is brilliant. Her blindness isn\u2019t a limitation \u2014 it\u2019s her superpower.",
+  applause: 12
+}, {
+  id: 2,
+  userId: "p6",
+  name: "Onyx",
+  chapterId: "ch1",
+  text: "Knowing an intersection by its acoustic signature... world-building that makes you stop and re-read.",
+  applause: 8
+}, {
+  id: 3,
+  userId: "p4",
+  name: "Nova",
+  chapterId: "ch2",
+  text: "People who could see rarely listened to buildings. This line is the whole thesis of the story.",
+  applause: 23
+}];
+const COSTS = {
+  DRIVE: 100,
+  AI_COAUTHOR: 500,
+  TALK_AUTHOR: 250,
+  TIP_MIN: 10
+};
+function Avatar({
+  src,
+  size = 32
+}) {
+  return /*#__PURE__*/React.createElement("img", {
+    src: src,
+    alt: "",
+    style: {
+      width: size,
+      height: size,
+      borderRadius: "50%",
+      objectFit: "cover",
+      border: `2px solid ${BRAND.border}`,
+      flexShrink: 0
+    }
+  });
+}
+function HumanIcon({
+  size = 14,
+  color = "#fff"
+}) {
+  return /*#__PURE__*/React.createElement("svg", {
+    width: size,
+    height: size,
+    viewBox: "0 0 16 16",
+    fill: "none"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "8",
+    cy: "5",
+    r: "3",
+    stroke: color,
+    strokeWidth: "1.5",
+    fill: "none"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M2.5 15c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5",
+    stroke: color,
+    strokeWidth: "1.5",
+    fill: "none",
+    strokeLinecap: "round"
+  }));
+}
+function HowBtn({
+  onClick
+}) {
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: onClick,
+    style: {
+      background: "#000",
+      border: `1px solid ${BRAND.border}`,
+      color: "#fff",
+      borderRadius: 20,
+      padding: "12px 24px 8px",
+      fontSize: 16,
+      cursor: "pointer",
+      fontFamily: FH,
+      letterSpacing: 2,
+      fontWeight: 300,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38,
+      whiteSpace: "nowrap"
+    }
+  }, "HOW THIS WORKS");
+}
+function TourIcon({
+  type,
+  color = "#fff",
+  size = 48
+}) {
   const icons = {
-    dna: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path className="tdna-l" d="M16 6c0 8 16 10 16 18s-16 10-16 18" stroke={color} strokeWidth="1.5" fill="none"/><path className="tdna-r" d="M32 6c0 8-16 10-16 18s16 10 16 18" stroke={color} strokeWidth="1.5" fill="none"/><line x1="16" y1="15" x2="32" y2="15" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="24" x2="32" y2="24" stroke={color} strokeWidth="1" opacity=".4"/><line x1="16" y1="33" x2="32" y2="33" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
-    ear: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path className="tear-outer" d="M30 10c6 3 10 9 10 16s-4 14-10 16" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><path className="tear-inner" d="M26 16c3 1.5 5 5 5 8s-2 7-5 8" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle className="tear-dot" cx="18" cy="24" r="4" fill={color} opacity=".5"/><line x1="8" y1="24" x2="14" y2="24" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
-    selection: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M8 36L24 8l16 28H8z" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/><circle className="tsel-dot" cx="24" cy="28" r="4" fill={color} opacity=".4"/><line x1="16" y1="32" x2="32" y2="32" stroke={color} strokeWidth="1" opacity=".4"/></svg>,
-    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tchain-l" x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect className="tchain-r" x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
-    globe: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><ellipse className="tglobe-spin" cx="24" cy="24" rx="9" ry="18" stroke={color} strokeWidth="1.5"/><line x1="6" y1="24" x2="42" y2="24" stroke={color} strokeWidth="1.5"/><path d="M8 14h32M8 34h32" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
-    book: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path className="tbook-l" d="M8 8h14c2 0 2 2 2 2v28s0-2-2-2H8V8z" stroke={color} strokeWidth="1.5"/><path className="tbook-r" d="M40 8H26c-2 0-2 2-2 2v28s0-2 2-2h14V8z" stroke={color} strokeWidth="1.5"/><line x1="12" y1="16" x2="20" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="12" y1="20" x2="18" y2="20" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="16" x2="36" y2="16" stroke={color} strokeWidth="1" opacity=".5"/><line x1="28" y1="20" x2="34" y2="20" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
-    spectrum: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tspec-1" x="6" y="32" width="8" height="10" rx="1" fill={color} opacity=".3"/><rect className="tspec-2" x="16" y="24" width="8" height="18" rx="1" fill={color} opacity=".45"/><rect className="tspec-3" x="26" y="16" width="8" height="26" rx="1" fill={color} opacity=".6"/><rect className="tspec-4" x="36" y="8" width="8" height="34" rx="1" fill={color} opacity=".8"/></svg>,
-    bot: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect x="10" y="14" width="28" height="24" rx="5" stroke={color} strokeWidth="1.5"/><circle className="tbot-eye-l" cx="19" cy="26" r="3" fill={color}/><circle className="tbot-eye-r" cx="29" cy="26" r="3" fill={color}/><path d="M18 33c0 0 2.5 3 6 3s6-3 6-3" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="24" y1="6" x2="24" y2="14" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle className="tbot-antenna" cx="24" cy="5" r="2.5" fill={color}/></svg>,
+    dna: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("path", {
+      className: "tdna-l",
+      d: "M16 6c0 8 16 10 16 18s-16 10-16 18",
+      stroke: color,
+      strokeWidth: "1.5",
+      fill: "none"
+    }), /*#__PURE__*/React.createElement("path", {
+      className: "tdna-r",
+      d: "M32 6c0 8-16 10-16 18s16 10 16 18",
+      stroke: color,
+      strokeWidth: "1.5",
+      fill: "none"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "16",
+      y1: "15",
+      x2: "32",
+      y2: "15",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".4"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "16",
+      y1: "24",
+      x2: "32",
+      y2: "24",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".4"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "16",
+      y1: "33",
+      x2: "32",
+      y2: "33",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".4"
+    })),
+    ear: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("path", {
+      className: "tear-outer",
+      d: "M30 10c6 3 10 9 10 16s-4 14-10 16",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("path", {
+      className: "tear-inner",
+      d: "M26 16c3 1.5 5 5 5 8s-2 7-5 8",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tear-dot",
+      cx: "18",
+      cy: "24",
+      r: "4",
+      fill: color,
+      opacity: ".5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "8",
+      y1: "24",
+      x2: "14",
+      y2: "24",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    })),
+    selection: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M8 36L24 8l16 28H8z",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinejoin: "round"
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tsel-dot",
+      cx: "24",
+      cy: "28",
+      r: "4",
+      fill: color,
+      opacity: ".4"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "16",
+      y1: "32",
+      x2: "32",
+      y2: "32",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".4"
+    })),
+    chain: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("rect", {
+      className: "tchain-l",
+      x: "8",
+      y: "14",
+      width: "14",
+      height: "20",
+      rx: "4",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("rect", {
+      className: "tchain-r",
+      x: "26",
+      y: "14",
+      width: "14",
+      height: "20",
+      rx: "4",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "22",
+      y1: "21",
+      x2: "26",
+      y2: "21",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "22",
+      y1: "27",
+      x2: "26",
+      y2: "27",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    })),
+    globe: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("circle", {
+      cx: "24",
+      cy: "24",
+      r: "18",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("ellipse", {
+      className: "tglobe-spin",
+      cx: "24",
+      cy: "24",
+      rx: "9",
+      ry: "18",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "6",
+      y1: "24",
+      x2: "42",
+      y2: "24",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M8 14h32M8 34h32",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    })),
+    book: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("path", {
+      className: "tbook-l",
+      d: "M8 8h14c2 0 2 2 2 2v28s0-2-2-2H8V8z",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("path", {
+      className: "tbook-r",
+      d: "M40 8H26c-2 0-2 2-2 2v28s0-2 2-2h14V8z",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "12",
+      y1: "16",
+      x2: "20",
+      y2: "16",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "12",
+      y1: "20",
+      x2: "18",
+      y2: "20",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "28",
+      y1: "16",
+      x2: "36",
+      y2: "16",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "28",
+      y1: "20",
+      x2: "34",
+      y2: "20",
+      stroke: color,
+      strokeWidth: "1",
+      opacity: ".5"
+    })),
+    spectrum: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("rect", {
+      className: "tspec-1",
+      x: "6",
+      y: "32",
+      width: "8",
+      height: "10",
+      rx: "1",
+      fill: color,
+      opacity: ".3"
+    }), /*#__PURE__*/React.createElement("rect", {
+      className: "tspec-2",
+      x: "16",
+      y: "24",
+      width: "8",
+      height: "18",
+      rx: "1",
+      fill: color,
+      opacity: ".45"
+    }), /*#__PURE__*/React.createElement("rect", {
+      className: "tspec-3",
+      x: "26",
+      y: "16",
+      width: "8",
+      height: "26",
+      rx: "1",
+      fill: color,
+      opacity: ".6"
+    }), /*#__PURE__*/React.createElement("rect", {
+      className: "tspec-4",
+      x: "36",
+      y: "8",
+      width: "8",
+      height: "34",
+      rx: "1",
+      fill: color,
+      opacity: ".8"
+    })),
+    bot: /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /*#__PURE__*/React.createElement("rect", {
+      x: "10",
+      y: "14",
+      width: "28",
+      height: "24",
+      rx: "5",
+      stroke: color,
+      strokeWidth: "1.5"
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tbot-eye-l",
+      cx: "19",
+      cy: "26",
+      r: "3",
+      fill: color
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tbot-eye-r",
+      cx: "29",
+      cy: "26",
+      r: "3",
+      fill: color
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M18 33c0 0 2.5 3 6 3s6-3 6-3",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "24",
+      y1: "6",
+      x2: "24",
+      y2: "14",
+      stroke: color,
+      strokeWidth: "1.5",
+      strokeLinecap: "round"
+    }), /*#__PURE__*/React.createElement("circle", {
+      className: "tbot-antenna",
+      cx: "24",
+      cy: "5",
+      r: "2.5",
+      fill: color
+    }))
   };
   return icons[type] || null;
 }
-
-function TourOverlay({onClose}) {
-  const slides = [
-    { icon:"book", title:"STORIES ARE\nBETTER TOGETHER", body:"A serial narrative unfolds in real time. You arrive as a reader. If the story moves you, you can step into it \u2014 comment, tip, drive a character, or propose where the plot goes next." },
-    { icon:"spectrum", title:"FOUR WAYS IN\nONE SPECTRUM", body:"Reader (free) \u2192 Kibitzer (comment for free) \u2192 Character Driver (pay to take the wheel of a character) \u2192 Meta-Author (pay to propose plot changes). Deeper participation costs more tokens." },
-    { icon:"bot", title:"AI IS A\nCHARACTER TOO", body:"The AI co-author isn\u2019t hidden. It\u2019s a named participant in the story, visible and addressable. Human and AI write together, publicly. The process is part of the art." },
-    { icon:"chain", title:"BUILT ON\nF1R3FLY", body:"Every chapter, every comment, every character turn is a signed transaction on a F1R3FLY shard. The story\u2019s provenance is permanent, auditable, and community-owned." },
-  ];
+function TourOverlay({
+  onClose
+}) {
+  const slides = [{
+    icon: "book",
+    title: "STORIES ARE\nBETTER TOGETHER",
+    body: "A serial narrative unfolds in real time. You arrive as a reader. If the story moves you, you can step into it \u2014 comment, tip, drive a character, or propose where the plot goes next."
+  }, {
+    icon: "spectrum",
+    title: "FOUR WAYS IN\nONE SPECTRUM",
+    body: "Reader (free) \u2192 Kibitzer (comment for free) \u2192 Character Driver (pay to take the wheel of a character) \u2192 Meta-Author (pay to propose plot changes). Deeper participation costs more tokens."
+  }, {
+    icon: "bot",
+    title: "AI IS A\nCHARACTER TOO",
+    body: "The AI co-author isn\u2019t hidden. It\u2019s a named participant in the story, visible and addressable. Human and AI write together, publicly. The process is part of the art."
+  }, {
+    icon: "chain",
+    title: "BUILT ON\nF1R3FLY",
+    body: "Every chapter, every comment, every character turn is a signed transaction on a F1R3FLY shard. The story\u2019s provenance is permanent, auditable, and community-owned."
+  }];
   const [si, setSi] = useState(0);
   const s = slides[si];
   const isLast = si === slides.length - 1;
-  return (
-    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(12px)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
-      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.95)",
+      backdropFilter: "blur(12px)",
+      zIndex: 200,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontFamily: FH
+    },
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("style", null, `@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes dnaShift{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
 @keyframes dnaShiftR{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
 .tdna-l{animation:dnaShift 3s ease-in-out infinite}.tdna-r{animation:dnaShiftR 3s ease-in-out infinite}
@@ -143,57 +651,198 @@ function TourOverlay({onClose}) {
 .tspec-1{transform-origin:bottom;animation:specGrow 2s ease-in-out infinite}.tspec-2{transform-origin:bottom;animation:specGrow 2s ease-in-out .2s infinite}.tspec-3{transform-origin:bottom;animation:specGrow 2s ease-in-out .4s infinite}.tspec-4{transform-origin:bottom;animation:specGrow 2s ease-in-out .6s infinite}
 @keyframes botBlink{0%,42%,50%,100%{opacity:1}45%,48%{opacity:0}}
 @keyframes antennaPulse{0%,100%{opacity:1}50%{opacity:.4}}
-.tbot-eye-l,.tbot-eye-r{animation:botBlink 3s ease-in-out infinite}.tbot-antenna{animation:antennaPulse 2s ease-in-out infinite}`}</style>
-      <div onClick={e=>e.stopPropagation()} style={{animation:"tourIn .35s ease-out",maxWidth:460,width:"90%",padding:"48px 36px 40px",border:`1px solid #007bc466`,borderRadius:14,background:"#000",textAlign:"center"}}>
-        <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
-        <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
-        <div style={{width:80,height:1,background:"linear-gradient(90deg, #F3D630, #8BB999)",margin:"0 auto 20px"}}/>
-        <div style={{fontSize:17,fontWeight:200,color:"#fff",lineHeight:1.6,fontFamily:FB,letterSpacing:0.2,marginBottom:36}}>{s.body}</div>
-        <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:28}}>
-          {slides.map((_,i)=><div key={i} onClick={()=>setSi(i)} style={{width:10,height:10,borderRadius:"50%",background:i===si?BRAND.yellow:"rgba(255,255,255,0.2)",cursor:"pointer",transition:"background .2s"}} />)}
-        </div>
-        <div style={{display:"flex",justifyContent:"center",gap:16}}>
-          {si > 0 && <button onClick={()=>setSi(si-1)} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,cursor:"pointer",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>BACK</button>}
-          <button onClick={()=>isLast?onClose():setSi(si+1)} style={{background:"linear-gradient(135deg, #5c0269, #7b0429)",border:"none",color:"#fff",borderRadius:20,padding:"12px 28px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,fontWeight:600,cursor:"pointer",boxShadow:"0 0 16px rgba(123,4,41,0.4)",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>{isLast?"LET\u2019S GO":"NEXT"}</button>
-        </div>
-      </div>
-    </div>
-  );
+.tbot-eye-l,.tbot-eye-r{animation:botBlink 3s ease-in-out infinite}.tbot-antenna{animation:antennaPulse 2s ease-in-out infinite}`), /*#__PURE__*/React.createElement("div", {
+    onClick: e => e.stopPropagation(),
+    style: {
+      animation: "tourIn .35s ease-out",
+      maxWidth: 460,
+      width: "90%",
+      padding: "48px 36px 40px",
+      border: `1px solid #007bc466`,
+      borderRadius: 14,
+      background: "#000",
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement(TourIcon, {
+    type: s.icon,
+    size: 48
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 20,
+      fontWeight: 700,
+      letterSpacing: 4,
+      color: BRAND.yellow,
+      lineHeight: 1.7,
+      whiteSpace: "pre-line",
+      margin: "0 0 16px",
+      fontFamily: FH
+    }
+  }, s.title), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 80,
+      height: 1,
+      background: "linear-gradient(90deg, #F3D630, #8BB999)",
+      margin: "0 auto 20px"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 17,
+      fontWeight: 200,
+      color: "#fff",
+      lineHeight: 1.6,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      marginBottom: 36
+    }
+  }, s.body), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      gap: 8,
+      marginBottom: 28
+    }
+  }, slides.map((_, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    onClick: () => setSi(i),
+    style: {
+      width: 10,
+      height: 10,
+      borderRadius: "50%",
+      background: i === si ? BRAND.yellow : "rgba(255,255,255,0.2)",
+      cursor: "pointer",
+      transition: "background .2s"
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      gap: 16
+    }
+  }, si > 0 && /*#__PURE__*/React.createElement("button", {
+    onClick: () => setSi(si - 1),
+    style: {
+      background: "#000",
+      border: `1px solid ${BRAND.border}`,
+      color: "#fff",
+      borderRadius: 20,
+      padding: "12px 24px 8px",
+      fontSize: 16,
+      fontFamily: FH,
+      letterSpacing: 2,
+      cursor: "pointer",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38
+    }
+  }, "BACK"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => isLast ? onClose() : setSi(si + 1),
+    style: {
+      background: "linear-gradient(135deg, #5c0269, #7b0429)",
+      border: "none",
+      color: "#fff",
+      borderRadius: 20,
+      padding: "12px 28px 8px",
+      fontSize: 16,
+      fontFamily: FH,
+      letterSpacing: 2,
+      fontWeight: 600,
+      cursor: "pointer",
+      boxShadow: "0 0 16px rgba(123,4,41,0.4)",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38
+    }
+  }, isLast ? "LET\u2019S GO" : "NEXT"))));
 }
-
-function F1R3GamesLogo({width=300}) {
-  return <svg width={width} viewBox="0 0 2041.904 1169.445" xmlns="http://www.w3.org/2000/svg" style={{display:"block",margin:"0 auto"}}>
-    <defs>
-      <linearGradient id="fg-g-flame" x1="771.497" y1="405.595" x2="1465.057" y2="405.595" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#f3d630"/>
-        <stop offset="1" stopColor="#a62832"/>
-      </linearGradient>
-      <linearGradient id="fg-g-knot" x1="929.98" y1="747.859" x2="929.98" y2="0" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#9ec597"/>
-        <stop offset=".519" stopColor="#5db7e7"/>
-        <stop offset="1" stopColor="#186d8c"/>
-      </linearGradient>
-      <clipPath id="fg-clip">
-        <path fill="none" d="M853.788,747.438c-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,169.433,169.896,99.235,172.964Z"/>
-      </clipPath>
-    </defs>
-    <path fill="#fff" d="M0,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737H46.094v66.658h87.579c3.545,0,6.736,3.191,6.736,6.737v29.074c0,3.546-3.191,6.737-6.736,6.737H46.094v89.706c0,3.545-3.19,6.736-6.736,6.736H6.737c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM235.429,989.323l-31.202,6.737c-3.191.709-6.736-1.419-7.091-4.609l-2.128-17.374c-.354-2.837.354-4.964,1.773-6.383l51.058-42.902h24.819c3.546,0,6.383,3.191,6.383,6.736v227.634c0,3.545-2.837,6.736-6.383,6.736h-30.492c-3.9,0-6.737-3.191-6.737-6.736v-169.839ZM362.005,924.438c0-3.546,2.837-6.737,6.737-6.737h101.406c42.548,0,77.296,34.039,77.296,76.232,0,32.62-21.629,59.213-52.477,71.623l48.576,90.061c2.482,4.609,0,10.282-6.027,10.282h-37.229c-3.191,0-4.965-1.772-5.674-3.191l-47.157-93.96h-39.357v90.415c0,3.545-3.19,6.736-6.736,6.736h-32.62c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM466.248,1030.808c18.792,0,35.103-16.31,35.103-36.166,0-18.792-16.311-34.393-35.103-34.393h-57.795v70.559h57.795ZM596.72,1129.024l18.083-17.374c3.191-2.837,6.382-2.837,9.219,0,1.063,1.418,21.983,19.146,43.612,19.146,19.146,0,37.584-13.828,37.584-33.329,0-18.438-17.02-35.103-48.931-35.103h-19.855c-3.9,0-6.737-2.836-6.737-7.091v-22.338c0-4.609,2.482-7.092,6.737-7.092h19.855c29.074,0,43.967-14.537,43.967-32.62,0-19.501-16.311-32.62-34.394-32.62-18.438,0-29.783,9.928-35.812,17.02-2.481,2.836-6.382,3.19-9.573.354l-17.374-16.311c-2.836-2.482-2.481-6.736,0-9.219,0,0,26.947-31.202,66.659-31.202,41.13,0,75.523,25.175,75.523,64.886,0,27.302-20.565,47.867-36.521,55.313v1.063c16.664,7.091,42.902,26.238,42.902,57.795,0,40.065-32.62,69.141-81.551,69.141-44.321,0-65.949-22.338-73.75-31.557-2.128-2.482-1.773-6.383.354-8.864ZM928.233,914.156c31.911,0,62.404,12.409,86.515,32.975,2.837,2.836,3.191,7.091.354,9.928l-21.982,23.047c-2.837,2.837-6.028,2.837-9.219,0-15.247-13.474-34.039-20.564-53.54-20.564-44.321,0-79.424,37.938-79.424,82.26,0,43.966,35.103,81.196,79.778,81.196,19.855,0,35.103-6.028,42.193-8.864v-30.139h-28.365c-3.9,0-6.737-2.837-6.737-6.382v-28.012c0-3.899,2.837-6.736,6.737-6.736h68.077c3.546,0,6.382,3.191,6.382,6.736v90.77c0,2.837-1.418,4.609-2.836,5.674,0,0-36.521,23.047-87.934,23.047-70.559,0-127.29-56.022-127.29-126.936s56.731-127.999,127.29-127.999ZM1056.58,1156.68l110.271-238.625c1.064-2.127,2.837-3.899,6.028-3.899h3.545c3.546,0,4.965,1.772,6.028,3.899l109.207,238.625c2.127,4.609-.709,9.219-6.028,9.219h-30.847c-5.319,0-7.801-2.127-10.283-7.092l-17.373-38.293h-106.017l-17.374,38.293c-1.418,3.546-4.609,7.092-10.282,7.092h-30.848c-5.318,0-8.154-4.609-6.027-9.219ZM1209.754,1081.156l-35.457-78.005h-1.063l-34.748,78.005h71.269ZM1367.53,919.474c.354-2.837,2.481-5.318,6.382-5.318h5.673c2.837,0,4.965,1.418,6.028,3.545l78.005,167.356h1.063l78.005-167.356c1.064-2.127,2.837-3.545,6.028-3.545h5.673c3.9,0,6.027,2.481,6.382,5.318l41.84,238.27c1.063,4.964-1.773,8.155-6.383,8.155h-32.266c-3.191,0-6.027-2.837-6.736-5.318l-20.92-134.382h-1.063l-62.05,139.346c-.709,2.127-2.837,3.9-6.027,3.9h-6.383c-3.19,0-4.964-1.773-6.027-3.9l-62.759-139.346h-1.063l-20.565,134.382c-.354,2.481-3.19,5.318-6.382,5.318h-31.911c-4.609,0-7.446-3.191-6.736-8.155l42.193-238.27ZM1668.902,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737h-104.952v58.149h87.579c3.545,0,6.736,3.19,6.736,6.736v29.429c0,3.9-3.191,6.737-6.736,6.737h-87.579v62.05h104.952c3.9,0,6.737,3.19,6.737,6.736v29.075c0,3.545-2.837,6.736-6.737,6.736h-144.309c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM1880.576,1131.151l12.765-21.982c2.836-4.965,8.864-4.965,12.055-2.482,1.773,1.063,30.493,21.983,53.54,21.983,18.438,0,32.266-12.056,32.266-27.302,0-18.083-15.246-30.493-45.03-42.549-33.329-13.474-66.658-34.747-66.658-76.586,0-31.557,23.401-68.077,79.777-68.077,36.166,0,63.822,18.438,70.914,23.756,3.546,2.127,4.609,8.155,2.127,11.7l-13.474,20.211c-2.836,4.255-8.154,7.091-12.409,4.255-2.837-1.773-29.784-19.502-49.285-19.502-20.211,0-31.202,13.474-31.202,24.82,0,16.665,13.119,28.011,41.839,39.712,34.394,13.828,74.104,34.393,74.104,80.132,0,36.521-31.557,70.205-81.551,70.205-44.675,0-70.913-20.92-78.005-27.656-3.19-3.191-4.964-4.964-1.772-10.638Z"/>
-    <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
-    <path fill="url(#fg-g-knot)" d="M1141.963,0c46.349,37.918,87.228,88.12,111.168,144.498,43.213,100.509,37.954,217.952-4.471,317.93-38.879,93.004-108.665,173.115-196.595,223.912-60.038,35.129-128.081,58.03-198.278,61.098-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,47.079,20,71.506,21.017,162.417,4.662,311.49-124.764,356.969-278.806,10.093-33.178,15.288-67.976,15.967-102.614,2.477-74.218-23.888-147.489-57.031-214.071Z"/>
-    <g clipPath="url(#fg-clip)">
-      <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
-    </g>
-  </svg>;
+function F1R3GamesLogo({
+  width = 300
+}) {
+  return /*#__PURE__*/React.createElement("svg", {
+    width: width,
+    viewBox: "0 0 2041.904 1169.445",
+    xmlns: "http://www.w3.org/2000/svg",
+    style: {
+      display: "block",
+      margin: "0 auto"
+    }
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: "fg-g-flame",
+    x1: "771.497",
+    y1: "405.595",
+    x2: "1465.057",
+    y2: "405.595",
+    gradientUnits: "userSpaceOnUse"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0",
+    stopColor: "#f3d630"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "1",
+    stopColor: "#a62832"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "fg-g-knot",
+    x1: "929.98",
+    y1: "747.859",
+    x2: "929.98",
+    y2: "0",
+    gradientUnits: "userSpaceOnUse"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0",
+    stopColor: "#9ec597"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: ".519",
+    stopColor: "#5db7e7"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "1",
+    stopColor: "#186d8c"
+  })), /*#__PURE__*/React.createElement("clipPath", {
+    id: "fg-clip"
+  }, /*#__PURE__*/React.createElement("path", {
+    fill: "none",
+    d: "M853.788,747.438c-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,169.433,169.896,99.235,172.964Z"
+  }))), /*#__PURE__*/React.createElement("path", {
+    fill: "#fff",
+    d: "M0,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737H46.094v66.658h87.579c3.545,0,6.736,3.191,6.736,6.737v29.074c0,3.546-3.191,6.737-6.736,6.737H46.094v89.706c0,3.545-3.19,6.736-6.736,6.736H6.737c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM235.429,989.323l-31.202,6.737c-3.191.709-6.736-1.419-7.091-4.609l-2.128-17.374c-.354-2.837.354-4.964,1.773-6.383l51.058-42.902h24.819c3.546,0,6.383,3.191,6.383,6.736v227.634c0,3.545-2.837,6.736-6.383,6.736h-30.492c-3.9,0-6.737-3.191-6.737-6.736v-169.839ZM362.005,924.438c0-3.546,2.837-6.737,6.737-6.737h101.406c42.548,0,77.296,34.039,77.296,76.232,0,32.62-21.629,59.213-52.477,71.623l48.576,90.061c2.482,4.609,0,10.282-6.027,10.282h-37.229c-3.191,0-4.965-1.772-5.674-3.191l-47.157-93.96h-39.357v90.415c0,3.545-3.19,6.736-6.736,6.736h-32.62c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM466.248,1030.808c18.792,0,35.103-16.31,35.103-36.166,0-18.792-16.311-34.393-35.103-34.393h-57.795v70.559h57.795ZM596.72,1129.024l18.083-17.374c3.191-2.837,6.382-2.837,9.219,0,1.063,1.418,21.983,19.146,43.612,19.146,19.146,0,37.584-13.828,37.584-33.329,0-18.438-17.02-35.103-48.931-35.103h-19.855c-3.9,0-6.737-2.836-6.737-7.091v-22.338c0-4.609,2.482-7.092,6.737-7.092h19.855c29.074,0,43.967-14.537,43.967-32.62,0-19.501-16.311-32.62-34.394-32.62-18.438,0-29.783,9.928-35.812,17.02-2.481,2.836-6.382,3.19-9.573.354l-17.374-16.311c-2.836-2.482-2.481-6.736,0-9.219,0,0,26.947-31.202,66.659-31.202,41.13,0,75.523,25.175,75.523,64.886,0,27.302-20.565,47.867-36.521,55.313v1.063c16.664,7.091,42.902,26.238,42.902,57.795,0,40.065-32.62,69.141-81.551,69.141-44.321,0-65.949-22.338-73.75-31.557-2.128-2.482-1.773-6.383.354-8.864ZM928.233,914.156c31.911,0,62.404,12.409,86.515,32.975,2.837,2.836,3.191,7.091.354,9.928l-21.982,23.047c-2.837,2.837-6.028,2.837-9.219,0-15.247-13.474-34.039-20.564-53.54-20.564-44.321,0-79.424,37.938-79.424,82.26,0,43.966,35.103,81.196,79.778,81.196,19.855,0,35.103-6.028,42.193-8.864v-30.139h-28.365c-3.9,0-6.737-2.837-6.737-6.382v-28.012c0-3.899,2.837-6.736,6.737-6.736h68.077c3.546,0,6.382,3.191,6.382,6.736v90.77c0,2.837-1.418,4.609-2.836,5.674,0,0-36.521,23.047-87.934,23.047-70.559,0-127.29-56.022-127.29-126.936s56.731-127.999,127.29-127.999ZM1056.58,1156.68l110.271-238.625c1.064-2.127,2.837-3.899,6.028-3.899h3.545c3.546,0,4.965,1.772,6.028,3.899l109.207,238.625c2.127,4.609-.709,9.219-6.028,9.219h-30.847c-5.319,0-7.801-2.127-10.283-7.092l-17.373-38.293h-106.017l-17.374,38.293c-1.418,3.546-4.609,7.092-10.282,7.092h-30.848c-5.318,0-8.154-4.609-6.027-9.219ZM1209.754,1081.156l-35.457-78.005h-1.063l-34.748,78.005h71.269ZM1367.53,919.474c.354-2.837,2.481-5.318,6.382-5.318h5.673c2.837,0,4.965,1.418,6.028,3.545l78.005,167.356h1.063l78.005-167.356c1.064-2.127,2.837-3.545,6.028-3.545h5.673c3.9,0,6.027,2.481,6.382,5.318l41.84,238.27c1.063,4.964-1.773,8.155-6.383,8.155h-32.266c-3.191,0-6.027-2.837-6.736-5.318l-20.92-134.382h-1.063l-62.05,139.346c-.709,2.127-2.837,3.9-6.027,3.9h-6.383c-3.19,0-4.964-1.773-6.027-3.9l-62.759-139.346h-1.063l-20.565,134.382c-.354,2.481-3.19,5.318-6.382,5.318h-31.911c-4.609,0-7.446-3.191-6.736-8.155l42.193-238.27ZM1668.902,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737h-104.952v58.149h87.579c3.545,0,6.736,3.19,6.736,6.736v29.429c0,3.9-3.191,6.737-6.736,6.737h-87.579v62.05h104.952c3.9,0,6.737,3.19,6.737,6.736v29.075c0,3.545-2.837,6.736-6.737,6.736h-144.309c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM1880.576,1131.151l12.765-21.982c2.836-4.965,8.864-4.965,12.055-2.482,1.773,1.063,30.493,21.983,53.54,21.983,18.438,0,32.266-12.056,32.266-27.302,0-18.083-15.246-30.493-45.03-42.549-33.329-13.474-66.658-34.747-66.658-76.586,0-31.557,23.401-68.077,79.777-68.077,36.166,0,63.822,18.438,70.914,23.756,3.546,2.127,4.609,8.155,2.127,11.7l-13.474,20.211c-2.836,4.255-8.154,7.091-12.409,4.255-2.837-1.773-29.784-19.502-49.285-19.502-20.211,0-31.202,13.474-31.202,24.82,0,16.665,13.119,28.011,41.839,39.712,34.394,13.828,74.104,34.393,74.104,80.132,0,36.521-31.557,70.205-81.551,70.205-44.675,0-70.913-20.92-78.005-27.656-3.19-3.191-4.964-4.964-1.772-10.638Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    fill: "url(#fg-g-flame)",
+    d: "M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    fill: "url(#fg-g-knot)",
+    d: "M1141.963,0c46.349,37.918,87.228,88.12,111.168,144.498,43.213,100.509,37.954,217.952-4.471,317.93-38.879,93.004-108.665,173.115-196.595,223.912-60.038,35.129-128.081,58.03-198.278,61.098-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,47.079,20,71.506,21.017,162.417,4.662,311.49-124.764,356.969-278.806,10.093-33.178,15.288-67.976,15.967-102.614,2.477-74.218-23.888-147.489-57.031-214.071Z"
+  }), /*#__PURE__*/React.createElement("g", {
+    clipPath: "url(#fg-clip)"
+  }, /*#__PURE__*/React.createElement("path", {
+    fill: "url(#fg-g-flame)",
+    d: "M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"
+  })));
 }
-
 function BuiltOnBadge() {
-  return (
-    <div style={{padding:"12px 0",display:"flex",justifyContent:"center",zIndex:100,background:"#000",cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
-      <img src="built-on-f1r3fly.io-box.svg" alt="Built on F1R3FLY.IO" style={{height:48,display:"block"}}/>
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 0",
+      display: "flex",
+      justifyContent: "center",
+      zIndex: 100,
+      background: "#000",
+      cursor: "pointer"
+    },
+    onClick: () => window.open && window.open("https://f1r3fly.io", "_blank")
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "built-on-f1r3fly.io-box.svg",
+    alt: "Built on F1R3FLY.IO",
+    style: {
+      height: 48,
+      display: "block"
+    }
+  }));
 }
-
 function F1R3SideChat() {
   const [phase, setPhase] = useState("join");
   const [myName, setMyName] = useState("");
@@ -203,159 +852,841 @@ function F1R3SideChat() {
   const [newComment, setNewComment] = useState("");
   const [myRole, setMyRole] = useState("reader");
   const [drivingChar, setDrivingChar] = useState(null);
-
   const chapter = STORY.chapters.find(c => c.id === currentCh) || STORY.chapters[0];
   const chapterComments = comments.filter(c => c.chapterId === currentCh);
-  const handleJoin = () => { if (myName.trim()) setPhase("read"); };
-  const addComment = () => { if (!newComment.trim()) return; setComments(c => [...c, { id:Date.now(), userId:"me", name:myName.trim()||"You", chapterId:currentCh, text:newComment.trim(), applause:0 }]); setNewComment(""); };
-  const takeWheel = (charId) => { setMyRole("creator"); setDrivingChar(charId); };
-
-  if (phase === "join") return (
-    <div style={{minHeight:"100vh",background:"#000",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",fontFamily:FH,position:"relative",padding:"40px 20px"}}>
-      <style>{FONTS}{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:#007bc466 !important;outline:none}`}</style>
-      <div style={{animation:"fadeIn .6s ease-out",textAlign:"center",marginTop:-105,position:"relative",zIndex:1}}>
-        <F1R3GamesLogo width={196}/>
-        <div style={{fontSize:16,color:"#fff",letterSpacing:6,fontFamily:FH,fontWeight:300,marginTop:24}}>PRESENTS</div>
-        <div style={{height:40}}/>
-        <div style={{border:`1px solid #007bc466`,borderRadius:14,padding:"40px 48px",display:"inline-block",background:"#000"}}>
-          <h1 style={{margin:"0 0 20px",display:"flex",alignItems:"center",justifyContent:"center"}}><SideChatLogo height={180}/></h1>
-          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:1.6}}>COLLABORATIVE FICTION,<br/>WRITTEN LIVE</div>
-        </div>
-        <div style={{height:50}}/>
-        <div style={{display:"flex",flexDirection:"column",gap:10,alignItems:"center"}}>
-          <div style={{fontSize:16,color:BRAND.yellow,letterSpacing:4,fontWeight:700,fontFamily:FH}}>CHOOSE YOUR F1R3SIGN</div>
-          <input value={myName} onChange={e=>setMyName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handleJoin()} placeholder="someone with a story" style={{background:"#000",border:`1px solid #007bc466`,borderRadius:6,color:"#fff",padding:"10px 16px",fontSize:16,fontWeight:300,width:"100%",maxWidth:460,fontFamily:FH,textAlign:"center",outline:"none",marginTop:20}}/>
-          <button onClick={handleJoin} style={{background:`linear-gradient(135deg, #5c0269, #7b0429)`,color:"#fff",border:"none",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:3,boxShadow:"0 0 20px rgba(123,4,41,0.4)",marginTop:20,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>JOIN</button>
-          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:2.2,marginTop:20}}>YOUR UNIQUE F1R3SIGN<br/>TRAVELS WITH YOU</div>
-          <div style={{marginTop:12}}><HowBtn onClick={()=>setShowTour(true)}/></div>
-        </div>
-        <div style={{marginTop:16,color:BRAND.textSecondary,fontSize:16}}>{STORY.readers} readers</div>
-      </div>
-      <BuiltOnBadge/>
-      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
-    </div>
-  );
-
+  const handleJoin = () => {
+    if (myName.trim()) setPhase("read");
+  };
+  const addComment = () => {
+    if (!newComment.trim()) return;
+    setComments(c => [...c, {
+      id: Date.now(),
+      userId: "me",
+      name: myName.trim() || "You",
+      chapterId: currentCh,
+      text: newComment.trim(),
+      applause: 0
+    }]);
+    setNewComment("");
+  };
+  const takeWheel = charId => {
+    setMyRole("creator");
+    setDrivingChar(charId);
+  };
+  if (phase === "join") return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: "100vh",
+      background: "#000",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "column",
+      fontFamily: FH,
+      position: "relative",
+      padding: "40px 20px"
+    }
+  }, /*#__PURE__*/React.createElement("style", null, FONTS, `@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:#007bc466 !important;outline:none}`), /*#__PURE__*/React.createElement("div", {
+    style: {
+      animation: "fadeIn .6s ease-out",
+      textAlign: "center",
+      marginTop: -105,
+      position: "relative",
+      zIndex: 1
+    }
+  }, /*#__PURE__*/React.createElement(F1R3GamesLogo, {
+    width: 196
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 6,
+      fontFamily: FH,
+      fontWeight: 300,
+      marginTop: 24
+    }
+  }, "PRESENTS"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 40
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: `1px solid #007bc466`,
+      borderRadius: 14,
+      padding: "40px 48px",
+      display: "inline-block",
+      background: "#000"
+    }
+  }, /*#__PURE__*/React.createElement("h1", {
+    style: {
+      margin: "0 0 20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement(SideChatLogo, {
+    height: 180
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 4,
+      fontWeight: 300,
+      fontFamily: FH,
+      lineHeight: 1.6
+    }
+  }, "COLLABORATIVE FICTION,", /*#__PURE__*/React.createElement("br", null), "WRITTEN LIVE")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 50
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 10,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: BRAND.yellow,
+      letterSpacing: 4,
+      fontWeight: 700,
+      fontFamily: FH
+    }
+  }, "CHOOSE YOUR F1R3SIGN"), /*#__PURE__*/React.createElement("input", {
+    value: myName,
+    onChange: e => setMyName(e.target.value),
+    onKeyDown: e => e.key === "Enter" && handleJoin(),
+    placeholder: "someone with a story",
+    style: {
+      background: "#000",
+      border: `1px solid #007bc466`,
+      borderRadius: 6,
+      color: "#fff",
+      padding: "10px 16px",
+      fontSize: 16,
+      fontWeight: 300,
+      width: "100%",
+      maxWidth: 460,
+      fontFamily: FH,
+      textAlign: "center",
+      outline: "none",
+      marginTop: 20
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: handleJoin,
+    style: {
+      background: `linear-gradient(135deg, #5c0269, #7b0429)`,
+      color: "#fff",
+      border: "none",
+      borderRadius: 20,
+      padding: "12px 24px 8px",
+      fontSize: 16,
+      fontFamily: FH,
+      fontWeight: 600,
+      cursor: "pointer",
+      letterSpacing: 3,
+      boxShadow: "0 0 20px rgba(123,4,41,0.4)",
+      marginTop: 20,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38,
+      whiteSpace: "nowrap"
+    }
+  }, "JOIN"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 4,
+      fontWeight: 300,
+      fontFamily: FH,
+      lineHeight: 2.2,
+      marginTop: 20
+    }
+  }, "YOUR UNIQUE F1R3SIGN", /*#__PURE__*/React.createElement("br", null), "TRAVELS WITH YOU"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement(HowBtn, {
+    onClick: () => setShowTour(true)
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 16,
+      color: BRAND.textSecondary,
+      fontSize: 16
+    }
+  }, STORY.readers, " readers")), /*#__PURE__*/React.createElement(BuiltOnBadge, null), showTour && /*#__PURE__*/React.createElement(TourOverlay, {
+    onClose: () => setShowTour(false)
+  }));
   const displayName = myName.trim() || "You";
   const canWrite = myRole === "creator" && chapter.status === "open";
-
-  return (
-    <div style={{minHeight:"100vh",background:"#000",color:"#fff",fontFamily:FH,display:"flex",flexDirection:"column",position:"relative",paddingBottom:80}}>
-      <style>{FONTS}{`::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}*{box-sizing:border-box}input::placeholder,textarea::placeholder{color:${BRAND.textSecondary};opacity:1}`}</style>
-
-      <div className="game-header" style={{padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#000",minHeight:70,gap:12}}>
-        <div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
-          <SideChatLogoH height={38}/>
-          <span style={{fontSize:16,fontWeight:200,color:"#fff",letterSpacing:2,fontFamily:FB,marginTop:4}}>{STORY.readers} readers · {STORY.chapters.length} chapters · shard live</span>
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:12}}>
-          <HowBtn onClick={()=>setShowTour(true)}/>
-          <button onClick={()=>setPhase("join")} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"10px 18px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:1,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>LEAVE</button>
-        </div>
-      </div>
-      <div style={{width:"100%",height:"0.5px",background:BRAND.stroke,opacity:0.8}}/>
-
-      <div className="story-layout" style={{flex:1,display:"flex",overflow:"hidden"}}>
-
-        {/* LEFT SIDEBAR — Identity + Kibitz */}
-        <div className="game-sidebar-left" style={{width:300,minWidth:300,background:"#000",borderRight:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:20,padding:"20px 16px",overflowY:"auto"}}>
-          <div style={{display:"flex",alignItems:"center",gap:10,padding:12,border:`1px solid ${BRAND.border}`,borderRadius:8,background:"#000"}}>
-            <Avatar src={PORTRAITS.hannah} size={40}/>
-            <div>
-              <div style={{fontSize:16,color:CHAT_ACCENT,fontWeight:700,fontFamily:FH,letterSpacing:1}}>{displayName}</div>
-              <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,textTransform:"uppercase",letterSpacing:1}}>{myRole}{drivingChar && ` \u00b7 ${CHARACTERS.find(c=>c.id===drivingChar)?.name}`}</div>
-            </div>
-          </div>
-          <div style={{border:`1px solid ${BRAND.border}`,borderRadius:8,padding:14,flex:1,display:"flex",flexDirection:"column"}}>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>KIBITZ \u00b7 CH {chapter.num} ({chapterComments.length})</div>
-            <div style={{flex:1,overflowY:"auto",display:"flex",flexDirection:"column",gap:12}}>
-              {chapterComments.length === 0 && <div style={{color:BRAND.textSecondary,fontSize:16,fontWeight:200,fontFamily:FB,letterSpacing:0.2,textAlign:"center",padding:"16px 0"}}>No comments yet.</div>}
-              {chapterComments.map(c => (
-                <div key={c.id} style={{padding:"8px 0",borderBottom:`1px solid ${BRAND.border}`,animation:"fadeUp 0.3s"}}>
-                  <div style={{fontSize:16,fontWeight:600,color:"#fff",fontFamily:FH,marginBottom:4}}>{c.name}</div>
-                  <div style={{fontSize:16,fontWeight:200,color:"#fff",lineHeight:1.6,fontFamily:FB,letterSpacing:0.2}}>{c.text}</div>
-                  <button onClick={()=>setComments(cs=>cs.map(x=>x.id===c.id?{...x,applause:x.applause+1}:x))} style={{marginTop:6,padding:"8px 14px 6px",borderRadius:20,fontSize:16,background:"transparent",border:`1px solid ${BRAND.border}`,color:BRAND.textSecondary,cursor:"pointer",fontFamily:FB,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,whiteSpace:"nowrap"}}>&#128079; {c.applause}</button>
-                </div>
-              ))}
-            </div>
-            <div style={{display:"flex",gap:6,marginTop:10,paddingTop:10,borderTop:`1px solid ${BRAND.border}`}}>
-              <input value={newComment} onChange={e=>setNewComment(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addComment()} placeholder="Comment..." style={{flex:1,background:"#000",border:`1px solid #007bc466`,borderRadius:6,padding:"8px 10px",color:"#fff",fontSize:16,fontWeight:200,outline:"none",fontFamily:FB,letterSpacing:0.2}}/>
-              <button onClick={addComment} disabled={!newComment.trim()} aria-label="Send" style={{background:newComment.trim()?`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`:"transparent",border:newComment.trim()?"none":`1px solid ${BRAND.border}`,borderRadius:6,padding:"0 14px",color:newComment.trim()?"#fff":BRAND.textSecondary,fontWeight:700,fontSize:16,cursor:newComment.trim()?"pointer":"default",fontFamily:FH,letterSpacing:1,flexShrink:0,height:36,width:36,display:"flex",alignItems:"center",justifyContent:"center",boxSizing:"border-box"}}>&uarr;</button>
-            </div>
-          </div>
-          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>{STORY.genre.toUpperCase()}</div>
-            <div style={{fontSize:16,fontWeight:600,color:"#fff",fontFamily:FH,lineHeight:1.3,marginBottom:6}}>{STORY.title}</div>
-            <div style={{fontSize:16,fontWeight:200,color:"#fff",fontFamily:FB,letterSpacing:0.2,lineHeight:1.6,marginBottom:8}}>{STORY.synopsis}</div>
-            <div style={{display:"flex",alignItems:"center",gap:6}}>
-              <span style={{fontSize:16,color:STORY.author.color,fontFamily:FH,fontWeight:600}}>by {STORY.author.name}</span>
-              <span style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginLeft:"auto"}}>{STORY.readers} readers</span>
-            </div>
-          </div>
-        </div>
-
-        {/* CENTER — Story */}
-        <div className="story-main" style={{flex:1,overflow:"auto",padding:"32px 40px 60px"}}>
-          <div style={{maxWidth:680,margin:"0 auto"}}>
-            <div style={{fontSize:16,color:BRAND.textSecondary,letterSpacing:2,fontFamily:FH,marginBottom:8,textTransform:"uppercase"}}>CHAPTER {chapter.num}{chapter.authorId && <span style={{color:BRAND.sky,marginLeft:8}}>by {DEMO_PLAYERS.find(p=>p.id===chapter.authorId)?.name || "unknown"}</span>}</div>
-            <h3 style={{fontSize:26,fontWeight:300,color:"#fff",fontFamily:FH,margin:"0 0 8px",letterSpacing:1}}>{chapter.title}</h3>
-            {chapter.wordCount > 0 && <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginBottom:24}}>{chapter.wordCount} words \u00b7 {chapter.applause} applause</div>}
-            {chapter.text ? (
-              <div>{chapter.text.split("\n").map((para, i) => para.trim() ? <p key={i} style={{fontSize:18,fontWeight:200,lineHeight:2,color:"#fff",fontFamily:FB,marginBottom:20,textIndent:i>0?24:0,letterSpacing:0.2}}>{para}</p> : <div key={i} style={{height:12}}/>)}</div>
-            ) : (
-              <div style={{textAlign:"center",padding:"60px 0"}}>
-                <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginBottom:16}}>This chapter is open for writing.</div>
-                {canWrite ? <div style={{fontSize:16,color:CHAT_ACCENT,fontFamily:FH,letterSpacing:2}}>You're driving {CHARACTERS.find(c=>c.id===drivingChar)?.name}. Write below.</div>
-                : <div style={{fontSize:16,fontWeight:200,color:"#fff",fontFamily:FB,letterSpacing:0.2}}>Take the wheel on a character to start writing. <span style={{color:BRAND.yellow}}>({COSTS.DRIVE} tokens)</span></div>}
-                {canWrite && <div style={{maxWidth:580,margin:"24px auto 0"}}><textarea placeholder="Continue the story..." style={{width:"100%",minHeight:180,background:"#000",border:`1px solid #007bc466`,borderRadius:8,padding:16,color:"#fff",fontSize:17,fontWeight:200,lineHeight:1.9,resize:"vertical",outline:"none",fontFamily:FB,letterSpacing:0.2}}/><div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}><button style={{background:`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`,color:"#fff",border:"none",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:2,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>PUBLISH</button></div></div>}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* RIGHT SIDEBAR — Story info, Chapters, Characters, Engagement */}
-        <div className="story-sidebar" style={{width:300,minWidth:300,background:"#000",borderLeft:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:20,padding:"20px 16px",overflowY:"auto"}}>
-          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>CHAPTERS</div>
-            <div style={{display:"flex",flexDirection:"column",gap:4}}>
-              {STORY.chapters.map(ch => { const sel = ch.id===currentCh; return (
-                <button key={ch.id} onClick={()=>setCurrentCh(ch.id)} style={{display:"flex",alignItems:"baseline",gap:8,padding:"8px 10px",borderRadius:6,textAlign:"left",cursor:"pointer",background:sel?"rgba(63,169,245,0.08)":"transparent",border:sel?`1px solid ${BRAND.border}`:"1px solid transparent",fontFamily:FH}}>
-                  <span style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FH,minWidth:22}}>{ch.num}.</span>
-                  <div><div style={{fontSize:16,color:sel?"#fff":BRAND.textSecondary,fontWeight:sel?600:400}}>{ch.title}</div>{ch.status==="open" && <div style={{fontSize:16,color:BRAND.yellow,marginTop:2,fontFamily:FH,letterSpacing:1}}>OPEN FOR WRITING</div>}</div>
-                </button>); })}
-            </div>
-          </div>
-          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>CHARACTERS</div>
-            {CHARACTERS.map(ch => { const dn = ch.driver?DEMO_PLAYERS.find(p=>p.id===ch.driver)?.name:null; const av = !ch.driver; const isMe = drivingChar===ch.id; return (
-              <div key={ch.id} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 0",borderBottom:`1px solid ${BRAND.border}`}}>
-                <div style={{width:8,height:8,borderRadius:"50%",background:ch.color,flexShrink:0}}/>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:16,fontWeight:600,color:isMe?CHAT_ACCENT:ch.color,fontFamily:FH}}>{ch.name}</div>
-                  <div style={{fontSize:16,fontWeight:200,color:"#fff",fontFamily:FB,letterSpacing:0.2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ch.role}</div>
-                  {dn && <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2}}>Driven by {dn}</div>}
-                </div>
-                {av && !drivingChar && <button onClick={()=>takeWheel(ch.id)} style={{padding:"8px 14px 6px",borderRadius:20,fontSize:16,fontFamily:FH,letterSpacing:1,cursor:"pointer",background:"transparent",border:`1px solid ${BRAND.yellow}66`,color:BRAND.yellow,fontWeight:600,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>DRIVE</button>}
-              </div>); })}
-          </div>
-          <div>
-            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>ENGAGEMENT</div>
-            {[{label:"Comment",cost:"Free",color:BRAND.sage},{label:"Drive Character",cost:`${COSTS.DRIVE} tokens`,color:BRAND.yellow},{label:"Talk to Author",cost:`${COSTS.TALK_AUTHOR} tokens`,color:"#FF6B2B"},{label:"AI Co-Author",cost:`${COSTS.AI_COAUTHOR} tokens`,color:BRAND.sky}].map(e => (
-              <div key={e.label} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontSize:16}}>
-                <span style={{color:"#fff",fontFamily:FB}}>{e.label}</span>
-                <span style={{color:e.color,fontFamily:FH,fontSize:16,fontWeight:600}}>{e.cost}</span>
-              </div>))}
-          </div>
-        </div>
-      </div>
-
-      <BuiltOnBadge/>
-      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: "100vh",
+      background: "#000",
+      color: "#fff",
+      fontFamily: FH,
+      display: "flex",
+      flexDirection: "column",
+      position: "relative",
+      paddingBottom: 80
+    }
+  }, /*#__PURE__*/React.createElement("style", null, FONTS, `::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}*{box-sizing:border-box}input::placeholder,textarea::placeholder{color:${BRAND.textSecondary};opacity:1}`), /*#__PURE__*/React.createElement("div", {
+    className: "game-header",
+    style: {
+      padding: "14px 20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      background: "#000",
+      minHeight: 70,
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement(SideChatLogoH, {
+    height: 38
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: "#fff",
+      letterSpacing: 2,
+      fontFamily: FB,
+      marginTop: 4
+    }
+  }, STORY.readers, " readers \xB7 ", STORY.chapters.length, " chapters \xB7 shard live")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement(HowBtn, {
+    onClick: () => setShowTour(true)
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setPhase("join"),
+    style: {
+      background: "#000",
+      border: `1px solid ${BRAND.border}`,
+      color: "#fff",
+      borderRadius: 20,
+      padding: "10px 18px 8px",
+      fontSize: 16,
+      cursor: "pointer",
+      fontFamily: FH,
+      letterSpacing: 1,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38,
+      whiteSpace: "nowrap"
+    }
+  }, "LEAVE"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "100%",
+      height: "0.5px",
+      background: BRAND.stroke,
+      opacity: 0.8
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "story-layout",
+    style: {
+      flex: 1,
+      display: "flex",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "game-sidebar-left",
+    style: {
+      width: 300,
+      minWidth: 300,
+      background: "#000",
+      borderRight: `1px solid ${BRAND.border}`,
+      display: "flex",
+      flexDirection: "column",
+      gap: 20,
+      padding: "20px 16px",
+      overflowY: "auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      padding: 12,
+      border: `1px solid ${BRAND.border}`,
+      borderRadius: 8,
+      background: "#000"
+    }
+  }, /*#__PURE__*/React.createElement(Avatar, {
+    src: PORTRAITS.hannah,
+    size: 40
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: CHAT_ACCENT,
+      fontWeight: 700,
+      fontFamily: FH,
+      letterSpacing: 1
+    }
+  }, displayName), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      textTransform: "uppercase",
+      letterSpacing: 1
+    }
+  }, myRole, drivingChar && ` \u00b7 ${CHARACTERS.find(c => c.id === drivingChar)?.name}`))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: `1px solid ${BRAND.border}`,
+      borderRadius: 8,
+      padding: 14,
+      flex: 1,
+      display: "flex",
+      flexDirection: "column"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 2,
+      fontFamily: FH,
+      fontWeight: 600,
+      marginBottom: 12,
+      textTransform: "uppercase"
+    }
+  }, "KIBITZ \\u00b7 CH ", chapter.num, " (", chapterComments.length, ")"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      overflowY: "auto",
+      display: "flex",
+      flexDirection: "column",
+      gap: 12
+    }
+  }, chapterComments.length === 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: BRAND.textSecondary,
+      fontSize: 16,
+      fontWeight: 200,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      textAlign: "center",
+      padding: "16px 0"
+    }
+  }, "No comments yet."), chapterComments.map(c => /*#__PURE__*/React.createElement("div", {
+    key: c.id,
+    style: {
+      padding: "8px 0",
+      borderBottom: `1px solid ${BRAND.border}`,
+      animation: "fadeUp 0.3s"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 600,
+      color: "#fff",
+      fontFamily: FH,
+      marginBottom: 4
+    }
+  }, c.name), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: "#fff",
+      lineHeight: 1.6,
+      fontFamily: FB,
+      letterSpacing: 0.2
+    }
+  }, c.text), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setComments(cs => cs.map(x => x.id === c.id ? {
+      ...x,
+      applause: x.applause + 1
+    } : x)),
+    style: {
+      marginTop: 6,
+      padding: "8px 14px 6px",
+      borderRadius: 20,
+      fontSize: 16,
+      background: "transparent",
+      border: `1px solid ${BRAND.border}`,
+      color: BRAND.textSecondary,
+      cursor: "pointer",
+      fontFamily: FB,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      whiteSpace: "nowrap"
+    }
+  }, "\uD83D\uDC4F ", c.applause)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      marginTop: 10,
+      paddingTop: 10,
+      borderTop: `1px solid ${BRAND.border}`
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    value: newComment,
+    onChange: e => setNewComment(e.target.value),
+    onKeyDown: e => e.key === "Enter" && addComment(),
+    placeholder: "Comment...",
+    style: {
+      flex: 1,
+      background: "#000",
+      border: `1px solid #007bc466`,
+      borderRadius: 6,
+      padding: "8px 10px",
+      color: "#fff",
+      fontSize: 16,
+      fontWeight: 200,
+      outline: "none",
+      fontFamily: FB,
+      letterSpacing: 0.2
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: addComment,
+    disabled: !newComment.trim(),
+    "aria-label": "Send",
+    style: {
+      background: newComment.trim() ? `linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)` : "transparent",
+      border: newComment.trim() ? "none" : `1px solid ${BRAND.border}`,
+      borderRadius: 6,
+      padding: "0 14px",
+      color: newComment.trim() ? "#fff" : BRAND.textSecondary,
+      fontWeight: 700,
+      fontSize: 16,
+      cursor: newComment.trim() ? "pointer" : "default",
+      fontFamily: FH,
+      letterSpacing: 1,
+      flexShrink: 0,
+      height: 36,
+      width: 36,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      boxSizing: "border-box"
+    }
+  }, "\u2191"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      paddingBottom: 20,
+      borderBottom: `1px solid ${BRAND.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 2,
+      fontFamily: FH,
+      fontWeight: 600,
+      marginBottom: 12,
+      textTransform: "uppercase"
+    }
+  }, STORY.genre.toUpperCase()), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 600,
+      color: "#fff",
+      fontFamily: FH,
+      lineHeight: 1.3,
+      marginBottom: 6
+    }
+  }, STORY.title), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: "#fff",
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      lineHeight: 1.6,
+      marginBottom: 8
+    }
+  }, STORY.synopsis), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      color: STORY.author.color,
+      fontFamily: FH,
+      fontWeight: 600
+    }
+  }, "by ", STORY.author.name), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      marginLeft: "auto"
+    }
+  }, STORY.readers, " readers")))), /*#__PURE__*/React.createElement("div", {
+    className: "story-main",
+    style: {
+      flex: 1,
+      overflow: "auto",
+      padding: "32px 40px 60px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 680,
+      margin: "0 auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: BRAND.textSecondary,
+      letterSpacing: 2,
+      fontFamily: FH,
+      marginBottom: 8,
+      textTransform: "uppercase"
+    }
+  }, "CHAPTER ", chapter.num, chapter.authorId && /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: BRAND.sky,
+      marginLeft: 8
+    }
+  }, "by ", DEMO_PLAYERS.find(p => p.id === chapter.authorId)?.name || "unknown")), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 26,
+      fontWeight: 300,
+      color: "#fff",
+      fontFamily: FH,
+      margin: "0 0 8px",
+      letterSpacing: 1
+    }
+  }, chapter.title), chapter.wordCount > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      marginBottom: 24
+    }
+  }, chapter.wordCount, " words \\u00b7 ", chapter.applause, " applause"), chapter.text ? /*#__PURE__*/React.createElement("div", null, chapter.text.split("\n").map((para, i) => para.trim() ? /*#__PURE__*/React.createElement("p", {
+    key: i,
+    style: {
+      fontSize: 18,
+      fontWeight: 200,
+      lineHeight: 2,
+      color: "#fff",
+      fontFamily: FB,
+      marginBottom: 20,
+      textIndent: i > 0 ? 24 : 0,
+      letterSpacing: 0.2
+    }
+  }, para) : /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      height: 12
+    }
+  }))) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "60px 0"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: BRAND.textSecondary,
+      fontFamily: FB,
+      letterSpacing: 0.2,
+      marginBottom: 16
+    }
+  }, "This chapter is open for writing."), canWrite ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: CHAT_ACCENT,
+      fontFamily: FH,
+      letterSpacing: 2
+    }
+  }, "You're driving ", CHARACTERS.find(c => c.id === drivingChar)?.name, ". Write below.") : /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 200,
+      color: "#fff",
+      fontFamily: FB,
+      letterSpacing: 0.2
+    }
+  }, "Take the wheel on a character to start writing. ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: BRAND.yellow
+    }
+  }, "(", COSTS.DRIVE, " tokens)")), canWrite && /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 580,
+      margin: "24px auto 0"
+    }
+  }, /*#__PURE__*/React.createElement("textarea", {
+    placeholder: "Continue the story...",
+    style: {
+      width: "100%",
+      minHeight: 180,
+      background: "#000",
+      border: `1px solid #007bc466`,
+      borderRadius: 8,
+      padding: 16,
+      color: "#fff",
+      fontSize: 17,
+      fontWeight: 200,
+      lineHeight: 1.9,
+      resize: "vertical",
+      outline: "none",
+      fontFamily: FB,
+      letterSpacing: 0.2
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "flex-end",
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    style: {
+      background: `linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`,
+      color: "#fff",
+      border: "none",
+      borderRadius: 20,
+      padding: "12px 24px 8px",
+      fontSize: 16,
+      fontFamily: FH,
+      fontWeight: 600,
+      cursor: "pointer",
+      letterSpacing: 2,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      lineHeight: 1,
+      minHeight: 38,
+      whiteSpace: "nowrap"
+    }
+  }, "PUBLISH")))))), /*#__PURE__*/React.createElement("div", {
+    className: "story-sidebar",
+    style: {
+      width: 300,
+      minWidth: 300,
+      background: "#000",
+      borderLeft: `1px solid ${BRAND.border}`,
+      display: "flex",
+      flexDirection: "column",
+      gap: 20,
+      padding: "20px 16px",
+      overflowY: "auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      paddingBottom: 20,
+      borderBottom: `1px solid ${BRAND.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 2,
+      fontFamily: FH,
+      fontWeight: 600,
+      marginBottom: 12,
+      textTransform: "uppercase"
+    }
+  }, "CHAPTERS"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4
+    }
+  }, STORY.chapters.map(ch => {
+    const sel = ch.id === currentCh;
+    return /*#__PURE__*/React.createElement("button", {
+      key: ch.id,
+      onClick: () => setCurrentCh(ch.id),
+      style: {
+        display: "flex",
+        alignItems: "baseline",
+        gap: 8,
+        padding: "8px 10px",
+        borderRadius: 6,
+        textAlign: "left",
+        cursor: "pointer",
+        background: sel ? "rgba(63,169,245,0.08)" : "transparent",
+        border: sel ? `1px solid ${BRAND.border}` : "1px solid transparent",
+        fontFamily: FH
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 16,
+        color: BRAND.textSecondary,
+        fontFamily: FH,
+        minWidth: 22
+      }
+    }, ch.num, "."), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 16,
+        color: sel ? "#fff" : BRAND.textSecondary,
+        fontWeight: sel ? 600 : 400
+      }
+    }, ch.title), ch.status === "open" && /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 16,
+        color: BRAND.yellow,
+        marginTop: 2,
+        fontFamily: FH,
+        letterSpacing: 1
+      }
+    }, "OPEN FOR WRITING")));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      paddingBottom: 20,
+      borderBottom: `1px solid ${BRAND.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 2,
+      fontFamily: FH,
+      fontWeight: 600,
+      marginBottom: 12,
+      textTransform: "uppercase"
+    }
+  }, "CHARACTERS"), CHARACTERS.map(ch => {
+    const dn = ch.driver ? DEMO_PLAYERS.find(p => p.id === ch.driver)?.name : null;
+    const av = !ch.driver;
+    const isMe = drivingChar === ch.id;
+    return /*#__PURE__*/React.createElement("div", {
+      key: ch.id,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "8px 0",
+        borderBottom: `1px solid ${BRAND.border}`
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 8,
+        height: 8,
+        borderRadius: "50%",
+        background: ch.color,
+        flexShrink: 0
+      }
+    }), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        minWidth: 0
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 16,
+        fontWeight: 600,
+        color: isMe ? CHAT_ACCENT : ch.color,
+        fontFamily: FH
+      }
+    }, ch.name), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 16,
+        fontWeight: 200,
+        color: "#fff",
+        fontFamily: FB,
+        letterSpacing: 0.2,
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap"
+      }
+    }, ch.role), dn && /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 16,
+        fontWeight: 200,
+        color: BRAND.textSecondary,
+        fontFamily: FB,
+        letterSpacing: 0.2
+      }
+    }, "Driven by ", dn)), av && !drivingChar && /*#__PURE__*/React.createElement("button", {
+      onClick: () => takeWheel(ch.id),
+      style: {
+        padding: "8px 14px 6px",
+        borderRadius: 20,
+        fontSize: 16,
+        fontFamily: FH,
+        letterSpacing: 1,
+        cursor: "pointer",
+        background: "transparent",
+        border: `1px solid ${BRAND.yellow}66`,
+        color: BRAND.yellow,
+        fontWeight: 600,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        lineHeight: 1,
+        minHeight: 38,
+        whiteSpace: "nowrap"
+      }
+    }, "DRIVE"));
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      color: "#fff",
+      letterSpacing: 2,
+      fontFamily: FH,
+      fontWeight: 600,
+      marginBottom: 12,
+      textTransform: "uppercase"
+    }
+  }, "ENGAGEMENT"), [{
+    label: "Comment",
+    cost: "Free",
+    color: BRAND.sage
+  }, {
+    label: "Drive Character",
+    cost: `${COSTS.DRIVE} tokens`,
+    color: BRAND.yellow
+  }, {
+    label: "Talk to Author",
+    cost: `${COSTS.TALK_AUTHOR} tokens`,
+    color: "#FF6B2B"
+  }, {
+    label: "AI Co-Author",
+    cost: `${COSTS.AI_COAUTHOR} tokens`,
+    color: BRAND.sky
+  }].map(e => /*#__PURE__*/React.createElement("div", {
+    key: e.label,
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      padding: "5px 0",
+      fontSize: 16
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "#fff",
+      fontFamily: FB
+    }
+  }, e.label), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: e.color,
+      fontFamily: FH,
+      fontSize: 16,
+      fontWeight: 600
+    }
+  }, e.cost)))))), /*#__PURE__*/React.createElement(BuiltOnBadge, null), showTour && /*#__PURE__*/React.createElement(TourOverlay, {
+    onClose: () => setShowTour(false)
+  }));
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(<F1R3SideChat/>);
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(F1R3SideChat, null));
 </script>
 </body>
 </html>
