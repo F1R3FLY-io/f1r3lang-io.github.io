@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>F1R3PIX — Draft Review v2r1 (Hannah Adams, April 2026)</title>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script>
+(function() {
+  var store = {};
+  window.storage = {
+    get: function(key, shared) { var v = store[key]; return v !== undefined ? Promise.resolve({ key: key, value: v, shared: !!shared }) : Promise.resolve(null); },
+    set: function(key, value, shared) { store[key] = value; return Promise.resolve({ key: key, value: value, shared: !!shared }); },
+    delete: function(key, shared) { delete store[key]; return Promise.resolve({ key: key, deleted: true, shared: !!shared }); },
+    list: function(prefix, shared) { var keys = Object.keys(store).filter(function(k) { return !prefix || k.startsWith(prefix); }); return Promise.resolve({ keys: keys, prefix: prefix, shared: !!shared }); }
+  };
+})();
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+  .join-hex-bg {
+    background-image: url("hexagon-repeat-pattern.svg");
+    background-size: 512px auto;
+    background-repeat: repeat;
+    background-position: center;
+    opacity: 1;
+  }
+  .join-hex-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("hexagon-repeat-pattern.svg");
+    background-size: 512px auto;
+    background-repeat: repeat;
+    background-position: center;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .join-solid-box { background: #000 !important; position: relative; z-index: 1; }
+  @media (max-width: 768px) { html, body { overflow-y: auto; overflow-x: hidden; height: auto; } html { scroll-behavior: auto; } }
+  @media (max-width: 768px) {
+    .game-layout { flex-direction: column !important; }
+    .game-sidebar {
+      width: 100% !important; border-left: none !important;
+      border-top: none;
+      border-top: 1px solid; border-image: linear-gradient(90deg, #F3D630, #8BB999) 1;
+      flex-direction: column !important;
+      gap: 16px !important; padding: 16px !important;
+      max-height: none !important; overflow-y: visible !important;
+      flex: 0 0 auto !important;
+    }
+    .game-sidebar-left { display: none !important; }
+    .game-header { flex-wrap: nowrap; gap: 6px; min-height: auto !important; padding: 8px 12px !important; position: sticky; top: 0; z-index: 50; background: #000 !important; }
+    .game-header-title { font-size: 18px !important; letter-spacing: 2px !important; }
+    .game-header-stats { display: none !important; }
+    .game-grid-wrap { flex: 0 0 auto !important; height: 55vh !important; min-height: 55vh !important; max-height: 55vh !important; overflow: auto !important; }
+    .zoom-controls { gap: 4px !important; }
+    .zoom-btn { width: 28px !important; height: 28px !important; font-size: 16px !important; }
+    .built-on-badge { position: relative !important; bottom: auto !important; left: auto !important; transform: none !important; margin: 16px auto !important; }
+  }
+  @media (max-width: 480px) {
+    .game-header-title { font-size: 16px !important; letter-spacing: 2px !important; }
+    .game-header-stats { display: none !important; }
+    .join-title { font-size: 28px !important; letter-spacing: 4px !important; }
+    .join-subtitle { font-size: 14px !important; }
+    .join-logo { width: 200px !important; }
+    .tour-btn { font-size: 10px !important; padding: 4px 8px !important; }
+    .leave-btn { font-size: 12px !important; padding: 4px 8px !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef } = React;
+
+// ══════════════════════════════════════════════════════════════════
+// F1R3PIX — Draft Review v1r2
+// F1R3FLY Brand Book March 27, 2026 — Hannah Adams
+// v2r1: Token balance, send, and transaction log added
+// ══════════════════════════════════════════════════════════════════
+
+const BRAND = {
+  yellow: "#F3D630", sage: "#8BB999", sky: "#3FA9F5",
+  surface: "#000000", card: "#0c0c18", border: "#007bc466", stroke: "linear-gradient(90deg, #F3D630, #8BB999)",
+  text: "#ffffff", textMuted: "#ffffff", textDim: "#ffffff",
+  textSecondary: "#A0A0A0",
+};
+const BRAND_FONTS = `@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Source+Sans+3:wght@200;300;400;600;700&family=Pixelify+Sans:wght@400;500;600;700&display=swap');`;
+const FH = "'Josefin Sans', 'Source Sans 3', sans-serif";
+const FB = "'Source Sans 3', 'Josefin Sans', sans-serif";
+const FM = "'Source Code Pro', 'Courier New', monospace";
+const FP = "'Pixelify Sans', 'Josefin Sans', sans-serif";
+
+const SHAPES = {
+  portrait:  { w: 22, h: 32, label: "PORT",  desc: "22 × 32" },
+  landscape: { w: 32, h: 22, label: "LAND", desc: "32 × 22" },
+  square:    { w: 26, h: 26, label: "SQ",    desc: "26 × 26" },
+};
+const DEFAULT_SHAPE = "portrait";
+
+const PFX_PX = "f1r3pix-pixel:";
+const PFX_P = "f1r3pix-player:";
+const MY_ID = "f1r3pix-myid";
+const SHARD_SHAPE = "f1r3pix-canvas-shape";
+const SHARD_HOST = "f1r3pix-host";
+const SHARD_SHAPE_UNLOCKED = "f1r3pix-shape-unlocked";
+const POLL = 1500;
+const MIN_ZOOM = 0.3;
+const MAX_ZOOM = 2.5;
+const CELL = 16;
+// Hex geometry — flat-top hexagons
+const HEX_SIZE = 14; // radius from center to vertex
+const HEX_W = HEX_SIZE * 2; // width of flat-top hex
+const HEX_H = Math.sqrt(3) * HEX_SIZE; // height of flat-top hex
+const HEX_COL_STEP = HEX_SIZE * 1.5; // horizontal step between columns
+const HEX_ROW_STEP = HEX_H; // vertical step between rows
+
+function hexPoints(cx, cy, r) {
+  const pts = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (Math.PI / 180) * (60 * i);
+    pts.push(`${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`);
+  }
+  return pts.join(" ");
+}
+
+const PALETTE = [
+  "#000000","#1a1a30","#3f3f3f","#8E8E93","#FFFFFF",
+  "#7b0429","#5c0269","#F7E478","#F3D630","#B3D1BC",
+  "#0c8e23","#8BB999","#7a9d0e","#82C7F8","#3FA9F5",
+  "#009188","#007bc4","#1114ad","#BF5AF2","#AF52DE",
+];
+
+// ── AI agent IDs for distinguishing human/AI ─────────────────────
+const AI_IDS = new Set(["sim-claude", "sim-gemini", "sim-grok", "sim-llama"]);
+
+const sh = {
+  async get(k,s=true){try{const r=await window.storage.get(k,s);return r?.value?JSON.parse(r.value):null}catch{return null}},
+  async set(k,v,s=true){try{await window.storage.set(k,JSON.stringify(v),s);return true}catch{return false}},
+  async del(k,s=true){try{await window.storage.delete(k,s);return true}catch{return false}},
+  async list(p){try{const r=await window.storage.list(p,true);return r?.keys||[]}catch{return[]}},
+};
+
+function hSeed(id){let h=0;for(let i=0;i<id.length;i++)h=((h<<5)-h+id.charCodeAt(i))|0;return Math.abs(h)}
+
+function Sigil({seed, size=24}){
+  const s=seed%10000, h1=s%360, h2=(s*7+120)%360, r=size*.38;
+  return(
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <circle cx={size/2} cy={size/2} r={r} fill={`hsl(${h1},25%,15%)`} stroke={`hsl(${h1},50%,40%)`} strokeWidth="1"/>
+      <circle cx={size/2} cy={size/2-r*.3} r={size*.1} fill={`hsl(${h1},70%,65%)`} opacity=".8"/>
+      <circle cx={size/2+r*.3} cy={size/2+r*.2} r={size*.08} fill={`hsl(${h2},70%,65%)`} opacity=".7"/>
+    </svg>
+  );
+}
+
+// ── Player type icons (human / AI) ───────────────────────────────
+function HumanIcon({ size = 14, color = "#fff" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="5" r="3" stroke={color} strokeWidth="1.5" fill="none"/>
+      <path d="M2.5 15c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" stroke={color} strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+function AIIcon({ size = 14, color = BRAND.sky }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+      <rect x="3" y="3" width="10" height="10" rx="2" stroke={color} strokeWidth="1.3" fill="none"/>
+      <circle cx="6.5" cy="7.5" r="1" fill={color}/>
+      <circle cx="9.5" cy="7.5" r="1" fill={color}/>
+      <path d="M6 10.5c0 0 .8 1 2 1s2-1 2-1" stroke={color} strokeWidth="1" fill="none" strokeLinecap="round"/>
+      <line x1="8" y1="1" x2="8" y2="3" stroke={color} strokeWidth="1.3" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+// ── "Built on F1R3FLY.IO" Badge with logo ────────────────────────
+function PixWordmark({height=56}) {
+  const c=[[0,0,"w"],[35,0,"w"],[70,0,"w"],[105,0,"w"],[140,0,"w"],[210,0,"w"],[245,0,"w"],[280,0,"w"],[385,0,"w"],[420,0,"w"],[455,0,"w"],[490,0,"w"],[525,0,"w"],[560,0,"w"],[630,0,"w"],[665,0,"w"],[700,0,"w"],[735,0,"w"],[770,0,"w"],[878,0,"y"],[913,0,"y"],[948,0,"y"],[983,0,"y"],[1018,0,"y"],[1123,0,"y"],[1158,0,"y"],[1263,0,"y"],[1298,0,"y"],[1438,0,"y"],[1473,0,"y"],[0,35,"w"],[35,35,"w"],[245,35,"w"],[280,35,"w"],[385,35,"w"],[420,35,"w"],[525,35,"w"],[560,35,"w"],[735,35,"w"],[770,35,"w"],[878,35,"y"],[913,35,"y"],[1018,35,"y"],[1123,35,"y"],[1158,35,"y"],[1263,35,"y"],[1298,35,"y"],[1438,35,"y"],[1473,35,"y"],[0,70,"w"],[35,70,"w"],[245,70,"w"],[280,70,"w"],[385,70,"w"],[420,70,"w"],[525,70,"w"],[560,70,"w"],[735,70,"w"],[770,70,"w"],[878,70,"y"],[913,70,"y"],[1018,70,"y"],[1123,70,"y"],[1158,70,"y"],[1298,70,"y"],[1333,70,"y"],[1403,70,"y"],[1438,70,"y"],[0,105,"w"],[35,105,"w"],[245,105,"w"],[280,105,"w"],[385,105,"w"],[420,105,"w"],[525,105,"w"],[560,105,"w"],[735,105,"w"],[878,105,"y"],[913,105,"y"],[1018,105,"y"],[1123,105,"y"],[1158,105,"y"],[1333,105,"y"],[1368,105,"y"],[1403,105,"y"],[0,140,"w"],[35,140,"w"],[70,140,"w"],[105,140,"w"],[245,140,"w"],[280,140,"w"],[385,140,"w"],[420,140,"w"],[455,140,"w"],[490,140,"w"],[525,140,"w"],[665,140,"w"],[700,140,"w"],[878,140,"y"],[913,140,"y"],[948,140,"y"],[983,140,"y"],[1018,140,"y"],[1123,140,"y"],[1158,140,"y"],[1368,140,"y"],[0,175,"w"],[35,175,"w"],[245,175,"w"],[280,175,"w"],[385,175,"w"],[420,175,"w"],[455,175,"w"],[490,175,"w"],[735,175,"w"],[878,175,"y"],[913,175,"y"],[1123,175,"y"],[1158,175,"y"],[1333,175,"y"],[1368,175,"y"],[1403,175,"y"],[0,210,"w"],[35,210,"w"],[245,210,"w"],[280,210,"w"],[385,210,"w"],[420,210,"w"],[525,210,"w"],[735,210,"w"],[770,210,"w"],[878,210,"y"],[913,210,"y"],[1123,210,"y"],[1158,210,"y"],[1298,210,"y"],[1333,210,"y"],[1403,210,"y"],[1438,210,"y"],[0,245,"w"],[35,245,"w"],[245,245,"w"],[280,245,"w"],[385,245,"w"],[420,245,"w"],[525,245,"w"],[560,245,"w"],[735,245,"w"],[770,245,"w"],[878,245,"y"],[913,245,"y"],[1123,245,"y"],[1158,245,"y"],[1263,245,"y"],[1298,245,"y"],[1438,245,"y"],[1473,245,"y"],[0,280,"w"],[35,280,"w"],[245,280,"w"],[280,280,"w"],[385,280,"w"],[420,280,"w"],[525,280,"w"],[560,280,"w"],[630,280,"w"],[665,280,"w"],[700,280,"w"],[735,280,"w"],[770,280,"w"],[878,280,"y"],[913,280,"y"],[1123,280,"y"],[1158,280,"y"],[1263,280,"y"],[1298,280,"y"],[1438,280,"y"],[1473,280,"y"]];
+  return(<svg viewBox="0 0 1505 312" height={height} xmlns="http://www.w3.org/2000/svg" style={{display:"block"}}>{c.map(([x,y,t],i)=><rect key={i} x={x} y={y} width="32" height="32" rx="2" fill={t==="w"?"#fff":"#F3D630"}/>)}</svg>);
+}
+
+function BuiltOnBadge() {
+  return (
+    <div className="built-on-badge" style={{padding:"12px 0",display:"flex",justifyContent:"center",zIndex:100,background:"#000",cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
+      <img src="built-on-f1r3fly.io-box.svg" alt="Built on F1R3FLY.IO" style={{height:48,display:"block"}}/>
+    </div>
+  );
+}
+
+function F1R3GamesLogo({width=300}) {
+  return <svg width={width} viewBox="0 0 2041.904 1169.445" xmlns="http://www.w3.org/2000/svg" style={{display:"block",margin:"0 auto"}}>
+    <defs>
+      <linearGradient id="fg-g-flame" x1="771.497" y1="405.595" x2="1465.057" y2="405.595" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stopColor="#f3d630"/>
+        <stop offset="1" stopColor="#a62832"/>
+      </linearGradient>
+      <linearGradient id="fg-g-knot" x1="929.98" y1="747.859" x2="929.98" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stopColor="#9ec597"/>
+        <stop offset=".519" stopColor="#5db7e7"/>
+        <stop offset="1" stopColor="#186d8c"/>
+      </linearGradient>
+      <clipPath id="fg-clip">
+        <path fill="none" d="M853.788,747.438c-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,169.433,169.896,99.235,172.964Z"/>
+      </clipPath>
+    </defs>
+    <path fill="#fff" d="M0,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737H46.094v66.658h87.579c3.545,0,6.736,3.191,6.736,6.737v29.074c0,3.546-3.191,6.737-6.736,6.737H46.094v89.706c0,3.545-3.19,6.736-6.736,6.736H6.737c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM235.429,989.323l-31.202,6.737c-3.191.709-6.736-1.419-7.091-4.609l-2.128-17.374c-.354-2.837.354-4.964,1.773-6.383l51.058-42.902h24.819c3.546,0,6.383,3.191,6.383,6.736v227.634c0,3.545-2.837,6.736-6.383,6.736h-30.492c-3.9,0-6.737-3.191-6.737-6.736v-169.839ZM362.005,924.438c0-3.546,2.837-6.737,6.737-6.737h101.406c42.548,0,77.296,34.039,77.296,76.232,0,32.62-21.629,59.213-52.477,71.623l48.576,90.061c2.482,4.609,0,10.282-6.027,10.282h-37.229c-3.191,0-4.965-1.772-5.674-3.191l-47.157-93.96h-39.357v90.415c0,3.545-3.19,6.736-6.736,6.736h-32.62c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM466.248,1030.808c18.792,0,35.103-16.31,35.103-36.166,0-18.792-16.311-34.393-35.103-34.393h-57.795v70.559h57.795ZM596.72,1129.024l18.083-17.374c3.191-2.837,6.382-2.837,9.219,0,1.063,1.418,21.983,19.146,43.612,19.146,19.146,0,37.584-13.828,37.584-33.329,0-18.438-17.02-35.103-48.931-35.103h-19.855c-3.9,0-6.737-2.836-6.737-7.091v-22.338c0-4.609,2.482-7.092,6.737-7.092h19.855c29.074,0,43.967-14.537,43.967-32.62,0-19.501-16.311-32.62-34.394-32.62-18.438,0-29.783,9.928-35.812,17.02-2.481,2.836-6.382,3.19-9.573.354l-17.374-16.311c-2.836-2.482-2.481-6.736,0-9.219,0,0,26.947-31.202,66.659-31.202,41.13,0,75.523,25.175,75.523,64.886,0,27.302-20.565,47.867-36.521,55.313v1.063c16.664,7.091,42.902,26.238,42.902,57.795,0,40.065-32.62,69.141-81.551,69.141-44.321,0-65.949-22.338-73.75-31.557-2.128-2.482-1.773-6.383.354-8.864ZM928.233,914.156c31.911,0,62.404,12.409,86.515,32.975,2.837,2.836,3.191,7.091.354,9.928l-21.982,23.047c-2.837,2.837-6.028,2.837-9.219,0-15.247-13.474-34.039-20.564-53.54-20.564-44.321,0-79.424,37.938-79.424,82.26,0,43.966,35.103,81.196,79.778,81.196,19.855,0,35.103-6.028,42.193-8.864v-30.139h-28.365c-3.9,0-6.737-2.837-6.737-6.382v-28.012c0-3.899,2.837-6.736,6.737-6.736h68.077c3.546,0,6.382,3.191,6.382,6.736v90.77c0,2.837-1.418,4.609-2.836,5.674,0,0-36.521,23.047-87.934,23.047-70.559,0-127.29-56.022-127.29-126.936s56.731-127.999,127.29-127.999ZM1056.58,1156.68l110.271-238.625c1.064-2.127,2.837-3.899,6.028-3.899h3.545c3.546,0,4.965,1.772,6.028,3.899l109.207,238.625c2.127,4.609-.709,9.219-6.028,9.219h-30.847c-5.319,0-7.801-2.127-10.283-7.092l-17.373-38.293h-106.017l-17.374,38.293c-1.418,3.546-4.609,7.092-10.282,7.092h-30.848c-5.318,0-8.154-4.609-6.027-9.219ZM1209.754,1081.156l-35.457-78.005h-1.063l-34.748,78.005h71.269ZM1367.53,919.474c.354-2.837,2.481-5.318,6.382-5.318h5.673c2.837,0,4.965,1.418,6.028,3.545l78.005,167.356h1.063l78.005-167.356c1.064-2.127,2.837-3.545,6.028-3.545h5.673c3.9,0,6.027,2.481,6.382,5.318l41.84,238.27c1.063,4.964-1.773,8.155-6.383,8.155h-32.266c-3.191,0-6.027-2.837-6.736-5.318l-20.92-134.382h-1.063l-62.05,139.346c-.709,2.127-2.837,3.9-6.027,3.9h-6.383c-3.19,0-4.964-1.773-6.027-3.9l-62.759-139.346h-1.063l-20.565,134.382c-.354,2.481-3.19,5.318-6.382,5.318h-31.911c-4.609,0-7.446-3.191-6.736-8.155l42.193-238.27ZM1668.902,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737h-104.952v58.149h87.579c3.545,0,6.736,3.19,6.736,6.736v29.429c0,3.9-3.191,6.737-6.736,6.737h-87.579v62.05h104.952c3.9,0,6.737,3.19,6.737,6.736v29.075c0,3.545-2.837,6.736-6.737,6.736h-144.309c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM1880.576,1131.151l12.765-21.982c2.836-4.965,8.864-4.965,12.055-2.482,1.773,1.063,30.493,21.983,53.54,21.983,18.438,0,32.266-12.056,32.266-27.302,0-18.083-15.246-30.493-45.03-42.549-33.329-13.474-66.658-34.747-66.658-76.586,0-31.557,23.401-68.077,79.777-68.077,36.166,0,63.822,18.438,70.914,23.756,3.546,2.127,4.609,8.155,2.127,11.7l-13.474,20.211c-2.836,4.255-8.154,7.091-12.409,4.255-2.837-1.773-29.784-19.502-49.285-19.502-20.211,0-31.202,13.474-31.202,24.82,0,16.665,13.119,28.011,41.839,39.712,34.394,13.828,74.104,34.393,74.104,80.132,0,36.521-31.557,70.205-81.551,70.205-44.675,0-70.913-20.92-78.005-27.656-3.19-3.191-4.964-4.964-1.772-10.638Z"/>
+    <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
+    <path fill="url(#fg-g-knot)" d="M1141.963,0c46.349,37.918,87.228,88.12,111.168,144.498,43.213,100.509,37.954,217.952-4.471,317.93-38.879,93.004-108.665,173.115-196.595,223.912-60.038,35.129-128.081,58.03-198.278,61.098-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,47.079,20,71.506,21.017,162.417,4.662,311.49-124.764,356.969-278.806,10.093-33.178,15.288-67.976,15.967-102.614,2.477-74.218-23.888-147.489-57.031-214.071Z"/>
+    <g clipPath="url(#fg-clip)">
+      <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
+    </g>
+  </svg>;
+}
+
+// ── Tour Overlay — "How This Works" ──────────────────────────────
+const TOUR_SLIDES = [
+  { icon: "pixel", title: "YOU OWN YOUR PIXELS", body: "Every pixel you place is yours. Recorded on the shard, attributed to you, permanent. This isn\u2019t rented space\u2014it\u2019s yours." },
+  { icon: "globe", title: "YOUR UNIQUE F1R3SIGN\nTRAVELS WITH YOU", body: "Your F1R3Sign isn\u2019t locked to this game. It moves with you across every service built on F1R3FLY. One sign, one reputation, everywhere." },
+  { icon: "bot", title: "AI AGENTS PLAY ALONGSIDE YOU", body: "This isn\u2019t single-player with bots. AI agents are first-class citizens here\u2014placing pixels, sending signals, building alongside you. Many minds, one canvas." },
+  { icon: "fork", title: "ANYONE CAN CLONE\nTHIS CANVAS", body: "No lock-in, no walled gardens. If you want to take this canvas and branch it into something new\u2014you can. Cloning isn\u2019t a threat. It\u2019s how the ecosystem grows." },
+];
+
+function TourIcon({ type, color = "#fff", size = 48 }) {
+  const icons = {
+    pixel: <svg className="tour-icon-pixel" width={size} height={size} viewBox="0 0 40 40" fill="none"><rect className="tpx-1" x="4" y="4" width="12" height="12" rx="1" fill={color}/><rect className="tpx-2" x="20" y="4" width="12" height="12" rx="1" fill={color} opacity=".5"/><rect className="tpx-3" x="4" y="20" width="12" height="12" rx="1" fill={color} opacity=".5"/><rect className="tpx-4" x="20" y="20" width="12" height="12" rx="1" fill={color}/><rect className="tpx-5" x="36" y="4" width="4" height="4" rx="1" fill={color} opacity=".3"/></svg>,
+    globe: <svg className="tour-icon-globe" width={size} height={size} viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke={color} strokeWidth="1.5"/><ellipse className="tglobe-spin" cx="20" cy="20" rx="8" ry="16" stroke={color} strokeWidth="1.5"/><line x1="4" y1="20" x2="36" y2="20" stroke={color} strokeWidth="1.5"/><line x1="20" y1="4" x2="20" y2="36" stroke={color} strokeWidth="1.5"/></svg>,
+    bot: <svg className="tour-icon-bot" width={size} height={size} viewBox="0 0 40 40" fill="none"><rect x="8" y="12" width="24" height="20" rx="4" stroke={color} strokeWidth="1.5"/><circle className="tbot-eye-l" cx="16" cy="22" r="2.5" fill={color}/><circle className="tbot-eye-r" cx="24" cy="22" r="2.5" fill={color}/><path d="M15 28c0 0 2 2.5 5 2.5s5-2.5 5-2.5" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="20" y1="6" x2="20" y2="12" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><circle className="tbot-antenna" cx="20" cy="5" r="2" fill={color}/></svg>,
+    chain: <svg className="tour-icon-chain" width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tchain-l" x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect className="tchain-r" x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line className="tchain-bar1" x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line className="tchain-bar2" x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
+    fork: <svg className="tour-icon-fork" width={size} height={size} viewBox="0 0 40 40" fill="none"><circle cx="20" cy="8" r="3" stroke={color} strokeWidth="1.5"/><circle className="tfork-l" cx="10" cy="32" r="3" stroke={color} strokeWidth="1.5"/><circle className="tfork-r" cx="30" cy="32" r="3" stroke={color} strokeWidth="1.5"/><path d="M20 11v8c0 4-10 4-10 10" stroke={color} strokeWidth="1.5"/><path d="M20 19c0 4 10 4 10 10" stroke={color} strokeWidth="1.5"/></svg>,
+  };
+  return icons[type] || null;
+}
+
+function TourOverlay({ onClose }) {
+  const [slide, setSlide] = useState(0);
+  const s = TOUR_SLIDES[slide];
+  const isLast = slide === TOUR_SLIDES.length - 1;
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(0,0,0,0.95)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={onClose}>
+      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes pixPulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tpx-1{animation:pixPulse 2.4s ease-in-out infinite}.tpx-2{animation:pixPulse 2.4s ease-in-out .4s infinite}.tpx-3{animation:pixPulse 2.4s ease-in-out .8s infinite}.tpx-4{animation:pixPulse 2.4s ease-in-out 1.2s infinite}.tpx-5{animation:pixPulse 2.4s ease-in-out 1.6s infinite}
+@keyframes globeSway{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.4)}}
+.tglobe-spin{transform-origin:center;animation:globeSway 4s ease-in-out infinite}
+@keyframes botBlink{0%,42%,50%,100%{opacity:1}45%,48%{opacity:0}}
+@keyframes antennaPulse{0%,100%{opacity:1;r:2}50%{opacity:.5;r:3}}
+.tbot-eye-l,.tbot-eye-r{animation:botBlink 3s ease-in-out infinite}.tbot-antenna{animation:antennaPulse 2s ease-in-out infinite}
+@keyframes chainSlide{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
+@keyframes chainSlideR{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
+.tchain-l{animation:chainSlide 3s ease-in-out infinite}.tchain-r{animation:chainSlideR 3s ease-in-out infinite}
+@keyframes forkPulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tfork-l{animation:forkPulse 2.5s ease-in-out infinite}.tfork-r{animation:forkPulse 2.5s ease-in-out .6s infinite}`}</style>
+      <div onClick={e => e.stopPropagation()} style={{ animation: "tourIn .35s ease-out", maxWidth: 460, width: "90%", textAlign: "center", padding: "48px 36px 40px", border: `1px solid #007bc466`, borderRadius: 14, background: "#000" }}>
+        <div style={{ marginBottom: 20 }}><TourIcon type={s.icon} size={48} /></div>
+        <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: 4, fontFamily: FH, color: BRAND.yellow, lineHeight: 1.7, marginBottom: 16, whiteSpace: "pre-line" }}>{s.title}</div>
+        <div style={{ width: 80, height: 1, background: "linear-gradient(90deg, #F3D630, #8BB999)", margin: "0 auto 20px" }} />
+        <div style={{ fontSize: 17, fontWeight: 200, color: "#fff", fontFamily: FB, letterSpacing: 0.2, lineHeight: 1.6, marginBottom: 36 }}>{s.body}</div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 28 }}>
+          {TOUR_SLIDES.map((_, i) => (
+            <div key={i} onClick={() => setSlide(i)} style={{ width: 10, height: 10, borderRadius: "50%", background: i === slide ? BRAND.yellow : "rgba(255,255,255,0.2)", cursor: "pointer", transition: "background .2s" }} />
+          ))}
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+          {slide > 0 && <button onClick={() => setSlide(slide - 1)} style={{ background: "#000", border: `1px solid ${BRAND.border}`, color: "#fff", borderRadius: 20, padding: "12px 24px 8px", fontSize: 16, fontFamily: FH, letterSpacing: 2, cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, minHeight: 38 }}>BACK</button>}
+          <button onClick={() => isLast ? onClose() : setSlide(slide + 1)} style={{ background: "linear-gradient(135deg, #5c0269, #7b0429)", border: "none", color: "#fff", borderRadius: 20, padding: "12px 28px 8px", fontSize: 16, fontFamily: FH, letterSpacing: 2, fontWeight: 600, cursor: "pointer", boxShadow: "0 0 16px rgba(123,4,41,0.4)", display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, minHeight: 38 }}>{isLast ? "LET\u2019S GO" : "NEXT"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Canvas Shape Controls with CLONE button ──────────────────────
+function CanvasShapeControls({ currentShape, hostName, isHost, isUnlocked, canChange, onChangeShape, onToggleLock, pixelCount }) {
+  const [confirmTarget, setConfirmTarget] = useState(null);
+  const [cloneMsg, setCloneMsg] = useState(false);
+  const shapes = Object.entries(SHAPES);
+  const handleShapeClick = (key) => {
+    if (!canChange || key === currentShape) return;
+    const cur = SHAPES[currentShape]; const next = SHAPES[key];
+    if (pixelCount > 0 && (next.w < cur.w || next.h < cur.h)) { setConfirmTarget(key); } else { onChangeShape(key); }
+  };
+  const handleClone = () => { setCloneMsg(true); setTimeout(() => setCloneMsg(false), 3000); };
+  return (
+    <div style={{ paddingBottom: 20, borderBottom: `1px solid ${BRAND.border}` }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+        <div style={{ fontSize: 16, color: BRAND.textMuted, letterSpacing: 2, fontFamily: FH }}>CANVAS</div>
+        {isHost && (
+          <button onClick={onToggleLock} style={{
+            background: "none", border: `1px solid ${BRAND.border}`, borderRadius: 20, padding: "8px 14px 6px", cursor: "pointer",
+            fontSize: 16, letterSpacing: 1, fontFamily: FH, color: isUnlocked ? BRAND.sage : BRAND.textSecondary, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 4, lineHeight: 1,
+          }}>{isUnlocked ? "\u{1F513}" : "\u{1F512}"}{isUnlocked ? "OPEN" : "LOCKED"}</button>
+        )}
+      </div>
+      <div style={{ fontSize: 16, fontWeight: 200, color: BRAND.textSecondary, fontFamily: FB, letterSpacing: 0.2, marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+        <span style={{ color: BRAND.yellow, fontWeight: 600 }}>{hostName}</span><span>picked</span>
+        <span style={{ color: "#fff", fontWeight: 600 }}>{SHAPES[currentShape]?.label}</span>
+      </div>
+      <div style={{ display: "flex", gap: 4 }}>
+        {shapes.map(([key, shape]) => {
+          const isActive = currentShape === key;
+          const pw = key === "portrait" ? 16 : key === "landscape" ? 24 : 20;
+          const ph = key === "portrait" ? 24 : key === "landscape" ? 16 : 20;
+          return (
+            <button key={key} onClick={() => handleShapeClick(key)} style={{
+                flex: 1, background: isActive ? "rgba(243,214,48,0.08)" : "rgba(255,255,255,0.03)",
+                border: isActive ? `1px solid ${BRAND.yellow}66` : `1px solid ${BRAND.border}`,
+                borderRadius: 6, padding: "10px 6px", cursor: canChange && !isActive ? "pointer" : "default",
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+                opacity: canChange || isActive ? 1 : 0.4, transition: "all 0.15s ease", position: "relative",
+              }}>
+              {isActive && !canChange && <div style={{ position: "absolute", top: 2, right: 4, fontSize: 10 }}>{"\u{1F512}"}</div>}
+              <div style={{ width: pw, height: ph, border: isActive ? `2px solid ${BRAND.yellow}` : `1px solid ${BRAND.border}`, borderRadius: 2 }} />
+              <div style={{ fontSize: 16, fontWeight: 600, letterSpacing: 0, fontFamily: FH, color: isActive ? BRAND.yellow : BRAND.textDim, whiteSpace: "nowrap" }}>{shape.label}</div>
+            </button>
+          );
+        })}
+      </div>
+      {!isHost && !isUnlocked && <div style={{ marginTop: 8, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10 }}>
+        <div style={{ fontSize: 16, fontWeight: 200, color: "#fff", fontFamily: FB, letterSpacing: 0.2 }}>Only {hostName} can change shape</div>
+        <button style={{ background: "none", border: `1px solid ${BRAND.border}`, borderRadius: 20, padding: "8px 14px 6px", fontSize: 16, fontFamily: FH, letterSpacing: 1, color: "#3FA9F5", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>ASK TO UNLOCK</button>
+      </div>}
+      {!isHost && isUnlocked && <div style={{ marginTop: 8, fontSize: 16, fontWeight: 200, color: BRAND.sage, fontFamily: FB, letterSpacing: 0.2 }}>{hostName} unlocked canvas shape — you can change it</div>}
+      {confirmTarget && (
+        <div style={{ marginTop: 10, padding: 10, borderRadius: 4, background: "rgba(123,4,41,0.15)", border: "1px solid #7b042966" }}>
+          <div style={{ fontSize: 16, fontWeight: 200, color: "#ff6b6b", fontFamily: FB, letterSpacing: 0.2, marginBottom: 8, lineHeight: 1.4 }}>Changing to {SHAPES[confirmTarget]?.label} will cut the canvas. Pixels outside the new bounds will be lost.</div>
+          <div style={{ display: "flex", gap: 6 }}>
+            <button onClick={() => { onChangeShape(confirmTarget); setConfirmTarget(null); }} style={{ background: "linear-gradient(135deg, #7b0429, #5c0269)", color: "#fff", border: "none", borderRadius: 20, padding: "10px 18px 8px", fontSize: 16, fontFamily: FH, letterSpacing: 1, cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>RESHAPE</button>
+            <button onClick={() => setConfirmTarget(null)} style={{ background: "none", color: "#fff", border: `1px solid ${BRAND.border}`, borderRadius: 20, padding: "10px 18px 8px", fontSize: 16, fontFamily: FH, letterSpacing: 1, cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>CANCEL</button>
+          </div>
+        </div>
+      )}
+      {/* CLONE THIS CANVAS */}
+      <div style={{ marginTop: 12 }}>
+        <button onClick={handleClone} style={{ width: "100%", background: "none", border: `1px solid ${BRAND.border}`, borderRadius: 20, padding: "12px 24px 8px", fontSize: 16, fontFamily: FH, letterSpacing: 1, color: BRAND.textSecondary, cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, whiteSpace: "nowrap", lineHeight: 1, transition: "border-color 0.2s" }}
+          onMouseEnter={e => e.target.style.borderColor = BRAND.sky} onMouseLeave={e => e.target.style.borderColor = BRAND.border}>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke={BRAND.textSecondary} strokeWidth="1.5" fill="none"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2H3.5A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke={BRAND.textSecondary} strokeWidth="1.5" fill="none"/></svg>
+          CLONE THIS CANVAS
+        </button>
+        {cloneMsg && <div style={{ marginTop: 6, fontSize: 16, fontWeight: 200, color: BRAND.sage, fontFamily: FB, letterSpacing: 0.2, textAlign: "center" }}>coming soon — branching is how ecosystems grow</div>}
+      </div>
+    </div>
+  );
+}
+
+// ── Join Screen — v1r2 ───────────────────────────────────────────
+function JoinScreen({ onJoin, players }) {
+  const [name, setName] = useState("");
+  const [showTour, setShowTour] = useState(false);
+  const go = () => { const n = name.trim(); if(n) onJoin(n); };
+  return (
+    <div className="join-hex-bg" style={{ height: "100vh", maxHeight: "100vh", overflow: "hidden", background: "#000", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", fontFamily: FH, position: "relative" }}>
+      <style>{BRAND_FONTS}{`
+        @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        * { box-sizing: border-box; }
+        input:focus { border-color: #007bc466 !important; }
+      `}</style>
+      <div style={{ animation: "fadeIn .6s ease-out", textAlign: "center", marginTop: -105, position: "relative", zIndex: 1 }}>
+        <F1R3GamesLogo width={196} />
+        <div style={{ fontSize: 16, color: "#fff", letterSpacing: 6, fontFamily: FH, fontWeight: 300, marginTop: 24 }}>PRESENTS</div>
+        <div style={{ height: 40 }} />
+        <div className="join-solid-box" style={{ border: `1px solid #007bc466`, borderRadius: 14, padding: "40px 48px", display: "inline-block", position: "relative", overflow: "hidden" }}>
+          <h1 className="join-title" style={{ margin: "0 0 20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <PixWordmark height={56} />
+          </h1>
+          <div style={{ fontSize: 16, color: "#fff", letterSpacing: 4, fontWeight: 300, fontFamily: FH }}>MANY MINDS. ONE CANVAS.</div>
+        </div>
+        <div style={{ height: 50 }} />
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
+          <div style={{ fontSize: 16, color: BRAND.yellow, letterSpacing: 4, fontWeight: 700, fontFamily: FH }}>CHOOSE YOUR F1R3SIGN</div>
+          <input value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === "Enter" && go()} placeholder="someone wonderful"
+            style={{ background: "#000", border: `1px solid #007bc466`, borderRadius: 6, color: "#fff", padding: "10px 16px", fontSize: 16, fontWeight: 300, width: "100%", maxWidth: 460, fontFamily: FH, textAlign: "center", outline: "none", marginTop: 20 }} />
+          <button onClick={go} style={{ background: "linear-gradient(135deg, #5c0269, #7b0429)", color: "#fff", border: "none", borderRadius: 20, padding: "12px 32px 8px", fontSize: 16, fontFamily: FH, fontWeight: 600, cursor: "pointer", letterSpacing: 3, boxShadow: "0 0 20px rgba(123,4,41,0.4)", marginTop: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, minHeight: 38 }}>JOIN</button>
+          <div style={{ fontSize: 16, color: "#fff", letterSpacing: 4, fontWeight: 300, fontFamily: FH, lineHeight: 2.2, marginTop: 20 }}>YOUR UNIQUE F1R3SIGN<br />TRAVELS WITH YOU</div>
+        </div>
+        <button onClick={() => setShowTour(true)} style={{ marginTop: 30, background: "#000", border: `1px solid ${BRAND.border}`, color: "#fff", borderRadius: 20, padding: "12px 24px 8px", fontSize: 16, fontFamily: FH, letterSpacing: 2, cursor: "pointer", fontWeight: 300, display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, minHeight: 38 }}>HOW THIS WORKS</button>
+        {players.length > 0 && <div style={{ marginTop: 16, color: BRAND.textDim, fontSize: 16 }}>{players.length} playing</div>}
+      </div>
+      <BuiltOnBadge />
+      {showTour && <TourOverlay onClose={() => setShowTour(false)} />}
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MAIN GAME — v1r2
+// ══════════════════════════════════════════════════════════════════
+function F1R3Pix() {
+  const [phase, setPhase] = useState("loading");
+  const [myId, setMyId] = useState(null);
+  const [myName, setMyName] = useState("");
+  const [players, setPlayers] = useState([]);
+  const [canvasShape, setCanvasShape] = useState(DEFAULT_SHAPE);
+  const [hostId, setHostId] = useState(null);
+  const [hostName, setHostName] = useState("");
+  const [shapeUnlocked, setShapeUnlocked] = useState(false);
+  const gridW = SHAPES[canvasShape]?.w || SHAPES[DEFAULT_SHAPE].w;
+  const gridH = SHAPES[canvasShape]?.h || SHAPES[DEFAULT_SHAPE].h;
+  const [grid, setGrid] = useState({});
+  const [undoStack, setUndoStack] = useState([]);
+  const [selColor, setSelColor] = useState(PALETTE[8]);
+  const [shardOk, setShardOk] = useState(false);
+  const [hoverCell, setHoverCell] = useState(null);
+  const [zoom, setZoom] = useState(1);
+  const [signal, setSignal] = useState(null);
+  const [signalConfirm, setSignalConfirm] = useState(false);
+  const [showTour, setShowTour] = useState(false);
+  const [tokenBalance, setTokenBalance] = useState(1000);
+  const [sendAmount, setSendAmount] = useState("");
+  const [sendTarget, setSendTarget] = useState("");
+  const [tokenLog, setTokenLog] = useState([
+    { id: 1, from: "sim-claude", to: null, fromName: "Claude", toName: "You", amount: 50, ts: Date.now() - 120000 },
+    { id: 2, from: null, to: "sim-grok", fromName: "You", toName: "Grok", amount: 25, ts: Date.now() - 90000 },
+  ]);
+  const pollRef = useRef(null);
+  const gridContainerRef = useRef(null);
+
+  const buildEmptyGrid = useCallback((w, h) => {
+    const g = {}; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) g[`${x},${y}`] = { color: "#1a1a2e", by: null, ts: 0 }; return g;
+  }, []);
+  useEffect(() => {
+    setGrid(prev => { const g = buildEmptyGrid(gridW, gridH); Object.entries(prev).forEach(([key, px]) => { if (px.by && g[key] !== undefined) g[key] = px; }); return g; });
+  }, [canvasShape, gridW, gridH, buildEmptyGrid]);
+
+  const fakeUsers = [
+    { id: "sim-claude", name: "Claude", joinedAt: Date.now() - 300000 },
+    { id: "sim-gemini", name: "Gemini", joinedAt: Date.now() - 240000 },
+    { id: "sim-grok", name: "Grok", joinedAt: Date.now() - 180000 },
+    { id: "sim-llama", name: "Llama", joinedAt: Date.now() - 120000 },
+    { id: "sim-scarlet", name: "Scarlet", joinedAt: Date.now() - 60000 },
+  ];
+  const allPlayers = [...players, ...fakeUsers];
+  const loadPlayers = useCallback(async () => { const keys = await sh.list(PFX_P); const all = []; for (const k of keys) { const p = await sh.get(k); if (p) all.push(p); } setPlayers(all); return all; }, []);
+  const loadGrid = useCallback(async () => { const keys = await sh.list(PFX_PX); const updates = {}; for (const k of keys) { const px = await sh.get(k); if (px) updates[`${px.x},${px.y}`] = px; } setGrid(prev => ({ ...prev, ...updates })); }, []);
+  const loadShardSettings = useCallback(async () => {
+    const shape = await sh.get(SHARD_SHAPE); if (shape && SHAPES[shape]) setCanvasShape(shape);
+    const host = await sh.get(SHARD_HOST); if (host) { setHostId(host.id); setHostName(host.name); }
+    const unlocked = await sh.get(SHARD_SHAPE_UNLOCKED); setShapeUnlocked(!!unlocked);
+  }, []);
+  const syncAll = useCallback(async () => { try { await loadPlayers(); await loadGrid(); await loadShardSettings(); setShardOk(true); } catch { setShardOk(false); } }, [loadPlayers, loadGrid, loadShardSettings]);
+  useEffect(() => { (async () => { await loadShardSettings(); const sid = await sh.get(MY_ID, false); if (sid) { const p = await sh.get(`${PFX_P}${sid}`); if (p) { setMyId(sid); setMyName(p.name); await syncAll(); setPhase("play"); return; } } await loadPlayers(); setPhase("join"); })() }, []);
+  useEffect(() => { if (phase !== "play") return; pollRef.current = setInterval(syncAll, POLL); return () => clearInterval(pollRef.current); }, [phase, syncAll]);
+
+  const handleJoin = async (name) => {
+    const id = `px-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,6)}`;
+    await sh.set(`${PFX_P}${id}`, { id, name, joinedAt: Date.now() }); await sh.set(MY_ID, id, false);
+    const existingHost = await sh.get(SHARD_HOST);
+    if (!existingHost) { await sh.set(SHARD_HOST, { id, name }); await sh.set(SHARD_SHAPE, DEFAULT_SHAPE); setHostId(id); setHostName(name); }
+    setMyId(id); setMyName(name); await syncAll(); setPhase("play");
+  };
+  const handleChangeShape = async (s) => { setCanvasShape(s); await sh.set(SHARD_SHAPE, s); };
+  const handleToggleLock = async () => { const v = !shapeUnlocked; setShapeUnlocked(v); await sh.set(SHARD_SHAPE_UNLOCKED, v); };
+  const placePixel = async (x, y) => { if (!myId) return; const key = `${x},${y}`; setUndoStack(prev => [...prev.slice(-99), { key, prev: grid[key] || null }]); const px = { x, y, color: selColor, by: myId, byName: myName, ts: Date.now() }; await sh.set(`${PFX_PX}${x}-${y}`, px); setGrid(prev => ({ ...prev, [key]: px })); };
+  const undoPixel = async () => { if (!undoStack.length) return; const last = undoStack[undoStack.length - 1]; setUndoStack(prev => prev.slice(0, -1)); if (last.prev) { await sh.set(`${PFX_PX}${last.prev.x}-${last.prev.y}`, last.prev); setGrid(prev => ({ ...prev, [last.key]: last.prev })); } else { await sh.del(`${PFX_PX}${last.key.replace(',','-')}`); setGrid(prev => { const g = { ...prev }; delete g[last.key]; return g; }); } };
+  const leave = async () => { if (myId) { await sh.del(`${PFX_P}${myId}`); await sh.set(MY_ID, null, false); } setMyId(null); setPhase("join"); await loadPlayers(); };
+
+  const sendTokens = useCallback(() => {
+    const amt = parseInt(sendAmount);
+    if (!amt || amt <= 0 || amt > tokenBalance || !sendTarget) return;
+    const targetPlayer = allPlayers.find(p => p.id === sendTarget);
+    if (!targetPlayer) return;
+    setTokenLog(prev => [...prev, { id: Date.now(), from: myId, to: sendTarget, fromName: myName, toName: targetPlayer.name, amount: amt, ts: Date.now() }]);
+    setTokenBalance(prev => prev - amt);
+    setSendAmount("");
+    setSendTarget("");
+  }, [sendAmount, tokenBalance, sendTarget, myId, myName, allPlayers]);
+
+  // Simulate occasional AI-to-AI token transfers for atmosphere
+  useEffect(() => {
+    if (phase !== "play") return;
+    const interval = setInterval(() => {
+      const aiPlayers = fakeUsers;
+      if (aiPlayers.length < 2) return;
+      const from = aiPlayers[Math.floor(Math.random() * aiPlayers.length)];
+      let to = aiPlayers[Math.floor(Math.random() * aiPlayers.length)];
+      while (to.id === from.id) to = aiPlayers[Math.floor(Math.random() * aiPlayers.length)];
+      const amt = Math.floor(Math.random() * 30) + 5;
+      setTokenLog(prev => [...prev, { id: Date.now() + Math.random(), from: from.id, to: to.id, fromName: from.name, toName: to.name, amount: amt, ts: Date.now() }]);
+    }, 8000 + Math.random() * 7000);
+    return () => clearInterval(interval);
+  }, [phase]);
+
+  const handleWheel = useCallback((e) => { e.preventDefault(); setZoom(z => { const next = e.deltaY > 0 ? z - 0.1 : z + 0.1; return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Math.round(next * 10) / 10)); }); }, []);
+  useEffect(() => { const el = gridContainerRef.current; if (!el) return; el.addEventListener("wheel", handleWheel, { passive: false }); return () => el.removeEventListener("wheel", handleWheel); }, [handleWheel, phase]);
+  useEffect(() => { if (phase !== "play") return; const sW = window.innerWidth > 768 ? 600 : 0; const vw = window.innerWidth - sW; const vh = window.innerWidth <= 768 ? window.innerHeight * 0.55 : window.innerHeight - 90; const gpw = gridW * HEX_COL_STEP + HEX_SIZE * 0.5; const gph = gridH * HEX_ROW_STEP + HEX_H * 0.5; const fit = Math.min(vw / gpw, vh / gph, MAX_ZOOM); setZoom(Math.max(MIN_ZOOM, Math.round(fit * 10) / 10)); }, [phase, gridW, gridH]);
+
+  const pixelCount = Object.values(grid).filter(p => p.by).length;
+  const isHost = myId === hostId;
+  const canChange = isHost || shapeUnlocked;
+
+  if (phase === "loading") return (
+    <div style={{ minHeight: "100vh", background: "#000", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <style>{BRAND_FONTS}{`@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}`}</style>
+      <div style={{ color: "#fff", fontSize: 16, letterSpacing: 2, fontFamily: FH, animation: "pulse 1.5s ease-in-out infinite" }}>connecting to shard...</div>
+    </div>
+  );
+  if (phase === "join") return <JoinScreen onJoin={handleJoin} players={players} />;
+  const hovInfo = hoverCell ? grid[hoverCell] : null;
+
+  // ── GAME VIEW ──────────────────────────────────────────────
+  return (
+    <div style={{ minHeight: "100vh", background: "#000", color: "#fff", fontFamily: FB, display: "flex", flexDirection: "column" }}>
+      <div id="top" />
+      <style>{BRAND_FONTS}{`
+        ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}
+        *{box-sizing:border-box}
+        input::placeholder, textarea::placeholder { color: ${BRAND.textSecondary}; opacity: 1; }
+      `}</style>
+
+      {/* Header */}
+      <div className="game-header" style={{ padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#000", minHeight: 70 }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+          <span className="game-header-title"><PixWordmark height={22} /></span>
+          <span className="game-header-stats" style={{ fontSize: 16, fontWeight: 200, color: "#fff", letterSpacing: 2, fontFamily: FB }}>{allPlayers.length} players | {pixelCount} pixels | shard {shardOk ? "live" : "offline"}</span>
+        </div>
+        <div className="zoom-controls" style={{ display: "flex", alignItems: "center", gap: 12, flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, flex: 1, justifyContent: "center" }}>
+          <button className="zoom-btn" onClick={() => setZoom(z => Math.max(MIN_ZOOM, Math.round((z - 0.1) * 10) / 10))} style={{ background: "#000", border: `1px solid ${BRAND.border}`, color: "#fff", borderRadius: 4, width: 36, height: 36, fontSize: 22, cursor: "pointer", fontFamily: FH, display: "flex", alignItems: "center", justifyContent: "center" }}>-</button>
+          <span style={{ fontSize: 16, color: BRAND.textMuted, fontFamily: FM, minWidth: 50, textAlign: "center" }}>{Math.round(zoom * 100)}%</span>
+          <button className="zoom-btn" onClick={() => setZoom(z => Math.min(MAX_ZOOM, Math.round((z + 0.1) * 10) / 10))} style={{ background: "#000", border: `1px solid ${BRAND.border}`, color: "#fff", borderRadius: 4, width: 36, height: 36, fontSize: 22, cursor: "pointer", fontFamily: FH, display: "flex", alignItems: "center", justifyContent: "center" }}>+</button>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
+            <button className="tour-btn" onClick={() => setShowTour(true)} style={{ background: "#000", border: `1px solid ${BRAND.border}`, color: "#fff", borderRadius: 20, padding: "12px 24px 8px", fontSize: 16, cursor: "pointer", fontFamily: FH, letterSpacing: 2, fontWeight: 300, display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, minHeight: 38 }}>HOW THIS WORKS</button>
+            <button className="leave-btn" onClick={leave} style={{ background: "#000", border: `1px solid ${BRAND.border}`, color: "#fff", borderRadius: 20, padding: "10px 18px 8px", fontSize: 16, cursor: "pointer", fontFamily: FH, letterSpacing: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1 , fontWeight: 300}}>LEAVE</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Brand gradient stroke */}
+      <div style={{ width: "100%", height: "0.5px", background: BRAND.stroke, opacity: 0.8 }} />
+
+      <div className="game-layout" style={{ flex: 1, display: "flex", overflow: "hidden" }}>
+
+        {/* Left Sidebar: Canvas + Signals */}
+        <div className="game-sidebar game-sidebar-left" style={{ width: 300, borderRight: `1px solid ${BRAND.border}`, padding: "20px 16px", display: "flex", flexDirection: "column", gap: 20, overflowY: "auto", background: "#000" }}>
+          <CanvasShapeControls currentShape={canvasShape} hostName={hostName || "host"} isHost={isHost} isUnlocked={shapeUnlocked} canChange={canChange} onChangeShape={handleChangeShape} onToggleLock={handleToggleLock} pixelCount={pixelCount} />
+
+          {/* F1R3 SIGNALS moved to right sidebar */}
+
+          {/* ── F1R3CAP — Token Balance + Send + Log ───────────── */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            {/* Balance */}
+            <div style={{ paddingBottom: 20, borderBottom: `1px solid ${BRAND.border}` }}>
+              <div style={{ fontSize: 16, textTransform: "uppercase", letterSpacing: 2, color: "#fff", fontFamily: FH, marginBottom: 12, fontWeight: 600 }}>F1R3CAP BALANCE</div>
+              <div style={{ fontSize: 32, fontWeight: 700, fontFamily: FH, color: BRAND.yellow, letterSpacing: 2 }}>
+                {tokenBalance.toLocaleString()}
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 200, color: BRAND.textSecondary, marginTop: 4, fontFamily: FB, letterSpacing: 0.2 }}>Staked on shard</div>
+            </div>
+
+            {/* Send */}
+            <div style={{ paddingBottom: 20, borderBottom: `1px solid ${BRAND.border}` }}>
+              <div style={{ fontSize: 16, textTransform: "uppercase", letterSpacing: 2, color: BRAND.textMuted, fontFamily: FH, marginBottom: 12, fontWeight: 600 }}>SEND F1R3CAP</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <select value={sendTarget} onChange={e => setSendTarget(e.target.value)}
+                  style={{ background: "#111", border: `1px solid ${BRAND.border}`, borderRadius: 6, color: sendTarget ? "#fff" : BRAND.textSecondary, padding: "8px 10px", fontSize: 16, fontFamily: FB, outline: "none", appearance: "none", cursor: "pointer" }}>
+                  <option value="">select player...</option>
+                  {allPlayers.filter(p => p.id !== myId).map(p => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
+                  ))}
+                </select>
+                <div style={{ display: "flex", gap: 6 }}>
+                  <input type="number" value={sendAmount} onChange={e => setSendAmount(e.target.value)} placeholder="amount"
+                    style={{ flex: 1, background: "#111", border: `1px solid ${BRAND.border}`, borderRadius: 6, padding: "8px 10px", color: BRAND.yellow, fontSize: 16, fontFamily: FB, outline: "none", width: 80 }} />
+                  <button onClick={sendTokens} style={{
+                    background: sendTarget && sendAmount ? "linear-gradient(135deg, #5c0269, #7b0429)" : "none",
+                    border: sendTarget && sendAmount ? "none" : `1px solid ${BRAND.border}`,
+                    borderRadius: 20, padding: "12px 24px 8px", color: sendTarget && sendAmount ? "#fff" : BRAND.textSecondary, fontWeight: 600, fontSize: 16,
+                    cursor: sendTarget && sendAmount ? "pointer" : "default", fontFamily: FH, letterSpacing: 2,
+                    display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, minHeight: 38,
+                    transition: "background 0.15s"
+                  }}>SEND</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Transaction Log */}
+            <div style={{ border: `1px solid ${BRAND.border}`, borderRadius: 8, padding: "12px 12px 4px" }}>
+              <div style={{ fontSize: 16, textTransform: "uppercase", letterSpacing: 2, color: BRAND.textMuted, fontFamily: FH, marginBottom: 12, fontWeight: 600 }}>TRANSACTIONS</div>
+              <div style={{ maxHeight: 200, overflowY: "auto", paddingRight: 6 }}>
+                {[...tokenLog].reverse().slice(0, 15).map(tx => {
+                  const isSent = tx.from === myId;
+                  return (
+                    <div key={tx.id} style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 16, fontWeight: 200, fontFamily: FB, letterSpacing: 0.2 }}>
+                      <span style={{ color: isSent ? "#7b0429" : BRAND.sage, fontSize: 18 }}>{isSent ? "\u2191" : "\u2193"}</span>
+                      <span style={{ color: BRAND.textSecondary, flex: 1 }}>
+                        {tx.fromName} <span style={{ color: BRAND.textSecondary }}>{"\u2192"}</span> {tx.toName}
+                      </span>
+                      <span style={{ color: isSent ? "#7b0429" : BRAND.sage, fontWeight: 600, fontFamily: FH }}>{isSent ? "-" : "+"}{tx.amount}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Grid */}
+        <div ref={gridContainerRef} className="game-grid-wrap" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 8, overflow: "auto", background: "#000" }}>
+          {(() => {
+            const svgW = gridW * HEX_COL_STEP + HEX_SIZE * 0.5 + 2;
+            const svgH = gridH * HEX_ROW_STEP + HEX_H * 0.5 + 2;
+            return (
+              <svg width={svgW} height={svgH} viewBox={`0 0 ${svgW} ${svgH}`} style={{ transform: `scale(${zoom})`, transformOrigin: "center center", transition: "transform 0.1s ease-out" }}>
+                {Array.from({ length: gridH }, (_, y) =>
+                  Array.from({ length: gridW }, (_, x) => {
+                    const key = `${x},${y}`;
+                    const px = grid[key];
+                    const cx = x * HEX_COL_STEP + HEX_SIZE + 1;
+                    const cy = y * HEX_ROW_STEP + HEX_H / 2 + 1 + (x % 2 === 1 ? HEX_ROW_STEP / 2 : 0);
+                    const isHovered = hoverCell === key;
+                    return (
+                      <polygon
+                        key={key}
+                        points={hexPoints(cx, cy, HEX_SIZE - 0.5)}
+                        fill={px?.color || "#1a1a2e"}
+                        stroke={isHovered ? selColor : "rgba(255,255,255,0.08)"}
+                        strokeWidth={isHovered ? 1.5 : 0.4}
+                        style={{ cursor: "pointer", transition: "fill 0.1s" }}
+                        onClick={() => placePixel(x, y)}
+                        onMouseEnter={() => setHoverCell(key)}
+                        onMouseLeave={() => setHoverCell(null)}
+                      />
+                    );
+                  })
+                )}
+              </svg>
+            );
+          })()}
+        </div>
+
+        {/* Right Sidebar */}
+        <div className="game-sidebar" style={{ width: 300, borderLeft: `1px solid ${BRAND.border}`, padding: "20px 16px", display: "flex", flexDirection: "column", gap: 20, overflowY: "auto", background: "#000" }}>
+          {/* PALETTE section */}
+          <div style={{ paddingBottom: 20, borderBottom: `1px solid ${BRAND.border}`, display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ fontSize: 16, color: BRAND.textMuted, letterSpacing: 2, fontFamily: FH }}>PALETTE</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "12px 6px" }}>
+              {PALETTE.map(c => (
+                <div key={c} onClick={() => setSelColor(c)} style={{ width: 28, height: 28, borderRadius: 4, background: c, cursor: "pointer",
+                  border: selColor === c ? "2px solid #fff" : c === "#000000" ? "1px solid #333" : "1px solid transparent",
+                  transition: "transform .1s", transform: selColor === c ? "scale(1.15)" : "scale(1)" }} />
+              ))}
+            </div>
+          </div>
+
+          {/* ACTIVE section */}
+          <div style={{ paddingBottom: 20, borderBottom: `1px solid ${BRAND.border}`, display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
+            <div style={{ fontSize: 16, color: BRAND.textMuted, letterSpacing: 2, fontFamily: FH }}>ACTIVE</div>
+            <div style={{ fontSize: 16, fontWeight: 200, color: BRAND.textSecondary, fontFamily: FB, letterSpacing: 0.2 }}>Selected: <span style={{ color: selColor, fontWeight: 600 }}>{selColor}</span></div>
+            {hovInfo?.by && <div style={{ fontSize: 16, fontWeight: 200, color: "#fff", fontFamily: FB, letterSpacing: 0.2 }}>by: {hovInfo.byName || "?"}<br />{new Date(hovInfo.ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>}
+            <button onClick={undoPixel} style={{ background: "none", border: `1px solid ${BRAND.border}`, color: "#fff", borderRadius: 20, padding: "12px 24px 8px", fontSize: 16, cursor: undoStack.length ? "pointer" : "default", fontFamily: FH, letterSpacing: 2, fontWeight: 300, display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, minHeight: 38 }}>UNDO</button>
+          </div>
+
+          {/* PLAYERS section */}
+          <div style={{ paddingBottom: 20, borderBottom: `1px solid ${BRAND.border}`, display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ fontSize: 16, color: BRAND.textMuted, letterSpacing: 2, fontFamily: FH }}>PLAYERS</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {allPlayers.map(p => {
+              const isAI = AI_IDS.has(p.id);
+              return (
+                <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ position: "relative" }}>
+                    <Sigil seed={hSeed(p.id)} size={26} />
+                    <div style={{ position: "absolute", bottom: -1, right: -1, width: 8, height: 8, borderRadius: "50%", background: "#4CD964", border: "2px solid #000" }} />
+                  </div>
+                  <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                    {isAI ? <AIIcon size={13} /> : <HumanIcon size={13} />}
+                    <span style={{ fontSize: 16, fontWeight: 200, color: p.id === myId ? BRAND.yellow : "#fff", fontFamily: FB, letterSpacing: 0.2 }}>
+                      {p.name}{p.id === hostId && <span style={{ fontSize: 16, color: "#fff", marginLeft: 4 }}>(Host)</span>}
+                    </span>
+                  </span>
+                </div>
+              );
+            })}
+            </div>
+          </div>
+
+          {/* F1R3 SIGNALS — bottom of right sidebar */}
+          <div>
+            <div style={{ fontSize: 16, color: "#fff", letterSpacing: 3, fontFamily: FH, marginBottom: 12, fontWeight: 600 }}>F1R3 SIGNALS</div>
+            <div style={{ fontSize: 16, fontWeight: 200, color: BRAND.sky, fontFamily: FB, letterSpacing: 0.2, marginBottom: 10, lineHeight: 1.4 }}>Not a &quot;like&quot; button</div>
+            <div style={{ fontSize: 16, fontWeight: 200, color: BRAND.textSecondary, fontFamily: FB, letterSpacing: 0.2, marginBottom: 10, lineHeight: 1.4 }}>How does this F1R3PIX make you feel?</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "10px 6px", justifyItems: "center" }}>
+              {[BRAND.yellow, BRAND.sage, BRAND.sky, "#7b0429", "#5c0269", "#009188", "#0c8e23", "#1114ad", "#FFFFFF", "#3f3f3f"].map(c => (
+                <div key={`sig-r-${c}`} style={{ width: 24, height: 24, borderRadius: "50%", background: c, cursor: "pointer",
+                  border: signal === c ? "2px solid #fff" : `1px solid ${BRAND.border}`,
+                  transition: "transform 0.15s, box-shadow 0.15s", transform: signal === c ? "scale(1.3)" : "scale(1)" }}
+                onClick={() => { setSignal(c); setSignalConfirm(true); setTimeout(() => setSignalConfirm(false), 2500); }}
+                onMouseEnter={e => { if (signal !== c) { e.target.style.transform = "scale(1.3)"; e.target.style.boxShadow = `0 0 10px ${c}66`; }}}
+                onMouseLeave={e => { if (signal !== c) { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "none"; }}} />
+              ))}
+            </div>
+            {signalConfirm && <div style={{ marginTop: 8, padding: "6px 8px", borderRadius: 4, background: "rgba(243,214,48,0.08)", border: `1px solid ${BRAND.yellow}33`, fontSize: 16, color: BRAND.yellow, fontFamily: FB }}>noted. we wrote that down.</div>}
+            {signal && !signalConfirm && <div style={{ marginTop: 8, fontSize: 16, fontWeight: 200, color: BRAND.textDim, fontFamily: FB, letterSpacing: 0.2, display: "flex", alignItems: "center", gap: 6 }}>{myName}'s signal: <div style={{ width: 12, height: 12, borderRadius: "50%", background: signal, border: `1px solid ${BRAND.border}` }} /></div>}
+            <div style={{ marginTop: 8, fontSize: 16, fontWeight: 200, color: BRAND.textSecondary, fontFamily: FB, letterSpacing: 0.2 }}>powered by F1R3INK</div>
+          </div>
+        </div>
+      </div>
+      <BuiltOnBadge />
+      {showTour && <TourOverlay onClose={() => setShowTour(false)} />}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(F1R3Pix));
+</script>
+</body>
+</html>
