@@ -15,11 +15,16 @@
   @media (max-width: 1024px) {
     .game-layout { flex-direction: column !important; }
     .game-sidebar { width: 100% !important; border-left: none !important; border-right: none !important; border-top: 1px solid #007bc466 !important; padding: 16px !important; max-height: none !important; overflow-y: visible !important; }
-    .game-sidebar-left { border-top: none !important; }
-    .beat-grid-outer { padding: 24px 12px !important; min-height: 420px !important; }
+    .game-sidebar-left { border-top: none !important; order: 2 !important; }
+    .beat-grid-outer { padding: 24px 12px !important; min-height: 300px !important; order: 1 !important; }
   }
   @media (max-width: 768px) {
-    .game-header { flex-wrap: wrap !important; padding: 10px 12px !important; }
+    .game-header { flex-wrap: wrap !important; padding: 10px 12px !important; gap: 8px !important; }
+    .game-header > div { flex-wrap: wrap !important; }
+    .beat-grid-outer { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+  }
+  @media (max-width: 480px) {
+    .game-header span[style*="fontSize:16"] { font-size: 13px !important; letter-spacing: 1px !important; }
   }
 </style>
 </head>
@@ -174,7 +179,7 @@ function TourOverlay({onClose}) {
 
 function BuiltOnBadge() {
   return (
-    <div style={{position:"fixed",bottom:16,left:"50%",transform:"translateX(-50%)",zIndex:100,cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
+    <div style={{padding:"12px 0",display:"flex",justifyContent:"center",zIndex:100,background:"#000",cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
       <img src="built-on-f1r3fly.io-box.svg" alt="Built on F1R3FLY.IO" style={{height:48,display:"block"}}/>
     </div>
   );

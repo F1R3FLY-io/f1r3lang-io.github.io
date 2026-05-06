@@ -12,7 +12,8 @@
   html, body { width: 100%; min-height: 100vh; background: #000; color: #fff; overflow-x: hidden; }
   input::placeholder, textarea::placeholder { color: #A0A0A0; opacity: 1; }
   @media (max-width: 768px) {
-    .game-header { flex-wrap: wrap !important; padding: 10px 12px !important; }
+    .game-header { flex-wrap: wrap !important; padding: 10px 12px !important; gap: 8px !important; }
+    .game-header > div { flex-wrap: wrap !important; }
     .story-layout { flex-direction: column !important; }
     .game-sidebar-left { display: none !important; }
     .story-sidebar { width: 100% !important; min-width: 100% !important; border-left: none !important; border-top: 1px solid #007bc466 !important; max-height: none !important; flex-direction: column !important; gap: 16px !important; padding: 16px !important; }
@@ -20,7 +21,7 @@
   }
   @media (max-width: 480px) {
     .game-header { padding: 8px 10px !important; }
-    .game-header span[style*="fontSize:29"] { font-size: 22px !important; letter-spacing: 2px !important; }
+    .game-header span[style*="fontSize:16"] { font-size: 13px !important; letter-spacing: 1px !important; }
   }
 </style>
 </head>
@@ -187,7 +188,7 @@ function F1R3GamesLogo({width=300}) {
 
 function BuiltOnBadge() {
   return (
-    <div style={{position:"fixed",bottom:16,left:"50%",transform:"translateX(-50%)",zIndex:100,cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
+    <div style={{padding:"12px 0",display:"flex",justifyContent:"center",zIndex:100,background:"#000",cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
       <img src="built-on-f1r3fly.io-box.svg" alt="Built on F1R3FLY.IO" style={{height:48,display:"block"}}/>
     </div>
   );
