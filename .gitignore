@@ -1,3 +1,8 @@
 .DS_Store
 .DS_Store
 generate_white_papers.py
+node_modules/
+*.babel-backup
+compile-games.sh
+package.json
+package-lock.json
