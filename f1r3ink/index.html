@@ -735,11 +735,11 @@ function F1R3Ink() {
   // ── JOIN SCREEN ──────────────────────────────────────────
   if (phase === "join") return /*#__PURE__*/React.createElement("div", {
     style: {
-      height: "100vh",
-      overflow: "hidden",
+      minHeight: "100vh",
+      overflow: "auto",
       background: "#000",
       display: "flex",
-      alignItems: "center",
+      alignItems: "flex-start",
       justifyContent: "center",
       flexDirection: "column",
       fontFamily: FH,
@@ -749,7 +749,7 @@ function F1R3Ink() {
     style: {
       animation: "fadeIn .6s ease-out",
       textAlign: "center",
-      marginTop: -105,
+      marginTop: 0,
       position: "relative",
       zIndex: 1
     }

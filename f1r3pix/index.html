@@ -1114,12 +1114,11 @@ function JoinScreen({
   return /*#__PURE__*/React.createElement("div", {
     className: "join-hex-bg",
     style: {
-      height: "100vh",
-      maxHeight: "100vh",
-      overflow: "hidden",
+      minHeight: "100vh",
+      overflow: "auto",
       background: "#000",
       display: "flex",
-      alignItems: "center",
+      alignItems: "flex-start",
       justifyContent: "center",
       flexDirection: "column",
       fontFamily: FH,
@@ -1133,7 +1132,7 @@ function JoinScreen({
     style: {
       animation: "fadeIn .6s ease-out",
       textAlign: "center",
-      marginTop: -105,
+      marginTop: 0,
       position: "relative",
       zIndex: 1
     }
