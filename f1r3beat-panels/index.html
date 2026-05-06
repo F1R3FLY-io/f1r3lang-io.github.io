@@ -40,7 +40,7 @@ const BRAND = {
   stroke: "linear-gradient(90deg, #F3D630, #8BB999)",
   textSecondary: "#A0A0A0"
 };
-const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap');`;
+const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Source+Sans+3:wght@200;300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap');`;
 const FH = "'Josefin Sans', sans-serif";
 const FB = "'Source Sans 3', sans-serif";
 const FM = "'Source Code Pro', monospace";
@@ -159,7 +159,7 @@ function TourOverlay({onClose}) {
         <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
         <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
         <div style={{width:80,height:1,background:"linear-gradient(90deg, #F3D630, #8BB999)",margin:"0 auto 20px"}}/>
-        <div style={{fontSize:17,color:"#fff",lineHeight:1.6,fontFamily:FB,marginBottom:36}}>{s.body}</div>
+        <div style={{fontSize:17,fontWeight:200,color:"#fff",lineHeight:1.6,fontFamily:FB,letterSpacing:0.2,marginBottom:36}}>{s.body}</div>
         <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:28}}>
           {slides.map((_,i)=><div key={i} onClick={()=>setSi(i)} style={{width:10,height:10,borderRadius:"50%",background:i===si?BRAND.yellow:"rgba(255,255,255,0.2)",cursor:"pointer",transition:"background .2s"}} />)}
         </div>
@@ -336,8 +336,8 @@ function F1R3Beat() {
       {/* Header */}
       <div className="game-header" style={{padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#000",minHeight:70,gap:12}}>
         <div style={{display:"flex",alignItems:"baseline",gap:12,flexWrap:"wrap"}}>
-          <BeatLogo height={27}/>
-          <span style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FB}}>{DEMO_PLAYERS.length + 1} players</span>
+          <BeatLogo height={19}/>
+          <span style={{fontSize:16,fontWeight:200,color:"#fff",letterSpacing:2,fontFamily:FB}}>{DEMO_PLAYERS.length + 1} players</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
           <HowBtn onClick={()=>setShowTour(true)}/>
@@ -385,9 +385,9 @@ function F1R3Beat() {
               <span style={{width:8,height:8,borderRadius:"50%",background:BEAT_ACCENT,display:"inline-block"}}/>
               RECORD
             </button>
-            <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,lineHeight:1.4}}>captures the evolution of the beat — not just the snapshot</div>
+            <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,lineHeight:1.4}}>captures the evolution of the beat — not just the snapshot</div>
             {recordTip && (
-              <div style={{position:"absolute",top:"calc(100% + 8px)",left:0,right:0,background:"#000",border:`1px solid #007bc466`,borderRadius:8,padding:"8px 14px",fontSize:16,color:"#fff",fontFamily:FB,letterSpacing:1,animation:"tipIn 0.2s ease-out",zIndex:10,textAlign:"center"}}>coming soon</div>
+              <div style={{position:"absolute",top:"calc(100% + 8px)",left:0,right:0,background:"#000",border:`1px solid #007bc466`,borderRadius:8,padding:"8px 14px",fontSize:16,fontWeight:200,color:"#fff",fontFamily:FB,letterSpacing:1,animation:"tipIn 0.2s ease-out",zIndex:10,textAlign:"center"}}>coming soon</div>
             )}
           </div>
 
@@ -398,7 +398,7 @@ function F1R3Beat() {
               <span style={{width:8,height:8,borderRadius:"50%",background:"#4CD964",display:"inline-block",boxShadow:"0 0 6px rgba(76,217,100,0.6)"}}/>
               <span style={{fontSize:16,color:"#fff",fontFamily:FM}}>live · polling 2s</span>
             </div>
-            <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB}}>{activeCount} active cells</div>
+            <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2}}>{activeCount} active cells</div>
           </div>
         </div>
 
@@ -443,7 +443,7 @@ function F1R3Beat() {
                   <span style={{fontSize:16,color:BEAT_ACCENT,fontWeight:700,fontFamily:FH,letterSpacing:1}}>{displayName}</span>
                   <HumanIcon size={12} color={BEAT_ACCENT}/>
                 </div>
-                <span style={{fontSize:16,color:BRAND.sage,fontFamily:FB,letterSpacing:1}}>you</span>
+                <span style={{fontSize:16,fontWeight:200,color:BRAND.sage,fontFamily:FB,letterSpacing:1}}>you</span>
               </div>
             </div>
 

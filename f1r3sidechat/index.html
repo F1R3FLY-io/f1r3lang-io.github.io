@@ -37,13 +37,16 @@ const BRAND = {
   text: "#ffffff", textMuted: "#ffffff", textDim: "#ffffff",
   textSecondary: "#A0A0A0"
 };
-const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');`;
+const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Source+Sans+3:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400&display=swap');`;
 const FH = "'Josefin Sans', sans-serif";
 const FB = "'Source Sans 3', sans-serif";
 const CHAT_ACCENT = "#8BB999"; // brand sage
 
 function SideChatLogo({height=240}) {
   return <img src="images/f1r3sidechat-logo.svg" alt="F1R3SIDECHAT" style={{height,width:"auto",display:"block"}} />;
+}
+function SideChatLogoH({height=27}) {
+  return <img src="images/f1r3sidechat-logo-horizontal.svg" alt="F1R3SIDECHAT" style={{height,width:"auto",display:"block"}} />;
 }
 
 const STORY = {
@@ -144,7 +147,7 @@ function TourOverlay({onClose}) {
         <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
         <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
         <div style={{width:80,height:1,background:"linear-gradient(90deg, #F3D630, #8BB999)",margin:"0 auto 20px"}}/>
-        <div style={{fontSize:17,color:"#fff",lineHeight:1.6,fontFamily:FB,marginBottom:36}}>{s.body}</div>
+        <div style={{fontSize:17,fontWeight:200,color:"#fff",lineHeight:1.6,fontFamily:FB,letterSpacing:0.2,marginBottom:36}}>{s.body}</div>
         <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:28}}>
           {slides.map((_,i)=><div key={i} onClick={()=>setSi(i)} style={{width:10,height:10,borderRadius:"50%",background:i===si?BRAND.yellow:"rgba(255,255,255,0.2)",cursor:"pointer",transition:"background .2s"}} />)}
         </div>
@@ -240,9 +243,9 @@ function F1R3SideChat() {
       <style>{FONTS}{`::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}*{box-sizing:border-box}input::placeholder,textarea::placeholder{color:${BRAND.textSecondary};opacity:1}`}</style>
 
       <div className="game-header" style={{padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#000",minHeight:70,gap:12}}>
-        <div style={{display:"flex",alignItems:"baseline",gap:12,flexWrap:"wrap"}}>
-          <span style={{display:"flex",alignItems:"center"}}><SideChatLogo height={27}/></span>
-          <span style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FB}}>{STORY.readers} readers | {STORY.chapters.length} chapters | shard live</span>
+        <div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
+          <SideChatLogoH height={38}/>
+          <span style={{fontSize:16,fontWeight:200,color:"#fff",letterSpacing:2,fontFamily:FB,marginTop:4}}>{STORY.readers} readers · {STORY.chapters.length} chapters · shard live</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
           <HowBtn onClick={()=>setShowTour(true)}/>
@@ -259,33 +262,33 @@ function F1R3SideChat() {
             <Avatar src={PORTRAITS.hannah} size={40}/>
             <div>
               <div style={{fontSize:16,color:CHAT_ACCENT,fontWeight:700,fontFamily:FH,letterSpacing:1}}>{displayName}</div>
-              <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,textTransform:"uppercase",letterSpacing:1}}>{myRole}{drivingChar && ` \u00b7 ${CHARACTERS.find(c=>c.id===drivingChar)?.name}`}</div>
+              <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,textTransform:"uppercase",letterSpacing:1}}>{myRole}{drivingChar && ` \u00b7 ${CHARACTERS.find(c=>c.id===drivingChar)?.name}`}</div>
             </div>
           </div>
           <div style={{border:`1px solid ${BRAND.border}`,borderRadius:8,padding:14,flex:1,display:"flex",flexDirection:"column"}}>
             <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>KIBITZ \u00b7 CH {chapter.num} ({chapterComments.length})</div>
             <div style={{flex:1,overflowY:"auto",display:"flex",flexDirection:"column",gap:12}}>
-              {chapterComments.length === 0 && <div style={{color:BRAND.textSecondary,fontSize:16,fontFamily:FB,textAlign:"center",padding:"16px 0"}}>No comments yet.</div>}
+              {chapterComments.length === 0 && <div style={{color:BRAND.textSecondary,fontSize:16,fontWeight:200,fontFamily:FB,letterSpacing:0.2,textAlign:"center",padding:"16px 0"}}>No comments yet.</div>}
               {chapterComments.map(c => (
                 <div key={c.id} style={{padding:"8px 0",borderBottom:`1px solid ${BRAND.border}`,animation:"fadeUp 0.3s"}}>
                   <div style={{fontSize:16,fontWeight:600,color:"#fff",fontFamily:FH,marginBottom:4}}>{c.name}</div>
-                  <div style={{fontSize:16,color:"#fff",lineHeight:1.6,fontFamily:FB}}>{c.text}</div>
+                  <div style={{fontSize:16,fontWeight:200,color:"#fff",lineHeight:1.6,fontFamily:FB,letterSpacing:0.2}}>{c.text}</div>
                   <button onClick={()=>setComments(cs=>cs.map(x=>x.id===c.id?{...x,applause:x.applause+1}:x))} style={{marginTop:6,padding:"8px 14px 6px",borderRadius:20,fontSize:16,background:"transparent",border:`1px solid ${BRAND.border}`,color:BRAND.textSecondary,cursor:"pointer",fontFamily:FB,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,whiteSpace:"nowrap"}}>&#128079; {c.applause}</button>
                 </div>
               ))}
             </div>
             <div style={{display:"flex",gap:6,marginTop:10,paddingTop:10,borderTop:`1px solid ${BRAND.border}`}}>
-              <input value={newComment} onChange={e=>setNewComment(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addComment()} placeholder="Comment..." style={{flex:1,background:"#000",border:`1px solid #007bc466`,borderRadius:6,padding:"8px 10px",color:"#fff",fontSize:16,outline:"none",fontFamily:FB}}/>
-              <button onClick={addComment} disabled={!newComment.trim()} aria-label="Send" style={{background:newComment.trim()?`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`:"transparent",border:newComment.trim()?"none":`1px solid ${BRAND.border}`,borderRadius:6,padding:"8px 14px",color:newComment.trim()?"#fff":BRAND.textSecondary,fontWeight:700,fontSize:16,cursor:newComment.trim()?"pointer":"default",fontFamily:FH,letterSpacing:1}}>&uarr;</button>
+              <input value={newComment} onChange={e=>setNewComment(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addComment()} placeholder="Comment..." style={{flex:1,background:"#000",border:`1px solid #007bc466`,borderRadius:6,padding:"8px 10px",color:"#fff",fontSize:16,fontWeight:200,outline:"none",fontFamily:FB,letterSpacing:0.2}}/>
+              <button onClick={addComment} disabled={!newComment.trim()} aria-label="Send" style={{background:newComment.trim()?`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`:"transparent",border:newComment.trim()?"none":`1px solid ${BRAND.border}`,borderRadius:6,padding:"0 14px",color:newComment.trim()?"#fff":BRAND.textSecondary,fontWeight:700,fontSize:16,cursor:newComment.trim()?"pointer":"default",fontFamily:FH,letterSpacing:1,flexShrink:0,height:36,width:36,display:"flex",alignItems:"center",justifyContent:"center",boxSizing:"border-box"}}>&uarr;</button>
             </div>
           </div>
           <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`}}>
             <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,fontWeight:600,marginBottom:12,textTransform:"uppercase"}}>{STORY.genre.toUpperCase()}</div>
             <div style={{fontSize:16,fontWeight:600,color:"#fff",fontFamily:FH,lineHeight:1.3,marginBottom:6}}>{STORY.title}</div>
-            <div style={{fontSize:16,color:"#fff",fontFamily:FB,lineHeight:1.6,marginBottom:8}}>{STORY.synopsis}</div>
+            <div style={{fontSize:16,fontWeight:200,color:"#fff",fontFamily:FB,letterSpacing:0.2,lineHeight:1.6,marginBottom:8}}>{STORY.synopsis}</div>
             <div style={{display:"flex",alignItems:"center",gap:6}}>
               <span style={{fontSize:16,color:STORY.author.color,fontFamily:FH,fontWeight:600}}>by {STORY.author.name}</span>
-              <span style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginLeft:"auto"}}>{STORY.readers} readers</span>
+              <span style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginLeft:"auto"}}>{STORY.readers} readers</span>
             </div>
           </div>
         </div>
@@ -295,15 +298,15 @@ function F1R3SideChat() {
           <div style={{maxWidth:680,margin:"0 auto"}}>
             <div style={{fontSize:16,color:BRAND.textSecondary,letterSpacing:2,fontFamily:FH,marginBottom:8,textTransform:"uppercase"}}>CHAPTER {chapter.num}{chapter.authorId && <span style={{color:BRAND.sky,marginLeft:8}}>by {DEMO_PLAYERS.find(p=>p.id===chapter.authorId)?.name || "unknown"}</span>}</div>
             <h3 style={{fontSize:26,fontWeight:300,color:"#fff",fontFamily:FH,margin:"0 0 8px",letterSpacing:1}}>{chapter.title}</h3>
-            {chapter.wordCount > 0 && <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginBottom:24}}>{chapter.wordCount} words \u00b7 {chapter.applause} applause</div>}
+            {chapter.wordCount > 0 && <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginBottom:24}}>{chapter.wordCount} words \u00b7 {chapter.applause} applause</div>}
             {chapter.text ? (
-              <div>{chapter.text.split("\n").map((para, i) => para.trim() ? <p key={i} style={{fontSize:18,lineHeight:2,color:"#fff",fontFamily:FB,marginBottom:20,textIndent:i>0?24:0,letterSpacing:0.2}}>{para}</p> : <div key={i} style={{height:12}}/>)}</div>
+              <div>{chapter.text.split("\n").map((para, i) => para.trim() ? <p key={i} style={{fontSize:18,fontWeight:200,lineHeight:2,color:"#fff",fontFamily:FB,marginBottom:20,textIndent:i>0?24:0,letterSpacing:0.2}}>{para}</p> : <div key={i} style={{height:12}}/>)}</div>
             ) : (
               <div style={{textAlign:"center",padding:"60px 0"}}>
-                <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB,marginBottom:16}}>This chapter is open for writing.</div>
+                <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginBottom:16}}>This chapter is open for writing.</div>
                 {canWrite ? <div style={{fontSize:16,color:CHAT_ACCENT,fontFamily:FH,letterSpacing:2}}>You're driving {CHARACTERS.find(c=>c.id===drivingChar)?.name}. Write below.</div>
-                : <div style={{fontSize:16,color:"#fff",fontFamily:FB}}>Take the wheel on a character to start writing. <span style={{color:BRAND.yellow}}>({COSTS.DRIVE} tokens)</span></div>}
-                {canWrite && <div style={{maxWidth:580,margin:"24px auto 0"}}><textarea placeholder="Continue the story..." style={{width:"100%",minHeight:180,background:"#000",border:`1px solid #007bc466`,borderRadius:8,padding:16,color:"#fff",fontSize:17,lineHeight:1.9,resize:"vertical",outline:"none",fontFamily:FB}}/><div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}><button style={{background:`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`,color:"#fff",border:"none",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:2,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>PUBLISH</button></div></div>}
+                : <div style={{fontSize:16,fontWeight:200,color:"#fff",fontFamily:FB,letterSpacing:0.2}}>Take the wheel on a character to start writing. <span style={{color:BRAND.yellow}}>({COSTS.DRIVE} tokens)</span></div>}
+                {canWrite && <div style={{maxWidth:580,margin:"24px auto 0"}}><textarea placeholder="Continue the story..." style={{width:"100%",minHeight:180,background:"#000",border:`1px solid #007bc466`,borderRadius:8,padding:16,color:"#fff",fontSize:17,fontWeight:200,lineHeight:1.9,resize:"vertical",outline:"none",fontFamily:FB,letterSpacing:0.2}}/><div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}><button style={{background:`linear-gradient(135deg, ${CHAT_ACCENT}, #7b0429)`,color:"#fff",border:"none",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:2,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>PUBLISH</button></div></div>}
               </div>
             )}
           </div>
@@ -328,8 +331,8 @@ function F1R3SideChat() {
                 <div style={{width:8,height:8,borderRadius:"50%",background:ch.color,flexShrink:0}}/>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontSize:16,fontWeight:600,color:isMe?CHAT_ACCENT:ch.color,fontFamily:FH}}>{ch.name}</div>
-                  <div style={{fontSize:16,color:"#fff",fontFamily:FB,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ch.role}</div>
-                  {dn && <div style={{fontSize:16,color:BRAND.textSecondary,fontFamily:FB}}>Driven by {dn}</div>}
+                  <div style={{fontSize:16,fontWeight:200,color:"#fff",fontFamily:FB,letterSpacing:0.2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ch.role}</div>
+                  {dn && <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2}}>Driven by {dn}</div>}
                 </div>
                 {av && !drivingChar && <button onClick={()=>takeWheel(ch.id)} style={{padding:"8px 14px 6px",borderRadius:20,fontSize:16,fontFamily:FH,letterSpacing:1,cursor:"pointer",background:"transparent",border:`1px solid ${BRAND.yellow}66`,color:BRAND.yellow,fontWeight:600,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>DRIVE</button>}
               </div>); })}
