@@ -22,20 +22,27 @@
     .game-header > div { flex-wrap: wrap !important; }
     .beat-grid-outer { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
     /* JOIN SCREEN MOBILE */
-    .join-hex-bg { height: auto !important; min-height: 100vh !important; max-height: none !important; overflow-y: auto !important; padding: 12px 16px 24px !important; justify-content: flex-start !important; align-items: stretch !important; }
-    .join-hex-bg > div:first-child { margin-top: 0 !important; padding-top: 0 !important; }
-    .join-hex-bg > div:first-child { margin-top: 0 !important; }
-    .join-solid-box { padding: 24px 20px !important; }
-    .join-solid-box h1 svg { height: 36px !important; }
-    .join-solid-box > div:last-child { font-size: 14px !important; letter-spacing: 2px !important; }
+    .join-hex-bg { height: auto !important; min-height: 100vh !important; max-height: none !important; overflow: visible !important; overflow-y: auto !important; padding: 12px 16px 24px !important; justify-content: flex-start !important; align-items: center !important; }
+    .join-hex-bg > * { margin-top: 0 !important; flex-shrink: 0 !important; }
+    .join-hex-bg > div { margin-top: 0 !important; }
+    .join-hex-bg svg[width="196"], .join-hex-bg svg[width="180"] { width: 120px !important; height: auto !important; }
+    .join-solid-box { padding: 20px 16px !important; margin-top: 12px !important; }
+    .join-solid-box h1 { margin: 0 !important; }
+    .join-solid-box h1 svg { height: 32px !important; width: auto !important; }
+    .join-solid-box > div:last-child { font-size: 13px !important; letter-spacing: 2px !important; }
+    .join-hex-bg input { font-size: 14px !important; padding: 10px 12px !important; }
+    .join-hex-bg button { font-size: 14px !important; padding: 10px 24px !important; }
+
 
   }
   @media (max-width: 480px) {
     .game-header span[style*="fontSize:16"] { font-size: 13px !important; letter-spacing: 1px !important; }
     /* JOIN SCREEN SMALL PHONE */
-    .join-hex-bg { padding: 16px 12px 20px !important; }
-    .join-solid-box { padding: 20px 16px !important; }
-    .join-solid-box h1 svg { height: 28px !important; }
+    .join-hex-bg { padding: 8px 12px 16px !important; }
+    .join-hex-bg svg[width="196"], .join-hex-bg svg[width="180"] { width: 100px !important; }
+    .join-solid-box { padding: 16px 12px !important; }
+    .join-solid-box h1 svg { height: 24px !important; }
+
 
   }
 </style>
