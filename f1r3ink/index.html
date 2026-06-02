@@ -6,6 +6,7 @@
 <title>F1R3INK — Draft Review v1 (Hannah Adams, April 2026)</title>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
 <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
@@ -17,98 +18,34 @@
     .game-sidebar-right { display: flex !important; flex-direction: column !important; border-top: 1px solid rgba(0,123,196,0.4) !important; padding: 16px !important; }
     .game-header { position: sticky; top: 0; z-index: 50; background: #000 !important; min-height: auto !important; padding: 8px 12px !important; flex-wrap: wrap !important; gap: 8px !important; }
     .game-header > div { flex-wrap: wrap !important; }
-    /* JOIN SCREEN MOBILE */
-    .join-hex-bg { height: auto !important; min-height: 100vh !important; max-height: none !important; overflow: visible !important; overflow-y: auto !important; padding: 12px 16px 24px !important; justify-content: flex-start !important; align-items: center !important; }
-    .join-hex-bg > * { margin-top: 0 !important; flex-shrink: 0 !important; }
-    .join-hex-bg > div { margin-top: 0 !important; }
-    .join-hex-bg svg[width="196"], .join-hex-bg svg[width="180"] { width: 120px !important; height: auto !important; }
-    .join-solid-box { padding: 20px 16px !important; margin-top: 12px !important; }
-    .join-solid-box h1 { margin: 0 !important; }
-    .join-solid-box h1 svg { height: 32px !important; width: auto !important; }
-    .join-solid-box > div:last-child { font-size: 13px !important; letter-spacing: 2px !important; }
-    .join-hex-bg input { font-size: 14px !important; padding: 10px 12px !important; }
-    .join-hex-bg button { font-size: 14px !important; padding: 10px 24px !important; }
-
-
   }
   @media (max-width: 480px) {
     .game-header span[style*="fontSize:16"] { font-size: 13px !important; letter-spacing: 1px !important; }
-    /* JOIN SCREEN SMALL PHONE */
-    .join-hex-bg { padding: 8px 12px 16px !important; }
-    .join-hex-bg svg[width="196"], .join-hex-bg svg[width="180"] { width: 100px !important; }
-    .join-solid-box { padding: 16px 12px !important; }
-    .join-solid-box h1 svg { height: 24px !important; }
-
-
   }
 </style>
 </head>
 <body>
 <div id="root"></div>
-<script>
-const {
-  useState
-} = React;
+<script type="text/babel">
+const { useState } = React;
 
 // ══════════════════════════════════════════════════════════════
 // F1R3INK — Branded Prototype (Static Mockup)
 // F1R3FLY Brand Book March 27, 2026 — Hannah Adams
 // ══════════════════════════════════════════════════════════════
 
-const BRAND = {
-  yellow: "#F3D630",
-  sage: "#8BB999",
-  sky: "#3FA9F5",
-  surface: "#000000",
-  card: "#0c0c18",
-  border: "#007bc466",
-  stroke: "linear-gradient(90deg, #F3D630, #8BB999)",
-  text: "#ffffff",
-  textMuted: "#ffffff",
-  textDim: "#ffffff",
-  textSecondary: "#A0A0A0"
-};
+const BRAND = { yellow:"#F3D630", sage:"#8BB999", sky:"#3FA9F5", surface:"#000000", card:"#0c0c18", border:"#007bc466", stroke:"linear-gradient(90deg, #F3D630, #8BB999)", text:"#ffffff", textMuted:"#ffffff", textDim:"#ffffff", textSecondary:"#A0A0A0" };
 const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Source+Sans+3:wght@200;300;400;600;700&display=swap');`;
 const FH = "'Josefin Sans', sans-serif";
 const FB = "'Source Sans 3', sans-serif";
 const INK_ACCENT = "#DC2547";
-const INK_COLORS = [{
-  hex: "#7B0429",
-  name: "scarlet"
-}, {
-  hex: "#FF6B2B",
-  name: "ember"
-}, {
-  hex: "#F3D630",
-  name: "yellow"
-}, {
-  hex: "#0C8E23",
-  name: "green"
-}, {
-  hex: "#009188",
-  name: "teal"
-}, {
-  hex: "#3FA9F5",
-  name: "sky"
-}, {
-  hex: "#7A7DE8",
-  name: "light-indigo"
-}, {
-  hex: "#5C0269",
-  name: "purple"
-}, {
-  hex: "#7A9D0E",
-  name: "lime"
-}, {
-  hex: "#FFFFFF",
-  name: "white"
-}, {
-  hex: "#8BB999",
-  name: "sage"
-}, {
-  hex: "#3F3F3F",
-  name: "gray"
-}];
+const INK_COLORS = [
+  {hex:"#7B0429",name:"scarlet"},{hex:"#FF6B2B",name:"ember"},{hex:"#F3D630",name:"yellow"},
+  {hex:"#0C8E23",name:"green"},{hex:"#009188",name:"teal"},{hex:"#3FA9F5",name:"sky"},
+  {hex:"#7A7DE8",name:"light-indigo"},{hex:"#5C0269",name:"purple"},{hex:"#7A9D0E",name:"lime"},
+  {hex:"#FFFFFF",name:"white"},{hex:"#8BB999",name:"sage"},{hex:"#3F3F3F",name:"gray"}
+];
+
 const PORTRAITS = {
   hannah: "images/hannah-adams.jpg",
   claude: "images/greg-meredith.jpg",
@@ -119,390 +56,69 @@ const PORTRAITS = {
 };
 
 // Demo players — static data, no storage
-const DEMO_PLAYERS = [{
-  id: "claude",
-  name: "Greg",
-  tags: ["founder", "rho-calculus"],
-  isAI: false,
-  portrait: PORTRAITS.claude,
-  inks: [{
-    color: "#7B0429",
-    from: "Lilia"
-  }, {
-    color: "#0C8E23",
-    from: "Steve"
-  }, {
-    color: "#7A7DE8",
-    from: "Hannah"
-  }, {
-    color: "#F3D630",
-    from: "Jeff"
-  }, {
-    color: "#3FA9F5",
-    from: "Mike"
-  }]
-}, {
-  id: "gemini",
-  name: "Mike",
-  tags: ["research"],
-  isAI: false,
-  portrait: PORTRAITS.gemini,
-  inks: [{
-    color: "#F3D630",
-    from: "Greg"
-  }, {
-    color: "#3FA9F5",
-    from: "Hannah"
-  }, {
-    color: "#5C0269",
-    from: "Lilia"
-  }]
-}, {
-  id: "grok",
-  name: "Lilia",
-  tags: ["operations"],
-  isAI: false,
-  portrait: PORTRAITS.grok,
-  inks: [{
-    color: "#5C0269",
-    from: "Jeff"
-  }, {
-    color: "#FF6B2B",
-    from: "Hannah"
-  }, {
-    color: "#009188",
-    from: "Greg"
-  }, {
-    color: "#7B0429",
-    from: "Steve"
-  }]
-}, {
-  id: "llama",
-  name: "Jeff",
-  tags: ["product"],
-  isAI: false,
-  portrait: PORTRAITS.llama,
-  inks: [{
-    color: "#7B0429",
-    from: "Hannah"
-  }, {
-    color: "#0C8E23",
-    from: "Greg"
-  }, {
-    color: "#7A7DE8",
-    from: "Mike"
-  }]
-}, {
-  id: "scarlet",
-  name: "Steve",
-  tags: ["CEO", "London"],
-  isAI: false,
-  portrait: PORTRAITS.scarlet,
-  inks: [{
-    color: "#0C8E23",
-    from: "Hannah"
-  }, {
-    color: "#F3D630",
-    from: "Greg"
-  }, {
-    color: "#7A7DE8",
-    from: "Lilia"
-  }, {
-    color: "#FF6B2B",
-    from: "Mike"
-  }, {
-    color: "#009188",
-    from: "Jeff"
-  }, {
-    color: "#5C0269",
-    from: "Greg"
-  }]
-}];
-const MY_INKS = [{
-  color: "#5C0269",
-  from: "Steve"
-}, {
-  color: "#F3D630",
-  from: "Greg"
-}, {
-  color: "#009188",
-  from: "Lilia"
-}, {
-  color: "#7B0429",
-  from: "Mike"
-}, {
-  color: "#0C8E23",
-  from: "Jeff"
-}];
-function Avatar({
-  src,
-  size = 48
-}) {
-  return /*#__PURE__*/React.createElement("img", {
-    src: src,
-    alt: "",
-    style: {
-      width: size,
-      height: size,
-      borderRadius: "50%",
-      objectFit: "cover",
-      border: `2px solid ${BRAND.border}`,
-      flexShrink: 0
-    }
-  });
+const DEMO_PLAYERS = [
+  { id:"claude", name:"Greg", tags:["founder","rho-calculus"], isAI:false, portrait:PORTRAITS.claude,
+    inks:[{color:"#7B0429",from:"Lilia"},{color:"#0C8E23",from:"Steve"},{color:"#7A7DE8",from:"Hannah"},{color:"#F3D630",from:"Jeff"},{color:"#3FA9F5",from:"Mike"}] },
+  { id:"gemini", name:"Mike", tags:["research"], isAI:false, portrait:PORTRAITS.gemini,
+    inks:[{color:"#F3D630",from:"Greg"},{color:"#3FA9F5",from:"Hannah"},{color:"#5C0269",from:"Lilia"}] },
+  { id:"grok", name:"Lilia", tags:["operations"], isAI:false, portrait:PORTRAITS.grok,
+    inks:[{color:"#5C0269",from:"Jeff"},{color:"#FF6B2B",from:"Hannah"},{color:"#009188",from:"Greg"},{color:"#7B0429",from:"Steve"}] },
+  { id:"llama", name:"Jeff", tags:["product"], isAI:false, portrait:PORTRAITS.llama,
+    inks:[{color:"#7B0429",from:"Hannah"},{color:"#0C8E23",from:"Greg"},{color:"#7A7DE8",from:"Mike"}] },
+  { id:"scarlet", name:"Steve", tags:["CEO","London"], isAI:false, portrait:PORTRAITS.scarlet,
+    inks:[{color:"#0C8E23",from:"Hannah"},{color:"#F3D630",from:"Greg"},{color:"#7A7DE8",from:"Lilia"},{color:"#FF6B2B",from:"Mike"},{color:"#009188",from:"Jeff"},{color:"#5C0269",from:"Greg"}] }
+];
+
+const MY_INKS = [{color:"#5C0269",from:"Steve"},{color:"#F3D630",from:"Greg"},{color:"#009188",from:"Lilia"},{color:"#7B0429",from:"Mike"},{color:"#0C8E23",from:"Jeff"}];
+
+function Avatar({src, size=48}) {
+  return <img src={src} alt="" style={{width:size, height:size, borderRadius:"50%", objectFit:"cover", border:`2px solid ${BRAND.border}`, flexShrink:0}} />;
 }
-function AIIcon({
-  size = 14,
-  color = BRAND.sky
-}) {
-  return /*#__PURE__*/React.createElement("svg", {
-    width: size,
-    height: size,
-    viewBox: "0 0 16 16",
-    fill: "none"
-  }, /*#__PURE__*/React.createElement("rect", {
-    x: "3",
-    y: "3",
-    width: "10",
-    height: "10",
-    rx: "2",
-    stroke: color,
-    strokeWidth: "1.3",
-    fill: "none"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "6.5",
-    cy: "7.5",
-    r: "1",
-    fill: color
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "9.5",
-    cy: "7.5",
-    r: "1",
-    fill: color
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M6 10.5c0 0 .8 1 2 1s2-1 2-1",
-    stroke: color,
-    strokeWidth: "1",
-    fill: "none",
-    strokeLinecap: "round"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "8",
-    y1: "1",
-    x2: "8",
-    y2: "3",
-    stroke: color,
-    strokeWidth: "1.3",
-    strokeLinecap: "round"
-  }));
+
+function AIIcon({size=14, color=BRAND.sky}) {
+  return (<svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+    <rect x="3" y="3" width="10" height="10" rx="2" stroke={color} strokeWidth="1.3" fill="none"/>
+    <circle cx="6.5" cy="7.5" r="1" fill={color}/><circle cx="9.5" cy="7.5" r="1" fill={color}/>
+    <path d="M6 10.5c0 0 .8 1 2 1s2-1 2-1" stroke={color} strokeWidth="1" fill="none" strokeLinecap="round"/>
+    <line x1="8" y1="1" x2="8" y2="3" stroke={color} strokeWidth="1.3" strokeLinecap="round"/>
+  </svg>);
 }
-function HumanIcon({
-  size = 14,
-  color = "#fff"
-}) {
-  return /*#__PURE__*/React.createElement("svg", {
-    width: size,
-    height: size,
-    viewBox: "0 0 16 16",
-    fill: "none"
-  }, /*#__PURE__*/React.createElement("circle", {
-    cx: "8",
-    cy: "5",
-    r: "3",
-    stroke: color,
-    strokeWidth: "1.5",
-    fill: "none"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M2.5 15c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5",
-    stroke: color,
-    strokeWidth: "1.5",
-    fill: "none",
-    strokeLinecap: "round"
-  }));
+
+function HumanIcon({size=14, color="#fff"}) {
+  return (<svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+    <circle cx="8" cy="5" r="3" stroke={color} strokeWidth="1.5" fill="none"/>
+    <path d="M2.5 15c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" stroke={color} strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+  </svg>);
 }
 
 // HOW THIS WORKS button — neutral dark, NOT gradient (avoids competing with JOIN)
-function HowBtn({
-  onClick
-}) {
-  return /*#__PURE__*/React.createElement("button", {
-    onClick: onClick,
-    style: {
-      background: "#000",
-      border: `1px solid ${BRAND.border}`,
-      color: "#fff",
-      borderRadius: 20,
-      padding: "12px 24px 8px",
-      fontSize: 16,
-      cursor: "pointer",
-      fontFamily: FH,
-      letterSpacing: 2,
-      fontWeight: 300,
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      lineHeight: 1,
-      minHeight: 38,
-      whiteSpace: "nowrap"
-    }
-  }, "HOW THIS WORKS");
+function HowBtn({onClick}) {
+  return <button onClick={onClick} style={{background:"#000", border:`1px solid ${BRAND.border}`, color:"#fff", borderRadius:20, padding:"12px 24px 8px", fontSize:16, cursor:"pointer", fontFamily:FH, letterSpacing:2, fontWeight:300, display:"inline-flex", alignItems:"center", justifyContent:"center", lineHeight:1, minHeight:38, whiteSpace:"nowrap"}}>HOW THIS WORKS</button>;
 }
-function TourIcon({
-  type,
-  color = "#fff",
-  size = 48
-}) {
+
+function TourIcon({type, color="#fff", size=48}) {
   const icons = {
-    droplet: /*#__PURE__*/React.createElement("svg", {
-      width: size,
-      height: size,
-      viewBox: "0 0 48 48",
-      fill: "none"
-    }, /*#__PURE__*/React.createElement("path", {
-      d: "M24 6c0 0-14 16-14 26a14 14 0 0028 0c0-10-14-26-14-26z",
-      stroke: color,
-      strokeWidth: "1.5",
-      strokeLinejoin: "round"
-    }), /*#__PURE__*/React.createElement("circle", {
-      className: "tdrop-inner",
-      cx: "24",
-      cy: "30",
-      r: "4",
-      fill: color,
-      opacity: ".3"
-    })),
-    globe: /*#__PURE__*/React.createElement("svg", {
-      width: size,
-      height: size,
-      viewBox: "0 0 48 48",
-      fill: "none"
-    }, /*#__PURE__*/React.createElement("circle", {
-      cx: "24",
-      cy: "24",
-      r: "18",
-      stroke: color,
-      strokeWidth: "1.5"
-    }), /*#__PURE__*/React.createElement("ellipse", {
-      className: "tglobe-spin",
-      cx: "24",
-      cy: "24",
-      rx: "9",
-      ry: "18",
-      stroke: color,
-      strokeWidth: "1.5"
-    }), /*#__PURE__*/React.createElement("line", {
-      x1: "6",
-      y1: "24",
-      x2: "42",
-      y2: "24",
-      stroke: color,
-      strokeWidth: "1.5"
-    }), /*#__PURE__*/React.createElement("path", {
-      d: "M8 14h32M8 34h32",
-      stroke: color,
-      strokeWidth: "1",
-      opacity: ".5"
-    })),
-    flag: /*#__PURE__*/React.createElement("svg", {
-      width: size,
-      height: size,
-      viewBox: "0 0 48 48",
-      fill: "none"
-    }, /*#__PURE__*/React.createElement("line", {
-      x1: "12",
-      y1: "6",
-      x2: "12",
-      y2: "42",
-      stroke: color,
-      strokeWidth: "1.5",
-      strokeLinecap: "round"
-    }), /*#__PURE__*/React.createElement("path", {
-      className: "tflag-wave",
-      d: "M12 8h24l-6 8 6 8H12",
-      stroke: color,
-      strokeWidth: "1.5",
-      fill: color,
-      fillOpacity: ".15"
-    })),
-    chain: /*#__PURE__*/React.createElement("svg", {
-      width: size,
-      height: size,
-      viewBox: "0 0 48 48",
-      fill: "none"
-    }, /*#__PURE__*/React.createElement("rect", {
-      className: "tchain-l",
-      x: "8",
-      y: "14",
-      width: "14",
-      height: "20",
-      rx: "4",
-      stroke: color,
-      strokeWidth: "1.5"
-    }), /*#__PURE__*/React.createElement("rect", {
-      className: "tchain-r",
-      x: "26",
-      y: "14",
-      width: "14",
-      height: "20",
-      rx: "4",
-      stroke: color,
-      strokeWidth: "1.5"
-    }), /*#__PURE__*/React.createElement("line", {
-      x1: "22",
-      y1: "21",
-      x2: "26",
-      y2: "21",
-      stroke: color,
-      strokeWidth: "1.5",
-      strokeLinecap: "round"
-    }), /*#__PURE__*/React.createElement("line", {
-      x1: "22",
-      y1: "27",
-      x2: "26",
-      y2: "27",
-      stroke: color,
-      strokeWidth: "1.5",
-      strokeLinecap: "round"
-    }))
+    droplet: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><path d="M24 6c0 0-14 16-14 26a14 14 0 0028 0c0-10-14-26-14-26z" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/><circle className="tdrop-inner" cx="24" cy="30" r="4" fill={color} opacity=".3"/></svg>,
+    globe: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke={color} strokeWidth="1.5"/><ellipse className="tglobe-spin" cx="24" cy="24" rx="9" ry="18" stroke={color} strokeWidth="1.5"/><line x1="6" y1="24" x2="42" y2="24" stroke={color} strokeWidth="1.5"/><path d="M8 14h32M8 34h32" stroke={color} strokeWidth="1" opacity=".5"/></svg>,
+    flag: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><line x1="12" y1="6" x2="12" y2="42" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><path className="tflag-wave" d="M12 8h24l-6 8 6 8H12" stroke={color} strokeWidth="1.5" fill={color} fillOpacity=".15"/></svg>,
+    chain: <svg width={size} height={size} viewBox="0 0 48 48" fill="none"><rect className="tchain-l" x="8" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><rect className="tchain-r" x="26" y="14" width="14" height="20" rx="4" stroke={color} strokeWidth="1.5"/><line x1="22" y1="21" x2="26" y2="21" stroke={color} strokeWidth="1.5" strokeLinecap="round"/><line x1="22" y1="27" x2="26" y2="27" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
   };
   return icons[type] || null;
 }
-function TourOverlay({
-  onClose
-}) {
-  const slides = [{
-    icon: "droplet",
-    title: "INK IS FEELING\nMADE VISIBLE",
-    body: "Choose a color. Send it to someone. That\u2019s an ink \u2014 a non-verbal signal that says something words can\u2019t. Not a like. Not a vote. A feeling."
-  }, {
-    icon: "globe",
-    title: "YOUR UNIQUE F1R3SIGN\nTRAVELS WITH YOU",
-    body: "Your F1R3Sign isn\u2019t locked to this game. It moves with you across every service built on F1R3FLY. One sign, one reputation, everywhere."
-  }, {
-    icon: "flag",
-    title: "YOUR FLAG\nTELLS YOUR STORY",
-    body: "Every ink you receive becomes a stripe on your flag. Over time, your flag becomes a portrait painted by your community \u2014 not by you."
-  }, {
-    icon: "chain",
-    title: "BUILT ON\nF1R3FLY",
-    body: "F1R3INK runs on F1R3FLY\u2019s shared computing layer. Every ink is a real transaction on a real shard. No central server. No single point of failure."
-  }];
+
+function TourOverlay({onClose}) {
+  const slides = [
+    { icon:"droplet", title:"INK IS FEELING\nMADE VISIBLE", body:"Choose a color. Send it to someone. That\u2019s an ink \u2014 a non-verbal signal that says something words can\u2019t. Not a like. Not a vote. A feeling." },
+    { icon:"globe", title:"YOUR UNIQUE F1R3SIGN\nTRAVELS WITH YOU", body:"Your F1R3Sign isn\u2019t locked to this game. It moves with you across every service built on F1R3FLY. One sign, one reputation, everywhere." },
+    { icon:"flag", title:"YOUR FLAG\nTELLS YOUR STORY", body:"Every ink you receive becomes a stripe on your flag. Over time, your flag becomes a portrait painted by your community \u2014 not by you." },
+    { icon:"chain", title:"BUILT ON\nF1R3FLY", body:"F1R3INK runs on F1R3FLY\u2019s shared computing layer. Every ink is a real transaction on a real shard. No central server. No single point of failure." },
+  ];
   const [si, setSi] = useState(0);
   const s = slides[si];
   const isLast = si === slides.length - 1;
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: "fixed",
-      inset: 0,
-      background: "rgba(0,0,0,0.95)",
-      backdropFilter: "blur(12px)",
-      zIndex: 200,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontFamily: FH
-    },
-    onClick: onClose
-  }, /*#__PURE__*/React.createElement("style", null, `@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  return (
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(12px)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:FH}} onClick={onClose}>
+      <style>{`@keyframes tourIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes dropPulse{0%,100%{opacity:.3;r:4}50%{opacity:.7;r:5}}
 .tdrop-inner{animation:dropPulse 2.5s ease-in-out infinite}
 @keyframes globeSway{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.4)}}
@@ -511,216 +127,63 @@ function TourOverlay({
 .tflag-wave{animation:flagWave 2.5s ease-in-out infinite}
 @keyframes chainSlide{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
 @keyframes chainSlideR{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
-.tchain-l{animation:chainSlide 3s ease-in-out infinite}.tchain-r{animation:chainSlideR 3s ease-in-out infinite}`), /*#__PURE__*/React.createElement("div", {
-    onClick: e => e.stopPropagation(),
-    style: {
-      animation: "tourIn .35s ease-out",
-      maxWidth: 460,
-      width: "90%",
-      padding: "48px 36px 40px",
-      border: `1px solid #007bc466`,
-      borderRadius: 14,
-      background: "#000",
-      textAlign: "center"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 20
-    }
-  }, /*#__PURE__*/React.createElement(TourIcon, {
-    type: s.icon,
-    size: 48
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 20,
-      fontWeight: 700,
-      letterSpacing: 4,
-      color: BRAND.yellow,
-      lineHeight: 1.7,
-      whiteSpace: "pre-line",
-      margin: "0 0 16px",
-      fontFamily: FH
-    }
-  }, s.title), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 80,
-      height: 1,
-      background: "linear-gradient(90deg, #F3D630, #8BB999)",
-      margin: "0 auto 20px"
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 17,
-      fontWeight: 200,
-      color: "#fff",
-      lineHeight: 1.6,
-      fontFamily: FB,
-      letterSpacing: 0.2,
-      marginBottom: 36
-    }
-  }, s.body), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "center",
-      gap: 8,
-      marginBottom: 28
-    }
-  }, slides.map((_, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    onClick: () => setSi(i),
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: "50%",
-      background: i === si ? BRAND.yellow : "rgba(255,255,255,0.2)",
-      cursor: "pointer",
-      transition: "background .2s"
-    }
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "center",
-      gap: 16
-    }
-  }, si > 0 && /*#__PURE__*/React.createElement("button", {
-    onClick: () => setSi(si - 1),
-    style: {
-      background: "#000",
-      border: `1px solid ${BRAND.border}`,
-      color: "#fff",
-      borderRadius: 20,
-      padding: "12px 24px 8px",
-      fontSize: 16,
-      fontFamily: FH,
-      letterSpacing: 2,
-      cursor: "pointer",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      lineHeight: 1,
-      minHeight: 38
-    }
-  }, "BACK"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => isLast ? onClose() : setSi(si + 1),
-    style: {
-      background: "linear-gradient(135deg, #5c0269, #7b0429)",
-      border: "none",
-      color: "#fff",
-      borderRadius: 20,
-      padding: "12px 28px 8px",
-      fontSize: 16,
-      fontFamily: FH,
-      letterSpacing: 2,
-      fontWeight: 600,
-      cursor: "pointer",
-      boxShadow: "0 0 16px rgba(123,4,41,0.4)",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      lineHeight: 1,
-      minHeight: 38
-    }
-  }, isLast ? "\u2019S GO" : "NEXT"))));
+.tchain-l{animation:chainSlide 3s ease-in-out infinite}.tchain-r{animation:chainSlideR 3s ease-in-out infinite}`}</style>
+      <div onClick={e=>e.stopPropagation()} style={{animation:"tourIn .35s ease-out",maxWidth:460,width:"90%",padding:"48px 36px 40px",border:`1px solid #007bc466`,borderRadius:14,background:"#000",textAlign:"center"}}>
+        <div style={{marginBottom:20}}><TourIcon type={s.icon} size={48}/></div>
+        <div style={{fontSize:20,fontWeight:700,letterSpacing:4,color:BRAND.yellow,lineHeight:1.7,whiteSpace:"pre-line",margin:"0 0 16px",fontFamily:FH}}>{s.title}</div>
+        <div style={{width:80,height:1,background:"linear-gradient(90deg, #F3D630, #8BB999)",margin:"0 auto 20px"}}/>
+        <div style={{fontSize:17,fontWeight:200,color:"#fff",lineHeight:1.6,fontFamily:FB,letterSpacing:0.2,marginBottom:36}}>{s.body}</div>
+        <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:28}}>
+          {slides.map((_,i)=><div key={i} onClick={()=>setSi(i)} style={{width:10,height:10,borderRadius:"50%",background:i===si?BRAND.yellow:"rgba(255,255,255,0.2)",cursor:"pointer",transition:"background .2s"}} />)}
+        </div>
+        <div style={{display:"flex",justifyContent:"center",gap:16}}>
+          {si > 0 && <button onClick={()=>setSi(si-1)} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"12px 24px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,cursor:"pointer",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>BACK</button>}
+          <button onClick={()=>isLast?onClose():setSi(si+1)} style={{background:"linear-gradient(135deg, #5c0269, #7b0429)",border:"none",color:"#fff",borderRadius:20,padding:"12px 28px 8px",fontSize:16,fontFamily:FH,letterSpacing:2,fontWeight:600,cursor:"pointer",boxShadow:"0 0 16px rgba(123,4,41,0.4)",display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38}}>{isLast?"\u2019S GO":"NEXT"}</button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 // Built on F1R3FLY.IO badge
 function BuiltOnBadge() {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "12px 0",
-      display: "flex",
-      justifyContent: "center",
-      zIndex: 100,
-      background: "#000",
-      cursor: "pointer"
-    },
-    onClick: () => window.open && window.open("https://f1r3fly.io", "_blank")
-  }, /*#__PURE__*/React.createElement("img", {
-    src: "built-on-f1r3fly.io-box.svg",
-    alt: "Built on F1R3FLY.IO",
-    style: {
-      height: 48,
-      display: "block"
-    }
-  }));
+  return (
+    <div style={{padding:"12px 0",display:"flex",justifyContent:"center",zIndex:100,background:"#000",cursor:"pointer"}} onClick={()=>window.open&&window.open("https://f1r3fly.io","_blank")}>
+      <img src="built-on-f1r3fly.io-box.svg" alt="Built on F1R3FLY.IO" style={{height:48,display:"block"}}/>
+    </div>
+  );
 }
 
 // F1R3Games logo SVG
-function F1R3GamesLogo({
-  width = 300
-}) {
-  return /*#__PURE__*/React.createElement("svg", {
-    width: width,
-    viewBox: "0 0 2041.904 1169.445",
-    xmlns: "http://www.w3.org/2000/svg",
-    style: {
-      display: "block",
-      margin: "0 auto"
-    }
-  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
-    id: "fg-g-flame",
-    x1: "771.497",
-    y1: "405.595",
-    x2: "1465.057",
-    y2: "405.595",
-    gradientUnits: "userSpaceOnUse"
-  }, /*#__PURE__*/React.createElement("stop", {
-    offset: "0",
-    stopColor: "#f3d630"
-  }), /*#__PURE__*/React.createElement("stop", {
-    offset: "1",
-    stopColor: "#a62832"
-  })), /*#__PURE__*/React.createElement("linearGradient", {
-    id: "fg-g-knot",
-    x1: "929.98",
-    y1: "747.859",
-    x2: "929.98",
-    y2: "0",
-    gradientUnits: "userSpaceOnUse"
-  }, /*#__PURE__*/React.createElement("stop", {
-    offset: "0",
-    stopColor: "#9ec597"
-  }), /*#__PURE__*/React.createElement("stop", {
-    offset: ".519",
-    stopColor: "#5db7e7"
-  }), /*#__PURE__*/React.createElement("stop", {
-    offset: "1",
-    stopColor: "#186d8c"
-  })), /*#__PURE__*/React.createElement("clipPath", {
-    id: "fg-clip"
-  }, /*#__PURE__*/React.createElement("path", {
-    fill: "none",
-    d: "M853.788,747.438c-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,169.433,169.896,99.235,172.964Z"
-  }))), /*#__PURE__*/React.createElement("path", {
-    fill: "#fff",
-    d: "M0,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737H46.094v66.658h87.579c3.545,0,6.736,3.191,6.736,6.737v29.074c0,3.546-3.191,6.737-6.736,6.737H46.094v89.706c0,3.545-3.19,6.736-6.736,6.736H6.737c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM235.429,989.323l-31.202,6.737c-3.191.709-6.736-1.419-7.091-4.609l-2.128-17.374c-.354-2.837.354-4.964,1.773-6.383l51.058-42.902h24.819c3.546,0,6.383,3.191,6.383,6.736v227.634c0,3.545-2.837,6.736-6.383,6.736h-30.492c-3.9,0-6.737-3.191-6.737-6.736v-169.839ZM362.005,924.438c0-3.546,2.837-6.737,6.737-6.737h101.406c42.548,0,77.296,34.039,77.296,76.232,0,32.62-21.629,59.213-52.477,71.623l48.576,90.061c2.482,4.609,0,10.282-6.027,10.282h-37.229c-3.191,0-4.965-1.772-5.674-3.191l-47.157-93.96h-39.357v90.415c0,3.545-3.19,6.736-6.736,6.736h-32.62c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM466.248,1030.808c18.792,0,35.103-16.31,35.103-36.166,0-18.792-16.311-34.393-35.103-34.393h-57.795v70.559h57.795ZM596.72,1129.024l18.083-17.374c3.191-2.837,6.382-2.837,9.219,0,1.063,1.418,21.983,19.146,43.612,19.146,19.146,0,37.584-13.828,37.584-33.329,0-18.438-17.02-35.103-48.931-35.103h-19.855c-3.9,0-6.737-2.836-6.737-7.091v-22.338c0-4.609,2.482-7.092,6.737-7.092h19.855c29.074,0,43.967-14.537,43.967-32.62,0-19.501-16.311-32.62-34.394-32.62-18.438,0-29.783,9.928-35.812,17.02-2.481,2.836-6.382,3.19-9.573.354l-17.374-16.311c-2.836-2.482-2.481-6.736,0-9.219,0,0,26.947-31.202,66.659-31.202,41.13,0,75.523,25.175,75.523,64.886,0,27.302-20.565,47.867-36.521,55.313v1.063c16.664,7.091,42.902,26.238,42.902,57.795,0,40.065-32.62,69.141-81.551,69.141-44.321,0-65.949-22.338-73.75-31.557-2.128-2.482-1.773-6.383.354-8.864ZM928.233,914.156c31.911,0,62.404,12.409,86.515,32.975,2.837,2.836,3.191,7.091.354,9.928l-21.982,23.047c-2.837,2.837-6.028,2.837-9.219,0-15.247-13.474-34.039-20.564-53.54-20.564-44.321,0-79.424,37.938-79.424,82.26,0,43.966,35.103,81.196,79.778,81.196,19.855,0,35.103-6.028,42.193-8.864v-30.139h-28.365c-3.9,0-6.737-2.837-6.737-6.382v-28.012c0-3.899,2.837-6.736,6.737-6.736h68.077c3.546,0,6.382,3.191,6.382,6.736v90.77c0,2.837-1.418,4.609-2.836,5.674,0,0-36.521,23.047-87.934,23.047-70.559,0-127.29-56.022-127.29-126.936s56.731-127.999,127.29-127.999ZM1056.58,1156.68l110.271-238.625c1.064-2.127,2.837-3.899,6.028-3.899h3.545c3.546,0,4.965,1.772,6.028,3.899l109.207,238.625c2.127,4.609-.709,9.219-6.028,9.219h-30.847c-5.319,0-7.801-2.127-10.283-7.092l-17.373-38.293h-106.017l-17.374,38.293c-1.418,3.546-4.609,7.092-10.282,7.092h-30.848c-5.318,0-8.154-4.609-6.027-9.219ZM1209.754,1081.156l-35.457-78.005h-1.063l-34.748,78.005h71.269ZM1367.53,919.474c.354-2.837,2.481-5.318,6.382-5.318h5.673c2.837,0,4.965,1.418,6.028,3.545l78.005,167.356h1.063l78.005-167.356c1.064-2.127,2.837-3.545,6.028-3.545h5.673c3.9,0,6.027,2.481,6.382,5.318l41.84,238.27c1.063,4.964-1.773,8.155-6.383,8.155h-32.266c-3.191,0-6.027-2.837-6.736-5.318l-20.92-134.382h-1.063l-62.05,139.346c-.709,2.127-2.837,3.9-6.027,3.9h-6.383c-3.19,0-4.964-1.773-6.027-3.9l-62.759-139.346h-1.063l-20.565,134.382c-.354,2.481-3.19,5.318-6.382,5.318h-31.911c-4.609,0-7.446-3.191-6.736-8.155l42.193-238.27ZM1668.902,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737h-104.952v58.149h87.579c3.545,0,6.736,3.19,6.736,6.736v29.429c0,3.9-3.191,6.737-6.736,6.737h-87.579v62.05h104.952c3.9,0,6.737,3.19,6.737,6.736v29.075c0,3.545-2.837,6.736-6.737,6.736h-144.309c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM1880.576,1131.151l12.765-21.982c2.836-4.965,8.864-4.965,12.055-2.482,1.773,1.063,30.493,21.983,53.54,21.983,18.438,0,32.266-12.056,32.266-27.302,0-18.083-15.246-30.493-45.03-42.549-33.329-13.474-66.658-34.747-66.658-76.586,0-31.557,23.401-68.077,79.777-68.077,36.166,0,63.822,18.438,70.914,23.756,3.546,2.127,4.609,8.155,2.127,11.7l-13.474,20.211c-2.836,4.255-8.154,7.091-12.409,4.255-2.837-1.773-29.784-19.502-49.285-19.502-20.211,0-31.202,13.474-31.202,24.82,0,16.665,13.119,28.011,41.839,39.712,34.394,13.828,74.104,34.393,74.104,80.132,0,36.521-31.557,70.205-81.551,70.205-44.675,0-70.913-20.92-78.005-27.656-3.19-3.191-4.964-4.964-1.772-10.638Z"
-  }), /*#__PURE__*/React.createElement("path", {
-    fill: "url(#fg-g-flame)",
-    d: "M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"
-  }), /*#__PURE__*/React.createElement("path", {
-    fill: "url(#fg-g-knot)",
-    d: "M1141.963,0c46.349,37.918,87.228,88.12,111.168,144.498,43.213,100.509,37.954,217.952-4.471,317.93-38.879,93.004-108.665,173.115-196.595,223.912-60.038,35.129-128.081,58.03-198.278,61.098-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,47.079,20,71.506,21.017,162.417,4.662,311.49-124.764,356.969-278.806,10.093-33.178,15.288-67.976,15.967-102.614,2.477-74.218-23.888-147.489-57.031-214.071Z"
-  }), /*#__PURE__*/React.createElement("g", {
-    clipPath: "url(#fg-clip)"
-  }, /*#__PURE__*/React.createElement("path", {
-    fill: "url(#fg-g-flame)",
-    d: "M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"
-  })));
+function F1R3GamesLogo({width=300}) {
+  return <svg width={width} viewBox="0 0 2041.904 1169.445" xmlns="http://www.w3.org/2000/svg" style={{display:"block",margin:"0 auto"}}>
+    <defs>
+      <linearGradient id="fg-g-flame" x1="771.497" y1="405.595" x2="1465.057" y2="405.595" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stopColor="#f3d630"/>
+        <stop offset="1" stopColor="#a62832"/>
+      </linearGradient>
+      <linearGradient id="fg-g-knot" x1="929.98" y1="747.859" x2="929.98" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stopColor="#9ec597"/>
+        <stop offset=".519" stopColor="#5db7e7"/>
+        <stop offset="1" stopColor="#186d8c"/>
+      </linearGradient>
+      <clipPath id="fg-clip">
+        <path fill="none" d="M853.788,747.438c-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,169.433,169.896,99.235,172.964Z"/>
+      </clipPath>
+    </defs>
+    <path fill="#fff" d="M0,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737H46.094v66.658h87.579c3.545,0,6.736,3.191,6.736,6.737v29.074c0,3.546-3.191,6.737-6.736,6.737H46.094v89.706c0,3.545-3.19,6.736-6.736,6.736H6.737c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM235.429,989.323l-31.202,6.737c-3.191.709-6.736-1.419-7.091-4.609l-2.128-17.374c-.354-2.837.354-4.964,1.773-6.383l51.058-42.902h24.819c3.546,0,6.383,3.191,6.383,6.736v227.634c0,3.545-2.837,6.736-6.383,6.736h-30.492c-3.9,0-6.737-3.191-6.737-6.736v-169.839ZM362.005,924.438c0-3.546,2.837-6.737,6.737-6.737h101.406c42.548,0,77.296,34.039,77.296,76.232,0,32.62-21.629,59.213-52.477,71.623l48.576,90.061c2.482,4.609,0,10.282-6.027,10.282h-37.229c-3.191,0-4.965-1.772-5.674-3.191l-47.157-93.96h-39.357v90.415c0,3.545-3.19,6.736-6.736,6.736h-32.62c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM466.248,1030.808c18.792,0,35.103-16.31,35.103-36.166,0-18.792-16.311-34.393-35.103-34.393h-57.795v70.559h57.795ZM596.72,1129.024l18.083-17.374c3.191-2.837,6.382-2.837,9.219,0,1.063,1.418,21.983,19.146,43.612,19.146,19.146,0,37.584-13.828,37.584-33.329,0-18.438-17.02-35.103-48.931-35.103h-19.855c-3.9,0-6.737-2.836-6.737-7.091v-22.338c0-4.609,2.482-7.092,6.737-7.092h19.855c29.074,0,43.967-14.537,43.967-32.62,0-19.501-16.311-32.62-34.394-32.62-18.438,0-29.783,9.928-35.812,17.02-2.481,2.836-6.382,3.19-9.573.354l-17.374-16.311c-2.836-2.482-2.481-6.736,0-9.219,0,0,26.947-31.202,66.659-31.202,41.13,0,75.523,25.175,75.523,64.886,0,27.302-20.565,47.867-36.521,55.313v1.063c16.664,7.091,42.902,26.238,42.902,57.795,0,40.065-32.62,69.141-81.551,69.141-44.321,0-65.949-22.338-73.75-31.557-2.128-2.482-1.773-6.383.354-8.864ZM928.233,914.156c31.911,0,62.404,12.409,86.515,32.975,2.837,2.836,3.191,7.091.354,9.928l-21.982,23.047c-2.837,2.837-6.028,2.837-9.219,0-15.247-13.474-34.039-20.564-53.54-20.564-44.321,0-79.424,37.938-79.424,82.26,0,43.966,35.103,81.196,79.778,81.196,19.855,0,35.103-6.028,42.193-8.864v-30.139h-28.365c-3.9,0-6.737-2.837-6.737-6.382v-28.012c0-3.899,2.837-6.736,6.737-6.736h68.077c3.546,0,6.382,3.191,6.382,6.736v90.77c0,2.837-1.418,4.609-2.836,5.674,0,0-36.521,23.047-87.934,23.047-70.559,0-127.29-56.022-127.29-126.936s56.731-127.999,127.29-127.999ZM1056.58,1156.68l110.271-238.625c1.064-2.127,2.837-3.899,6.028-3.899h3.545c3.546,0,4.965,1.772,6.028,3.899l109.207,238.625c2.127,4.609-.709,9.219-6.028,9.219h-30.847c-5.319,0-7.801-2.127-10.283-7.092l-17.373-38.293h-106.017l-17.374,38.293c-1.418,3.546-4.609,7.092-10.282,7.092h-30.848c-5.318,0-8.154-4.609-6.027-9.219ZM1209.754,1081.156l-35.457-78.005h-1.063l-34.748,78.005h71.269ZM1367.53,919.474c.354-2.837,2.481-5.318,6.382-5.318h5.673c2.837,0,4.965,1.418,6.028,3.545l78.005,167.356h1.063l78.005-167.356c1.064-2.127,2.837-3.545,6.028-3.545h5.673c3.9,0,6.027,2.481,6.382,5.318l41.84,238.27c1.063,4.964-1.773,8.155-6.383,8.155h-32.266c-3.191,0-6.027-2.837-6.736-5.318l-20.92-134.382h-1.063l-62.05,139.346c-.709,2.127-2.837,3.9-6.027,3.9h-6.383c-3.19,0-4.964-1.773-6.027-3.9l-62.759-139.346h-1.063l-20.565,134.382c-.354,2.481-3.19,5.318-6.382,5.318h-31.911c-4.609,0-7.446-3.191-6.736-8.155l42.193-238.27ZM1668.902,924.438c0-3.546,2.837-6.737,6.737-6.737h144.309c3.9,0,6.737,3.191,6.737,6.737v29.074c0,3.546-2.837,6.737-6.737,6.737h-104.952v58.149h87.579c3.545,0,6.736,3.19,6.736,6.736v29.429c0,3.9-3.191,6.737-6.736,6.737h-87.579v62.05h104.952c3.9,0,6.737,3.19,6.737,6.736v29.075c0,3.545-2.837,6.736-6.737,6.736h-144.309c-3.9,0-6.737-3.191-6.737-6.736v-234.725ZM1880.576,1131.151l12.765-21.982c2.836-4.965,8.864-4.965,12.055-2.482,1.773,1.063,30.493,21.983,53.54,21.983,18.438,0,32.266-12.056,32.266-27.302,0-18.083-15.246-30.493-45.03-42.549-33.329-13.474-66.658-34.747-66.658-76.586,0-31.557,23.401-68.077,79.777-68.077,36.166,0,63.822,18.438,70.914,23.756,3.546,2.127,4.609,8.155,2.127,11.7l-13.474,20.211c-2.836,4.255-8.154,7.091-12.409,4.255-2.837-1.773-29.784-19.502-49.285-19.502-20.211,0-31.202,13.474-31.202,24.82,0,16.665,13.119,28.011,41.839,39.712,34.394,13.828,74.104,34.393,74.104,80.132,0,36.521-31.557,70.205-81.551,70.205-44.675,0-70.913-20.92-78.005-27.656-3.19-3.191-4.964-4.964-1.772-10.638Z"/>
+    <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
+    <path fill="url(#fg-g-knot)" d="M1141.963,0c46.349,37.918,87.228,88.12,111.168,144.498,43.213,100.509,37.954,217.952-4.471,317.93-38.879,93.004-108.665,173.115-196.595,223.912-60.038,35.129-128.081,58.03-198.278,61.098-87.428,4.412-180.304-25.688-234.692-98.043-30.081-39.794-44.664-89.191-41.922-138.599,6.115-108.792,82.22-204.095,172.734-258.262,23.407-14.134,46.899-25.609,71.544-35.786,9.42-3.952,31.631-12.235,41.455-16.004,15.256-5.823,37.681-14.359,52.569-20.531,32.225-13.355,61.995-32.84,85.869-58.468,24.59-26.13,43.699-59.4,55.342-97.342,1.259,9.85,1.766,19.907,1.497,30.029-1.882,79.004-48.044,149.388-112.066,193.872-20.119,14.518-41.286,28.524-62.074,41.977-9.615,6.07-19.613,12.732-28.884,19.247-49.755,34.958-89.85,73.804-116.473,126.491-14.226,29.052-24.36,62.257-17.528,93.563,4.43,19.066,17.108,34.54,33.392,44.893,19.902,12.922,47.079,20,71.506,21.017,162.417,4.662,311.49-124.764,356.969-278.806,10.093-33.178,15.288-67.976,15.967-102.614,2.477-74.218-23.888-147.489-57.031-214.071Z"/>
+    <g clipPath="url(#fg-clip)">
+      <path fill="url(#fg-g-flame)" d="M1385.001,397.265c57.833,42.205,91.462,118.475,76.512,189.769-4.731,22.618-13.838,44.475-26.874,63.584-30.74,47.396-82.441,80.484-136.492,94.669-86.016,23.095-182.474,7.785-262.706-28.264-96.758-44.781-177.269-122.956-225.025-217.625-39.981-83.571-48.678-180.795-28.299-270.658,7.485-32.213,19.304-63.531,35.289-92.404,13.185-23.435,29.207-45.473,48.403-64.177,6.277-6.162,13.006-11.896,19.99-17.209-2.13,13.967-4.275,27.202-5.541,40.391-6.256,60.768-1.19,122.096,14.769,180.88,10.717,40.144,25.146,79.02,46.044,114.673,5.438,9.423,11.631,18.99,18.057,27.746,7.215,8.892,14.382,17.941,22.037,26.455,41.177,46.442,90.852,86.006,146.847,112.71,8.962,4.087,19.307,8.35,28.533,11.833,43.926,16.247,93.653,28.079,139.048,21.179,18.479-2.819,35.501-9.391,51.059-20.157,5.03-3.097,9.523-7.071,13.686-11.268,38.804-40.741,34.802-108.866,24.663-162.126Z"/>
+    </g>
+  </svg>;
 }
 
 // ── F1R3INK lockup ────────────────────────────────────────────
-// External SVG: images/f1r3ink-logo.svg (viewBox 3696.77 × 939.08, ratio ~3.94:1)
-function InkLogo({
-  height = 72
-}) {
-  return /*#__PURE__*/React.createElement("img", {
-    src: "images/f1r3ink-logo.svg",
-    alt: "F1R3Ink",
-    style: {
-      height,
-      display: "block"
-    }
-  });
+// External SVG: images/f1r3ink-logo-v2.svg (viewBox 2323.894 × 1516.829, ratio ~1.53:1)
+function InkLogo({height=72}) {
+  return <img src="images/f1r3ink-logo-v2.svg" alt="F1R3Ink" style={{height,display:"block"}}/>;
 }
 
 // ── Main App ──────────────────────────────────────────────────
@@ -733,626 +196,152 @@ function F1R3Ink() {
   const [selectedColor, setSelectedColor] = useState(null);
 
   // ── JOIN SCREEN ──────────────────────────────────────────
-  if (phase === "join") return /*#__PURE__*/React.createElement("div", {
-    style: {
-      minHeight: "100vh",
-      overflow: "auto",
-      background: "#000",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "column",
-      fontFamily: FH,
-      position: "relative"
-    }
-  }, /*#__PURE__*/React.createElement("style", null, FONTS, `@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:#007bc466 !important;outline:none} input::placeholder, textarea::placeholder { color: ${BRAND.textSecondary}; opacity: 1; }`), /*#__PURE__*/React.createElement("div", {
-    style: {
-      animation: "fadeIn .6s ease-out",
-      textAlign: "center",
-      marginTop: 0,
-      position: "relative",
-      zIndex: 1
-    }
-  }, /*#__PURE__*/React.createElement(F1R3GamesLogo, {
-    width: 196
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: "#fff",
-      letterSpacing: 6,
-      fontFamily: FH,
-      fontWeight: 300,
-      marginTop: 24
-    }
-  }, "PRESENTS"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      height: 40
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      border: `1px solid #007bc466`,
-      borderRadius: 14,
-      padding: "40px 48px",
-      display: "inline-block",
-      background: "#000"
-    }
-  }, /*#__PURE__*/React.createElement("h1", {
-    style: {
-      margin: "0 0 20px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }
-  }, /*#__PURE__*/React.createElement(InkLogo, {
-    height: 74
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: "#fff",
-      letterSpacing: 4,
-      fontWeight: 300,
-      fontFamily: FH,
-      lineHeight: 1.6
-    }
-  }, "YOUR TRUE COLORS", /*#__PURE__*/React.createElement("br", null), "COME SHINING THROUGH")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      height: 50
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexDirection: "column",
-      gap: 10,
-      alignItems: "center"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: BRAND.yellow,
-      letterSpacing: 4,
-      fontWeight: 700,
-      fontFamily: FH
-    }
-  }, "CHOOSE YOUR F1R3SIGN"), /*#__PURE__*/React.createElement("input", {
-    value: myName,
-    onChange: e => setMyName(e.target.value),
-    onKeyDown: e => e.key === "Enter" && myName.trim() && setPhase("play"),
-    placeholder: "someone colorful",
-    style: {
-      background: "#000",
-      border: `1px solid #007bc466`,
-      borderRadius: 6,
-      color: "#fff",
-      padding: "10px 16px",
-      fontSize: 16,
-      fontWeight: 300,
-      width: "100%",
-      maxWidth: 460,
-      fontFamily: FH,
-      textAlign: "center",
-      outline: "none",
-      marginTop: 20
-    }
-  }), /*#__PURE__*/React.createElement("input", {
-    value: myTags,
-    onChange: e => setMyTags(e.target.value),
-    placeholder: "tags: mood, vibe, role...",
-    style: {
-      background: "#000",
-      border: `1px solid #007bc466`,
-      borderRadius: 6,
-      color: "#fff",
-      padding: "10px 16px",
-      fontSize: 16,
-      width: "100%",
-      maxWidth: 460,
-      fontFamily: FH,
-      textAlign: "center",
-      outline: "none"
-    }
-  }), /*#__PURE__*/React.createElement("button", {
-    onClick: () => myName.trim() && setPhase("play"),
-    style: {
-      background: "linear-gradient(135deg, #5c0269, #7b0429)",
-      color: "#fff",
-      border: "none",
-      borderRadius: 20,
-      padding: "12px 32px 8px",
-      fontSize: 16,
-      fontFamily: FH,
-      fontWeight: 600,
-      cursor: "pointer",
-      letterSpacing: 3,
-      boxShadow: "0 0 20px rgba(123,4,41,0.4)",
-      marginTop: 20,
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      lineHeight: 1,
-      minHeight: 38,
-      whiteSpace: "nowrap"
-    }
-  }, "JOIN"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: "#fff",
-      letterSpacing: 4,
-      fontWeight: 300,
-      fontFamily: FH,
-      lineHeight: 2.2,
-      marginTop: 20
-    }
-  }, "YOUR UNIQUE F1R3SIGN", /*#__PURE__*/React.createElement("br", null), "TRAVELS WITH YOU"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginTop: 12
-    }
-  }, /*#__PURE__*/React.createElement(HowBtn, {
-    onClick: () => setShowTour(true)
-  }))), DEMO_PLAYERS.length > 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginTop: 16,
-      color: BRAND.textDim,
-      fontSize: 16
-    }
-  }, DEMO_PLAYERS.length, " playing")), /*#__PURE__*/React.createElement(BuiltOnBadge, null), showTour && /*#__PURE__*/React.createElement(TourOverlay, {
-    onClose: () => setShowTour(false)
-  }));
+  if (phase === "join") return (
+    <div style={{height:"100vh",overflow:"hidden",background:"#000",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",fontFamily:FH,position:"relative"}}>
+      <style>{FONTS}{`@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} input:focus{border-color:#007bc466 !important;outline:none} input::placeholder, textarea::placeholder { color: ${BRAND.textSecondary}; opacity: 1; }`}</style>
+      <div style={{animation:"fadeIn .6s ease-out",textAlign:"center",marginTop:-105,position:"relative",zIndex:1}}>
+        <F1R3GamesLogo width={196}/>
+        <div style={{fontSize:16,color:"#fff",letterSpacing:6,fontFamily:FH,fontWeight:300,marginTop:24}}>PRESENTS</div>
+        <div style={{height:40}}/>
+        <div style={{border:`1px solid #007bc466`,borderRadius:14,padding:"40px 48px",display:"inline-block",background:"#000"}}>
+          <h1 style={{margin:"0 0 20px",display:"flex",alignItems:"center",justifyContent:"center"}}><InkLogo height={74}/></h1>
+          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:1.6}}>YOUR TRUE COLORS<br/>COME SHINING THROUGH</div>
+        </div>
+        <div style={{height:50}}/>
+        <div style={{display:"flex",flexDirection:"column",gap:10,alignItems:"center"}}>
+          <div style={{fontSize:16,color:BRAND.yellow,letterSpacing:4,fontWeight:700,fontFamily:FH}}>CHOOSE YOUR F1R3SIGN</div>
+          <input value={myName} onChange={e=>setMyName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&myName.trim()&&setPhase("play")} placeholder="someone colorful" style={{background:"#000",border:`1px solid #007bc466`,borderRadius:6,color:"#fff",padding:"10px 16px",fontSize:16,fontWeight:300,width:"100%",maxWidth:460,fontFamily:FH,textAlign:"center",outline:"none",marginTop:20}}/>
+          <input value={myTags} onChange={e=>setMyTags(e.target.value)} placeholder="tags: mood, vibe, role..." style={{background:"#000",border:`1px solid #007bc466`,borderRadius:6,color:"#fff",padding:"10px 16px",fontSize:16,width:"100%",maxWidth:460,fontFamily:FH,textAlign:"center",outline:"none"}}/>
+          <button onClick={()=>myName.trim()&&setPhase("play")} style={{background:"linear-gradient(135deg, #5c0269, #7b0429)",color:"#fff",border:"none",borderRadius:20,padding:"12px 32px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:3,boxShadow:"0 0 20px rgba(123,4,41,0.4)",marginTop:20,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>JOIN</button>
+          <div style={{fontSize:16,color:"#fff",letterSpacing:4,fontWeight:300,fontFamily:FH,lineHeight:2.2,marginTop:20}}>YOUR UNIQUE F1R3SIGN<br/>TRAVELS WITH YOU</div>
+          <div style={{marginTop:12}}><HowBtn onClick={()=>setShowTour(true)}/></div>
+        </div>
+        {DEMO_PLAYERS.length > 0 && <div style={{marginTop:16,color:BRAND.textDim,fontSize:16}}>{DEMO_PLAYERS.length} playing</div>}
+      </div>
+      <BuiltOnBadge/>
+      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
+    </div>
+  );
 
   // ── GAME VIEW ──────────────────────────────────────────────
   const displayName = myName.trim() || "Hannah";
-  const totalInks = DEMO_PLAYERS.reduce((a, p) => a + p.inks.length, 0) + MY_INKS.length;
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      minHeight: "100vh",
-      background: "#000",
-      color: "#fff",
-      fontFamily: FH,
-      display: "flex",
-      flexDirection: "column",
-      overflow: "hidden",
-      position: "relative"
-    }
-  }, /*#__PURE__*/React.createElement("style", null, FONTS, `::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px} *{box-sizing:border-box} input::placeholder, textarea::placeholder { color: ${BRAND.textSecondary}; opacity: 1; }`), /*#__PURE__*/React.createElement("div", {
-    className: "game-header",
-    style: {
-      padding: "14px 20px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      background: "#000",
-      minHeight: 70
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "baseline",
-      gap: 12
-    }
-  }, /*#__PURE__*/React.createElement(InkLogo, {
-    height: 32
-  }), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 16,
-      fontWeight: 200,
-      color: "#fff",
-      letterSpacing: 2,
-      fontFamily: FB
-    }
-  }, DEMO_PLAYERS.length + 1, " players | ", totalInks, " inks | shard live")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 12
-    }
-  }, /*#__PURE__*/React.createElement(HowBtn, {
-    onClick: () => setShowTour(true)
-  }), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setPhase("join"),
-    style: {
-      background: "#000",
-      border: `1px solid ${BRAND.border}`,
-      color: "#fff",
-      borderRadius: 20,
-      padding: "10px 18px 8px",
-      fontSize: 16,
-      cursor: "pointer",
-      fontFamily: FH,
-      letterSpacing: 1,
-      fontWeight: 300,
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      lineHeight: 1,
-      minHeight: 38,
-      whiteSpace: "nowrap"
-    }
-  }, "LEAVE"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: "100%",
-      height: "0.5px",
-      background: BRAND.stroke,
-      opacity: 0.8
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "game-layout",
-    style: {
-      flex: 1,
-      display: "flex",
-      overflow: "hidden"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "game-sidebar game-sidebar-left",
-    style: {
-      width: 300,
-      minWidth: 300,
-      flexShrink: 0,
-      borderRight: `1px solid ${BRAND.border}`,
-      padding: "20px 16px",
-      display: "flex",
-      flexDirection: "column",
-      gap: 20,
-      overflowY: "auto",
-      background: "#000"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      paddingBottom: 20,
-      borderBottom: `1px solid ${BRAND.border}`,
-      display: "flex",
-      flexDirection: "column",
-      gap: 12,
-      alignItems: "center"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: "#fff",
-      letterSpacing: 2,
-      fontFamily: FH,
-      textTransform: "uppercase",
-      alignSelf: "flex-start"
-    }
-  }, "MY FLAG"), /*#__PURE__*/React.createElement(Avatar, {
-    src: PORTRAITS.hannah,
-    size: 80
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: BRAND.yellow,
-      fontWeight: 600,
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, displayName), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: "100%"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: "#fff",
-      marginBottom: 8,
-      letterSpacing: 2,
-      fontFamily: FH,
-      textTransform: "uppercase"
-    }
-  }, "TAGS"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 4
-    }
-  }, (myTags.trim() ? myTags.split(",").map(t => t.trim()).filter(Boolean) : ["Pooh"]).map((t, i) => /*#__PURE__*/React.createElement("span", {
-    key: i,
-    style: {
-      background: BRAND.card,
-      border: `1px solid ${BRAND.border}`,
-      borderRadius: 20,
-      padding: "2px 12px",
-      fontSize: 16,
-      color: BRAND.sage,
-      fontFamily: FB
-    }
-  }, t))))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      paddingBottom: 20,
-      borderBottom: `1px solid ${BRAND.border}`,
-      display: "flex",
-      flexDirection: "column",
-      gap: 12
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: "#fff",
-      letterSpacing: 2,
-      fontFamily: FH,
-      textTransform: "uppercase"
-    }
-  }, "F1R3 SIGNALS"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      fontWeight: 200,
-      color: BRAND.sky,
-      fontFamily: FB,
-      letterSpacing: 0.2,
-      lineHeight: 1.4
-    }
-  }, "Not a \"like\" button \u2014 a feeling"), selectedTarget ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      fontWeight: 200,
-      color: "#fff",
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, "How do you feel about ", /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: BRAND.yellow,
-      fontWeight: 600
-    }
-  }, DEMO_PLAYERS.find(p => p.id === selectedTarget)?.name), "?") : /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      fontWeight: 200,
-      color: BRAND.textSecondary,
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, "select someone to ink"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "repeat(6, 1fr)",
-      gap: "10px 6px",
-      justifyItems: "center"
-    }
-  }, INK_COLORS.map(c => /*#__PURE__*/React.createElement("div", {
-    key: c.hex,
-    title: c.name,
-    onClick: () => setSelectedColor(c.hex),
-    style: {
-      width: 24,
-      height: 24,
-      borderRadius: "50%",
-      background: c.hex,
-      cursor: "pointer",
-      border: selectedColor === c.hex ? "2px solid #fff" : `1px solid ${BRAND.border}`,
-      transition: "transform 0.15s",
-      transform: selectedColor === c.hex ? "scale(1.3)" : "scale(1)"
-    }
-  }))), selectedColor && selectedTarget && /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: "center",
-      marginTop: 4
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    style: {
-      background: selectedColor,
-      color: selectedColor === "#F3D630" || selectedColor === "#FFFFFF" || selectedColor === "#7A9D0E" ? "#111" : "#fff",
-      border: "none",
-      borderRadius: 20,
-      padding: "12px 32px 8px",
-      fontSize: 16,
-      fontFamily: FH,
-      fontWeight: 600,
-      cursor: "pointer",
-      letterSpacing: 3,
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      lineHeight: 1,
-      minHeight: 38,
-      whiteSpace: "nowrap",
-      boxShadow: `0 0 20px ${selectedColor}44`
-    }
-  }, "INK")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      fontWeight: 200,
-      color: BRAND.textSecondary,
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, "How does this F1R3INK make you feel?"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      overflowY: "auto",
-      padding: "24px 32px",
-      background: "#000"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: "#fff",
-      letterSpacing: 2,
-      marginBottom: 20,
-      fontFamily: FH,
-      textTransform: "uppercase"
-    }
-  }, "COMMUNITY WHEEL"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-      gap: 20
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: 20,
-      borderRadius: 8,
-      border: `1px solid ${BRAND.border}`,
-      background: "#000",
-      textAlign: "center"
-    }
-  }, /*#__PURE__*/React.createElement(Avatar, {
-    src: PORTRAITS.hannah,
-    size: 72
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: BRAND.yellow,
-      fontWeight: 600,
-      marginTop: 8,
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, displayName), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 3,
-      justifyContent: "center",
-      marginTop: 10,
-      flexWrap: "wrap"
-    }
-  }, MY_INKS.map((ink, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      width: 16,
-      height: 16,
-      borderRadius: "50%",
-      background: ink.color
-    },
-    title: `from ${ink.from}`
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      fontWeight: 200,
-      color: BRAND.textSecondary,
-      marginTop: 6,
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, MY_INKS.length, " inks")), DEMO_PLAYERS.map(p => /*#__PURE__*/React.createElement("div", {
-    key: p.id,
-    onClick: () => setSelectedTarget(selectedTarget === p.id ? null : p.id),
-    style: {
-      padding: 20,
-      borderRadius: 8,
-      border: selectedTarget === p.id ? `1px solid ${BRAND.sky}` : `1px solid ${BRAND.border}`,
-      background: selectedTarget === p.id ? "rgba(63,169,245,0.06)" : "#000",
-      textAlign: "center",
-      cursor: "pointer",
-      transition: "all 0.2s"
-    }
-  }, /*#__PURE__*/React.createElement(Avatar, {
-    src: p.portrait,
-    size: 72
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: selectedTarget === p.id ? BRAND.sky : "#fff",
-      fontWeight: 600,
-      marginTop: 8,
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, p.name), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 3,
-      justifyContent: "center",
-      marginTop: 10,
-      flexWrap: "wrap"
-    }
-  }, p.inks.map((ink, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      width: 16,
-      height: 16,
-      borderRadius: "50%",
-      background: ink.color
-    },
-    title: `from ${ink.from}`
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      fontWeight: 200,
-      color: BRAND.textSecondary,
-      marginTop: 6,
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, p.inks.length, " ink", p.inks.length !== 1 ? "s" : ""))))), /*#__PURE__*/React.createElement("div", {
-    className: "game-sidebar game-sidebar-right",
-    style: {
-      width: 300,
-      minWidth: 300,
-      flexShrink: 0,
-      borderLeft: `1px solid ${BRAND.border}`,
-      padding: "20px 16px",
-      display: "flex",
-      flexDirection: "column",
-      gap: 20,
-      overflowY: "auto",
-      background: "#000"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexDirection: "column",
-      gap: 12
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      color: "#fff",
-      letterSpacing: 2,
-      fontFamily: FH,
-      textTransform: "uppercase"
-    }
-  }, "INKED BY"), MY_INKS.length > 0 ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexDirection: "column",
-      gap: 6
-    }
-  }, MY_INKS.map((s, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 12,
-      height: 12,
-      borderRadius: "50%",
-      background: s.color,
-      flexShrink: 0,
-      border: `1px solid ${BRAND.border}`
-    }
-  }), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 16,
-      fontWeight: 200,
-      color: "#fff",
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, s.from)))) : /*#__PURE__*/React.createElement("div", {
-    style: {
-      color: BRAND.textSecondary,
-      fontSize: 16,
-      fontWeight: 200,
-      textAlign: "center",
-      lineHeight: 1.6,
-      fontFamily: FB,
-      letterSpacing: 0.2
-    }
-  }, "no ink yet", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", null, "others will color your flag")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      fontWeight: 200,
-      color: BRAND.textSecondary,
-      fontFamily: FB,
-      letterSpacing: 0.2,
-      marginTop: 4
-    }
-  }, "powered by F1R3INK")))), /*#__PURE__*/React.createElement(BuiltOnBadge, null), showTour && /*#__PURE__*/React.createElement(TourOverlay, {
-    onClose: () => setShowTour(false)
-  }));
+  const totalInks = DEMO_PLAYERS.reduce((a,p) => a + p.inks.length, 0) + MY_INKS.length;
+
+  return (
+    <div style={{minHeight:"100vh",background:"#000",color:"#fff",fontFamily:FH,display:"flex",flexDirection:"column",overflow:"hidden",position:"relative"}}>
+      <style>{FONTS}{`::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px} *{box-sizing:border-box} input::placeholder, textarea::placeholder { color: ${BRAND.textSecondary}; opacity: 1; }`}</style>
+
+      {/* Header */}
+      <div className="game-header" style={{padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#000",minHeight:70}}>
+        <div style={{display:"flex",alignItems:"baseline",gap:12}}>
+          <InkLogo height={32}/>
+          <span style={{fontSize:16,fontWeight:200,color:"#fff",letterSpacing:2,fontFamily:FB}}>{DEMO_PLAYERS.length + 1} players | {totalInks} inks | shard live</span>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:12}}>
+          <HowBtn onClick={()=>setShowTour(true)}/>
+          <button onClick={()=>setPhase("join")} style={{background:"#000",border:`1px solid ${BRAND.border}`,color:"#fff",borderRadius:20,padding:"10px 18px 8px",fontSize:16,cursor:"pointer",fontFamily:FH,letterSpacing:1,fontWeight:300,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap"}}>LEAVE</button>
+        </div>
+      </div>
+
+      {/* Gradient stroke */}
+      <div style={{width:"100%",height:"0.5px",background:BRAND.stroke,opacity:0.8}}/>
+
+      {/* 3-column layout */}
+      <div className="game-layout" style={{flex:1,display:"flex",overflow:"hidden"}}>
+
+        {/* Left Sidebar — My Flag */}
+        <div className="game-sidebar game-sidebar-left" style={{width:300,minWidth:300,flexShrink:0,borderRight:`1px solid ${BRAND.border}`,padding:"20px 16px",display:"flex",flexDirection:"column",gap:20,overflowY:"auto",background:"#000"}}>
+
+          {/* MY FLAG section */}
+          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:12,alignItems:"center"}}>
+            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,textTransform:"uppercase",alignSelf:"flex-start"}}>MY FLAG</div>
+            <Avatar src={PORTRAITS.hannah} size={80}/>
+            <div style={{fontSize:16,color:BRAND.yellow,fontWeight:600,fontFamily:FB,letterSpacing:0.2}}>{displayName}</div>
+            <div style={{width:"100%"}}>
+              <div style={{fontSize:16,color:"#fff",marginBottom:8,letterSpacing:2,fontFamily:FH,textTransform:"uppercase"}}>TAGS</div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+                {(myTags.trim() ? myTags.split(",").map(t=>t.trim()).filter(Boolean) : ["Pooh"]).map((t,i) =>
+                  <span key={i} style={{background:BRAND.card,border:`1px solid ${BRAND.border}`,borderRadius:20,padding:"2px 12px",fontSize:16,color:BRAND.sage,fontFamily:FB}}>{t}</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* F1R3 SIGNALS section */}
+          <div style={{paddingBottom:20,borderBottom:`1px solid ${BRAND.border}`,display:"flex",flexDirection:"column",gap:12}}>
+            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,textTransform:"uppercase"}}>F1R3 SIGNALS</div>
+            <div style={{fontSize:16,fontWeight:200,color:BRAND.sky,fontFamily:FB,letterSpacing:0.2,lineHeight:1.4}}>Not a &quot;like&quot; button — a feeling</div>
+            {selectedTarget
+              ? <div style={{fontSize:16,fontWeight:200,color:"#fff",fontFamily:FB,letterSpacing:0.2}}>How do you feel about <span style={{color:BRAND.yellow,fontWeight:600}}>{DEMO_PLAYERS.find(p=>p.id===selectedTarget)?.name}</span>?</div>
+              : <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2}}>select someone to ink</div>}
+            <div style={{display:"grid",gridTemplateColumns:"repeat(6, 1fr)",gap:"10px 6px",justifyItems:"center"}}>
+              {INK_COLORS.map(c => (
+                <div key={c.hex} title={c.name} onClick={()=>setSelectedColor(c.hex)} style={{width:24,height:24,borderRadius:"50%",background:c.hex,cursor:"pointer",border:selectedColor===c.hex?"2px solid #fff":`1px solid ${BRAND.border}`,transition:"transform 0.15s",transform:selectedColor===c.hex?"scale(1.3)":"scale(1)"}}/>
+              ))}
+            </div>
+            {selectedColor && selectedTarget && (
+              <div style={{textAlign:"center",marginTop:4}}>
+                <button style={{background:selectedColor,color:(selectedColor==="#F3D630"||selectedColor==="#FFFFFF"||selectedColor==="#7A9D0E")?"#111":"#fff",border:"none",borderRadius:20,padding:"12px 32px 8px",fontSize:16,fontFamily:FH,fontWeight:600,cursor:"pointer",letterSpacing:3,display:"inline-flex",alignItems:"center",justifyContent:"center",lineHeight:1,minHeight:38,whiteSpace:"nowrap",boxShadow:`0 0 20px ${selectedColor}44`}}>INK</button>
+              </div>
+            )}
+            <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2}}>How does this F1R3INK make you feel?</div>
+          </div>
+        </div>
+
+        {/* Center — Community */}
+        <div style={{flex:1,overflowY:"auto",padding:"24px 32px",background:"#000"}}>
+          <div style={{fontSize:16,color:"#fff",letterSpacing:2,marginBottom:20,fontFamily:FH,textTransform:"uppercase"}}>COMMUNITY WHEEL</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))",gap:20}}>
+            {/* My card */}
+            <div style={{padding:20,borderRadius:8,border:`1px solid ${BRAND.border}`,background:"#000",textAlign:"center"}}>
+              <Avatar src={PORTRAITS.hannah} size={72}/>
+              <div style={{fontSize:16,color:BRAND.yellow,fontWeight:600,marginTop:8,fontFamily:FB,letterSpacing:0.2}}>{displayName}</div>
+              <div style={{display:"flex",gap:3,justifyContent:"center",marginTop:10,flexWrap:"wrap"}}>
+                {MY_INKS.map((ink,i) => <div key={i} style={{width:16,height:16,borderRadius:"50%",background:ink.color}} title={`from ${ink.from}`}/>)}
+              </div>
+              <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,marginTop:6,fontFamily:FB,letterSpacing:0.2}}>{MY_INKS.length} inks</div>
+            </div>
+            {/* Other players */}
+            {DEMO_PLAYERS.map(p => (
+              <div key={p.id} onClick={()=>setSelectedTarget(selectedTarget===p.id ? null : p.id)} style={{padding:20,borderRadius:8,border:selectedTarget===p.id?`1px solid ${BRAND.sky}`:`1px solid ${BRAND.border}`,background:selectedTarget===p.id?"rgba(63,169,245,0.06)":"#000",textAlign:"center",cursor:"pointer",transition:"all 0.2s"}}>
+                <Avatar src={p.portrait} size={72}/>
+                <div style={{fontSize:16,color:selectedTarget===p.id?BRAND.sky:"#fff",fontWeight:600,marginTop:8,fontFamily:FB,letterSpacing:0.2}}>{p.name}</div>
+                <div style={{display:"flex",gap:3,justifyContent:"center",marginTop:10,flexWrap:"wrap"}}>
+                  {p.inks.map((ink,i) => <div key={i} style={{width:16,height:16,borderRadius:"50%",background:ink.color}} title={`from ${ink.from}`}/>)}
+                </div>
+                <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,marginTop:6,fontFamily:FB,letterSpacing:0.2}}>{p.inks.length} ink{p.inks.length!==1?"s":""}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Sidebar — Inked By */}
+        <div className="game-sidebar game-sidebar-right" style={{width:300,minWidth:300,flexShrink:0,borderLeft:`1px solid ${BRAND.border}`,padding:"20px 16px",display:"flex",flexDirection:"column",gap:20,overflowY:"auto",background:"#000"}}>
+          <div style={{display:"flex",flexDirection:"column",gap:12}}>
+            <div style={{fontSize:16,color:"#fff",letterSpacing:2,fontFamily:FH,textTransform:"uppercase"}}>INKED BY</div>
+            {MY_INKS.length > 0 ? (
+              <div style={{display:"flex",flexDirection:"column",gap:6}}>
+                {MY_INKS.map((s,i) => (
+                  <div key={i} style={{display:"flex",alignItems:"center",gap:8}}>
+                    <div style={{width:12,height:12,borderRadius:"50%",background:s.color,flexShrink:0,border:`1px solid ${BRAND.border}`}}/>
+                    <span style={{fontSize:16,fontWeight:200,color:"#fff",fontFamily:FB,letterSpacing:0.2}}>{s.from}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{color:BRAND.textSecondary,fontSize:16,fontWeight:200,textAlign:"center",lineHeight:1.6,fontFamily:FB,letterSpacing:0.2}}>no ink yet<br/><span>others will color your flag</span></div>
+            )}
+            <div style={{fontSize:16,fontWeight:200,color:BRAND.textSecondary,fontFamily:FB,letterSpacing:0.2,marginTop:4}}>powered by F1R3INK</div>
+          </div>
+        </div>
+      </div>
+      <BuiltOnBadge/>
+      {showTour && <TourOverlay onClose={()=>setShowTour(false)}/>}
+    </div>
+  );
 }
-ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(F1R3Ink, null));
+
+ReactDOM.createRoot(document.getElementById('root')).render(<F1R3Ink/>);
 </script>
 </body>
 </html>
