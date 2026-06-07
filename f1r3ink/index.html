@@ -39,7 +39,8 @@
   .joiner-f1r3games-logo { width: var(--j-logo-w); height: auto; display: block; }
   .joiner-presents { font-size: var(--j-text); font-weight: 300; letter-spacing: 4px; color: #fff; margin-top: var(--j-gap-presents); font-family: 'Josefin Sans', sans-serif; }
   .joiner-card { width: 100%; max-width: var(--j-card-max); margin-top: var(--j-gap-card); padding: var(--j-card-pad); border: 1px solid rgba(63,169,245,0.5); border-radius: 20px; background: #000; display: flex; flex-direction: column; align-items: center; gap: var(--j-card-gap); }
-  .joiner-wordmark { max-width: 100%; max-height: calc(var(--wordmark-max-h, 80px) * var(--j-wm-scale)); width: auto; height: auto; display: block; }
+  .joiner-wordmark-slot { width: 100%; display: flex; justify-content: center; align-items: center; }
+  .joiner-wordmark-slot > * { max-width: 100%; max-height: calc(var(--wordmark-max-h, 80px) * var(--j-wm-scale)); width: auto; height: auto; display: block; }
   .joiner-tagline { font-size: var(--j-text); font-weight: 300; letter-spacing: 2px; color: #fff; line-height: 1.6; text-wrap: balance; font-family: 'Josefin Sans', sans-serif; }
   .joiner-form { width: 100%; margin-top: var(--j-gap-form); display: flex; flex-direction: column; align-items: center; gap: var(--j-card-gap); }
   .joiner-choose { font-size: var(--j-text); font-weight: 700; letter-spacing: 4px; color: #F3D630; font-family: 'Josefin Sans', sans-serif; }
@@ -796,11 +797,12 @@ function Joiner({
     style: {
       "--wordmark-max-h": wordmarkMaxH + "px"
     }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "joiner-wordmark-slot"
   }, typeof wordmark === "string" ? /*#__PURE__*/React.createElement("img", {
-    className: "joiner-wordmark",
     src: wordmark,
     alt: ""
-  }) : wordmark, tagline && /*#__PURE__*/React.createElement("div", {
+  }) : wordmark), tagline && /*#__PURE__*/React.createElement("div", {
     className: "joiner-tagline"
   }, tagline)), /*#__PURE__*/React.createElement("div", {
     className: "joiner-form"
