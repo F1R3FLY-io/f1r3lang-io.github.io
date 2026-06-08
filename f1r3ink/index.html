@@ -27,12 +27,12 @@
      Source of truth: ../_template/joiner-template.html (June 3, 2026)
      ============================================================ */
   .joiner {
-    --j-logo-w: 140px; --j-card-max: 320px; --j-gap-presents: 20px; --j-gap-card: 28px;
+    --j-logo-w: 112px; --j-card-max: 320px; --j-gap-presents: 20px; --j-gap-card: 28px;
     --j-gap-form: 32px; --j-card-pad: 28px 24px; --j-card-gap: 16px; --j-text: 16px; --j-wm-scale: 1;
     height: 100vh; overflow-y: auto; min-height: 100vh; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 32px 20px 0; position: relative;
   }
   @media (min-width: 768px) {
-    .joiner { --j-logo-w: 196px; --j-card-max: 460px; --j-gap-presents: 28px; --j-gap-card: 40px; --j-gap-form: 44px; --j-card-pad: 39px 34px; --j-card-gap: 22px; --j-text: 18px; --j-wm-scale: 1.4; }
+    .joiner { --j-logo-w: 140px; --j-card-max: 400px; --j-gap-presents: 18px; --j-gap-card: 24px; --j-gap-form: 44px; --j-card-pad: 39px 34px; --j-card-gap: 22px; --j-text: 18px; --j-wm-scale: 1.25; }
   }
   .joiner-stage { width: 100%; max-width: var(--j-card-max); display: flex; flex-direction: column; align-items: center; text-align: center; animation: joinerFadeIn .6s ease-out; }
   @keyframes joinerFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -50,7 +50,7 @@
   .joiner-join-btn { background: linear-gradient(135deg, #5c0269, #7b0429); color: #fff; border: none; border-radius: 20px; padding: 12px 32px 8px; font-size: 16px; font-family: 'Josefin Sans', sans-serif; font-weight: 600; letter-spacing: 3px; cursor: pointer; box-shadow: 0 0 20px rgba(123,4,41,0.4); min-height: 38px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; margin-top: 4px; }
   .joiner-travels { font-size: var(--j-text); font-weight: 300; letter-spacing: 3px; color: #fff; line-height: 1.6; margin-top: 16px; text-wrap: balance; font-family: 'Josefin Sans', sans-serif; }
   .joiner-count { font-size: 14px; color: #fff; margin-top: 12px; font-weight: 300; font-family: 'Josefin Sans', sans-serif; }
-  .joiner-footer { margin-top: auto; padding: 28px 0 16px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: nowrap; }
+  .joiner-footer { padding: 28px 0 16px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: nowrap; }
   .joiner-how-btn { background: #000; border: 1px solid rgba(63,169,245,0.5); color: #fff; border-radius: 20px; padding: 10px 16px 7px; font-size: 14px; font-family: 'Josefin Sans', sans-serif; font-weight: 300; letter-spacing: 1.5px; cursor: pointer; min-height: 34px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; white-space: nowrap; }
   .joiner-built { background: #000; border: 1px solid rgba(63,169,245,0.5); border-radius: 20px; padding: 6px 12px; min-height: 34px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
   .joiner-built img { height: 15px; display: block; }
