@@ -6,3 +6,4 @@ node_modules/
 compile-games.sh
 package.json
 package-lock.json
+.fuse_hidden*
