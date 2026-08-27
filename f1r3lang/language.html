@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Language — f1r3lang</title>
+  <meta name="description" content="How f1r3lang works: processes and names, message passing on channels, parallel composition, unforgeable names, pattern matching, and the RSpace execution model.">
+  <meta name="theme-color" content="#0A0A0A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <img src="images/f1r3lang-logo-v1.svg" alt="f1r3lang">
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">&#9776;</button>
+    <ul class="nav-links" id="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li class="nav-divider" aria-hidden="true">|</li>
+      <li><a href="language.html" aria-current="page">The Language</a></li>
+      <li class="nav-divider" aria-hidden="true">|</li>
+      <li><a href="get-started.html">Get Started</a></li>
+      <li class="nav-divider" aria-hidden="true">|</li>
+      <li><a href="ecosystem.html">Ecosystem</a></li>
+      <li class="nav-divider" aria-hidden="true">|</li>
+      <li><a href="https://github.com/F1R3FLY-io" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+
+<header class="page-head">
+  <p class="eyebrow">The language</p>
+  <h1 class="section-header">Two kinds of things. One idea.</h1>
+  <hr class="section-rule">
+</header>
+
+<!-- ============ CORE MODEL ============ -->
+<section class="section reveal" id="model" style="border-top:none; padding-top:2.5rem;">
+  <div class="split" style="margin-top:0;">
+    <div class="prose">
+      <h2 class="section-sub">Processes and names</h2>
+      <p>There are no variables, no objects, no shared memory. A f1r3lang program is made of exactly two kinds of values: <strong>processes</strong> — everything that computes, including literals like <code class="inline">42</code> — and <strong>names</strong> — the channels processes communicate on.</p>
+      <p>The two convert into each other: <code class="inline">@P</code> quotes a process into a name; <code class="inline">*x</code> dereferences a name back into a process. That reflection is the "rho" in rho&#8209;calculus, and it's what lets the language treat code as data without leaving the formal model.</p>
+      <p>You don't assign a value. You send it: <code class="inline">chan!(42)</code>. You don't read a variable. You receive: <code class="inline">for (@v &lt;- chan)</code>.</p>
+    </div>
+    <div class="code-block" style="margin-top:0;">
+      <div class="code-block-bar"><span>send-receive.rho</span><span>f1r3lang</span></div>
+      <pre><span class="kw">new</span> chan <span class="kw">in</span> {
+  chan!(42) |              <span class="cm">// send 42 on chan</span>
+  <span class="kw">for</span> (@value &lt;- chan) {   <span class="cm">// receive it</span>
+    stdout!(value)         <span class="cm">// value is 42</span>
+  }
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONCURRENCY ============ -->
+<section class="section reveal" id="concurrency">
+  <div class="split" style="margin-top:0;">
+    <div class="prose">
+      <h2 class="section-sub">Parallel is the default</h2>
+      <p>The <code class="inline">|</code> operator composes processes concurrently. It's not syntactic sugar over threads — it's the fundamental way programs are built. Sequence is what you construct deliberately, with acknowledgment channels, when you actually need it.</p>
+      <p>Channels hold messages as a <strong>bag, not a queue</strong> — no guaranteed ordering. Communication is fully asynchronous: sends never block. This sounds strict until you realize it's how distributed systems already behave. f1r3lang just refuses to lie to you about it.</p>
+    </div>
+    <div class="code-block" style="margin-top:0;">
+      <div class="code-block-bar"><span>ordering.rho</span><span>f1r3lang</span></div>
+      <pre><span class="cm">// concurrent — arrives in any order:</span>
+chan!(<span class="str">"first"</span>) | chan!(<span class="str">"second"</span>)
+
+<span class="cm">// sequence, when you mean it:</span>
+<span class="kw">new</span> ack <span class="kw">in</span> {
+  chan!(<span class="str">"first"</span>, *ack) |
+  <span class="kw">for</span> (_ &lt;- ack) {
+    chan!(<span class="str">"second"</span>)
+  }
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECURITY ============ -->
+<section class="section reveal" id="security">
+  <div class="split" style="margin-top:0;">
+    <div class="prose">
+      <h2 class="section-sub">Unforgeable names</h2>
+      <p>Names created with <code class="inline">new</code> are cryptographically unique. No process outside the block that created one can guess it, reconstruct it, or convert bits back into it — the language has no construct for forging a name, even when its bits are visible on chain.</p>
+      <p>That's capability-based security as grammar. Access to a channel <em>is</em> the permission to use it. The contract-draining bugs of shared-state languages — reentrancy, confused-deputy calls — depend on reaching state you shouldn't; here that state is a name you were never given.</p>
+    </div>
+    <div class="code-block" style="margin-top:0;">
+      <div class="code-block-bar"><span>private.rho</span><span>f1r3lang</span></div>
+      <pre><span class="kw">new</span> privateChan <span class="kw">in</span> {
+  <span class="cm">// only this block holds privateChan</span>
+  privateChan!(<span class="str">"secret"</span>) |
+  <span class="kw">for</span> (@msg &lt;- privateChan) {
+    stdout!(msg)
+  }
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXECUTION ============ -->
+<section class="section reveal" id="execution">
+  <p class="eyebrow">Under the hood</p>
+  <h2 class="section-header">The execution model</h2>
+  <hr class="section-rule">
+  <div class="prose">
+    <p>Programs run on <strong>RSpace</strong>, a pattern-matching tuple space that replaces the key-value store. Execution is reduction: the runtime matches sends against receives, concurrently, without locks. Every operation is metered in <strong>phlogiston</strong> — deploys carry a limit, unused gas is refunded. Non-deterministic scheduling, deterministic outcomes: whatever order reductions happen in, every validator converges on the same state, finalized mathematically by CBC Casper consensus.</p>
+  </div>
+  <div class="compare-wrap">
+  <table class="compare">
+    <thead><tr><th scope="col">Concept</th><th scope="col">Conventional languages</th><th scope="col">f1r3lang</th></tr></thead>
+    <tbody>
+      <tr><td>Variables</td><td>Mutable storage locations</td><td>Names (channels)</td></tr>
+      <tr><td>Assignment</td><td><code>x = 5</code></td><td><code>chan!(5)</code> — send</td></tr>
+      <tr><td>Read</td><td><code>x</code></td><td><code>for (@v &lt;- chan) { ... }</code> — receive</td></tr>
+      <tr><td>Function call</td><td><code>f(x)</code></td><td><code>f!(x, *ret)</code> — send args + return channel</td></tr>
+      <tr><td>Sequence</td><td><code>a; b</code></td><td>Acknowledgment channels — explicit</td></tr>
+      <tr><td>Concurrency</td><td>Threads, async/await</td><td><code>a | b</code> — the default</td></tr>
+      <tr><td>Encapsulation</td><td>Private fields, convention</td><td>Unforgeable names — cryptographic</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ============ WHAT'S NEW ============ -->
+<section class="section reveal" id="new">
+  <p class="eyebrow">Beyond Rholang</p>
+  <h2 class="section-header">What the rename buys you</h2>
+  <hr class="section-rule">
+  <div class="card-grid">
+    <article class="card">
+      <h3>Real numeric types</h3>
+      <p>BigInt, rationals, fixed-point, and floats — typed numeric literals across widths, not just 64-bit integers. Financial math without the workarounds.</p>
+    </article>
+    <article class="card">
+      <h3>PathMaps &amp; zippers</h3>
+      <p>Hierarchical trie structures with literal syntax and cursor-based navigation. Filesystem-shaped data as a first-class value.</p>
+    </article>
+    <article class="card">
+      <h3>RhoSpec</h3>
+      <p>A native test framework for contracts, used by the platform's own system contracts. Test on-chain logic like you test everything else.</p>
+    </article>
+    <article class="card">
+      <h3>Rhox templates</h3>
+      <p><code class="inline">.rhox</code> macro files parameterize contracts at deploy time — one source, many configurations. The Proof-of-Stake contract itself ships this way.</p>
+    </article>
+    <article class="card">
+      <h3>AI channels</h3>
+      <p><code class="inline">rho:ai:*</code> and <code class="inline">rho:ollama:*</code> — hosted and local models as system channels, with deterministic replay for consensus.</p>
+    </article>
+    <article class="card">
+      <h3>A pure-Rust engine</h3>
+      <p>The node and interpreter were rebuilt in Rust — no JVM. Faster, leaner, and the recommended production implementation.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="section cta-band reveal">
+  <h2 class="section-header">See it run</h2>
+  <hr class="section-rule">
+  <div class="hero-actions" style="margin-top:0;">
+    <a class="btn btn-primary" href="get-started.html">Get started</a>
+    <a class="btn btn-ghost" href="https://github.com/F1R3FLY-io/f1r3fly/tree/main/docs/rholang" target="_blank" rel="noopener">Full language reference &rarr;</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <img src="images/f1r3lang-logo-v1.svg" alt="">
+      <span class="footer-note">A <a href="https://f1r3fly.io" target="_blank" rel="noopener">F1R3FLY</a> language</span>
+    </div>
+    <span class="footer-copy">&copy; F1R3FLY INDUSTRIES, 2026. All Rights Reserved</span>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
