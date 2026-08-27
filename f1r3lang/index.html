@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>f1r3lang — The Concurrent Language for Verifiable Concurrent Computing</title>
-  <meta name="description" content="f1r3lang (formerly Rholang) is a concurrent programming language built on the rho-calculus. Parallel by default, secure by construction, AI-native by design. The smart contract language of the F1R3FLY execution layer.">
+  <meta name="description" content="f1r3lang (formerly Rholang) is a concurrent programming language built on the rho-calculus. SELECT-FROM-WHERE, plus the missing word: DO. Parallel by default, transactions that leave receipts, AI-native by design.">
   <meta name="theme-color" content="#0A0A0A">
 
   <!-- Open Graph -->
@@ -38,6 +38,8 @@
       <li class="nav-divider" aria-hidden="true">|</li>
       <li><a href="get-started.html">Get Started</a></li>
       <li class="nav-divider" aria-hidden="true">|</li>
+      <li><a href="research.html">Research</a></li>
+      <li class="nav-divider" aria-hidden="true">|</li>
       <li><a href="ecosystem.html">Ecosystem</a></li>
       <li class="nav-divider" aria-hidden="true">|</li>
       <li><a href="https://github.com/F1R3FLY-io" target="_blank" rel="noopener">GitHub</a></li>
@@ -51,7 +53,7 @@
 <header class="hero">
   <h1 class="hero-headline">What is f1r3lang? And, how do you spell it&nbsp;really?</h1>
   <p class="hero-tagline">The concurrent language for verifiable concurrent&nbsp;computing.</p>
-  <p class="hero-copy">Most languages added concurrency later and have managed the damage ever since. f1r3lang starts there. Built on the rho&#8209;calculus, every program is a set of processes passing messages on channels — parallel by default, deterministic in consensus, and secure by construction rather than by audit.</p>
+  <p class="hero-copy">You already know the door in: SELECT, FROM, WHERE — the query shape every developer has written for fifty years. f1r3lang builds the whole language around it and adds the missing word: <strong>DO</strong>. The query acts. Built on the rho&#8209;calculus, every program is processes passing messages on channels — parallel by default, deterministic in consensus, and every transaction leaves its receipt in the program itself.</p>
   <p class="hero-lineage">Formerly Rholang &middot; proven on RChain &middot; reborn on F1R3FLY</p>
   <div class="hero-actions">
     <a class="btn btn-primary" href="get-started.html">Get started</a>
@@ -59,14 +61,13 @@
   </div>
 
   <div class="code-block reveal">
-    <div class="code-block-bar"><span>hello-world.rho</span><span>f1r3lang</span></div>
-    <pre><span class="kw">new</span> helloworld, stdout(<span class="str">`rho:io:stdout`</span>) <span class="kw">in</span> {
-  <span class="kw">contract</span> helloworld( world ) = {
-    <span class="kw">for</span>( @msg &lt;- world ) {
-      stdout!(msg)
-    }
-  } |
-  helloworld!(<span class="str">"Hello, World!"</span>)
+    <div class="code-block-bar"><span>select-from-where-do.rho</span><span>f1r3lang</span></div>
+    <pre><span class="cm">-- the query you already write:</span>
+<span class="cm">-- SELECT spec FROM prey WHERE chi(spec)</span>
+
+<span class="cm">// the same query in f1r3lang — with a DO</span>
+<span class="kw">for</span>( @spec &lt;- prey <span class="kw">where</span> Chi(spec) ) {
+  Break!(spec)
 }</pre>
   </div>
 </header>
@@ -78,20 +79,20 @@
   <hr class="section-rule">
   <div class="card-grid">
     <article class="card">
-      <h3>Concurrent by default</h3>
-      <p>The <code class="inline">|</code> operator runs processes in parallel — it's the core of the language, not a library. While sequential chains execute one transaction at a time, f1r3lang programs execute concurrently and still converge on identical state across every node.</p>
+      <h3>The door you already know</h3>
+      <p>SELECT&#8209;FROM&#8209;WHERE has been reinvented every decade for fifty years — SQL, LINQ, XQuery, comprehensions. f1r3lang builds the language around that shape and adds DO: the query is not a request for a value someone else acts on. It is how anything happens at all.</p>
     </article>
     <article class="card">
-      <h3>Secure by construction</h3>
-      <p>Channels created with <code class="inline">new</code> are unforgeable — no process can guess or reconstruct them. Capability security is grammar, not convention, and the reentrancy bugs that drained Solidity contracts have no syntax to exist in.</p>
+      <h3>Transactions leave receipts</h3>
+      <p>When a reader meets a writer on a channel, the meeting itself is recorded in the program text. Atomicity needs no engine underneath, multi-party commit is the <code class="inline">&amp;</code> operator, and a failed condition consumes nothing — there is no rollback because nothing began.</p>
     </article>
     <article class="card">
-      <h3>AI as a primitive</h3>
-      <p>Contracts call language models the way other languages print a string: <code class="inline">rho:ai:*</code> channels reach GPT&#8209;4, image and audio models, or local LLMs — with results cached deterministically so consensus replay still agrees.</p>
+      <h3>Concurrent and unforgeable</h3>
+      <p>The <code class="inline">|</code> operator runs processes in parallel by default, and names made with <code class="inline">new</code> are cryptographically unforgeable — capability security as grammar. Thousands of concurrent transactions, identical final state on every node.</p>
     </article>
     <article class="card">
-      <h3>Verifiable at scale</h3>
-      <p>Programs execute on RSpace, a pattern-matching tuple space, metered by phlogiston and finalized by CBC Casper consensus. Parallelism with a mathematical guarantee that every validator reaches the same answer.</p>
+      <h3>One text, three readings</h3>
+      <p>Let a condition answer with a value instead of yes or no, and the same program becomes three artefacts: code committing transactions, a stochastic simulation of a population of itself, and — measured, not promised — a learning rule. <a href="research.html">The research &rarr;</a></p>
     </article>
   </div>
 </section>
@@ -105,6 +106,7 @@
     <div class="prose">
       <p>No other chain language ships AI as a built-in. In f1r3lang, a contract can query a model mid-execution, hand the result to the next process, and leave a verifiable record of the whole exchange on chain.</p>
       <p>AI channels are non-deterministic by nature, so the runtime caches responses at execution and replays them during consensus — agents that act on chain without breaking the chain's agreement about what happened.</p>
+      <p>And calling models is only the surface. Grade a <code class="inline">where</code> clause and the clause itself becomes a learning rule — gradient descent falls out of the language, no framework imported. <a href="research.html">See the research.</a></p>
       <p><strong>On-chain agents, off-chain models, one verifiable transcript.</strong></p>
     </div>
     <div class="code-block" style="margin-top:0;">
@@ -134,10 +136,11 @@
   <hr class="section-rule">
   <div class="prose">
     <p>f1r3lang is the language formerly known as Rholang — the concurrent smart contract language that ran RChain's mainnet. The theory underneath it, the reflective higher-order &pi;&#8209;calculus, comes from decades of process calculus research into how independent systems communicate without shared state.</p>
-    <p>F1R3FLY rebuilt the machine around the language: a pure-Rust node, real numeric types, hierarchical data structures, a native test framework, and the AI channel system. Same calculus. New engine. New name.</p>
+    <p>F1R3FLY rebuilt the machine around the language — a pure-Rust node, real numeric types, a native test framework, the AI channel system — and kept building past it: an active research program, published as working notes with runnable code, on where the language goes next. Same calculus. New engine. New name.</p>
   </div>
   <div class="hero-actions">
     <a class="btn btn-ghost" href="language.html">What changed &rarr;</a>
+    <a class="btn btn-ghost" href="research.html">Where it's going &rarr;</a>
   </div>
 </section>
 

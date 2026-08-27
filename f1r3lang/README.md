@@ -7,14 +7,26 @@ Static HTML/CSS/JS — no build step, same stack as f1r3fly.io.
 ## Structure
 
 ```
-index.html          Home — positioning, pillars, AI channels, lineage
-language.html       Core concepts + execution model + what's new
+index.html          Home — SELECT-FROM-WHERE-DO hook, pillars, AI, lineage
+language.html       Developer tour: the door, writes, SQL translation table,
+                    witnessed transactions, core model, execution, what's new
 get-started.html    Docker node, first contract, docs links
+research.html       The research program: language definitions (three rungs),
+                    generated conditions, graded where-clauses, honest status
 ecosystem.html      Node, interpreter, editors, LSP, community
 css/styles.css      All styles; brand tokens in :root
 js/main.js          Mobile nav + scroll reveal
-images/             Logo SVGs (PLACEHOLDER: old Rholang brand)
+images/             Logo SVGs
 ```
+
+## Positioning note (2026-08-27, per Greg's paper)
+
+Site content is based on "MeTTaIL for the Working Software Developer" (L.G. Meredith,
+Aug 2026). **"MeTTaIL" is an internal code name and does not appear in site copy** —
+it is described as "the language definition block / toolchain." The name is visible
+only where GitHub repo paths are linked (mettail-rust), which are public artifacts.
+f1r3lang is the overarching public name. The quantum reading is deliberately fenced
+("a fenced fragment," not "a quantum language") — keep that honesty if editing.
 
 ## Brand status
 
